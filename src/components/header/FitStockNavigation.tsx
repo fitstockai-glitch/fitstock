@@ -1,11 +1,32 @@
-import { Search, ImagePlus, Menu } from "lucide-react";
-import { useState } from "react";
+import { Search, ImagePlus, Globe, Check } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
+type Language = "ja" | "en";
+
 const FitStockNavigation = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState<Language>("ja");
+  const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const languages = [
+    { code: "ja" as Language, label: "日本語" },
+    { code: "en" as Language, label: "English" },
+  ];
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsLanguageDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <nav className="bg-background border-b border-border">
@@ -47,19 +68,56 @@ const FitStockNavigation = () => {
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 md:gap-2">
+          {/* Language Switcher */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
+              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Language"
+            >
+              <Globe size={20} />
+            </button>
+            
+            {isLanguageDropdownOpen && (
+              <div className="absolute right-0 top-full mt-2 w-36 bg-background border border-border rounded-lg shadow-lg z-50 py-1">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => {
+                      setCurrentLanguage(lang.code);
+                      setIsLanguageDropdownOpen(false);
+                    }}
+                    className="w-full px-4 py-2 text-sm text-left hover:bg-secondary transition-colors flex items-center justify-between"
+                  >
+                    <span className={currentLanguage === lang.code ? "text-foreground font-medium" : "text-muted-foreground"}>
+                      {lang.label}
+                    </span>
+                    {currentLanguage === lang.code && (
+                      <Check size={16} className="text-primary" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Sign in */}
           <Button 
             variant="ghost" 
             className="hidden md:inline-flex text-foreground hover:text-primary font-medium"
           >
             Sign in
           </Button>
-          <button 
-            className="p-2 text-foreground"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            <Menu size={20} />
-          </button>
+
+          {/* Upgrade to Plus */}
+          <Link to="/pricing">
+            <Button 
+              className="bg-foreground text-background hover:bg-foreground/90 font-medium text-sm px-4"
+            >
+              Upgrade to Plus
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -74,17 +132,6 @@ const FitStockNavigation = () => {
           />
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-border bg-background px-4 py-4">
-          <div className="space-y-2">
-            <Button variant="outline" className="w-full justify-center">
-              Sign in
-            </Button>
-          </div>
-        </div>
-      )}
     </nav>
   );
 };
