@@ -17,8 +17,6 @@ const PhotoDetail = () => {
   const baseId = id?.split("-")[0] || "1";
   const photo = photos.find((p) => p.id === baseId) || photos[0];
 
-  // Get related photos (excluding current)
-  const relatedPhotos = photos.filter((p) => p.id !== baseId).slice(0, 8);
 
   const handleDownload = () => {
     window.open(photo.imageUrl, "_blank");
@@ -64,27 +62,6 @@ const PhotoDetail = () => {
               />
             </div>
 
-            {/* Related photos */}
-            <div>
-              <h2 className="text-lg font-medium text-foreground mb-4">関連する写真</h2>
-              <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                {relatedPhotos.map((relatedPhoto) => (
-                  <Link
-                    key={relatedPhoto.id}
-                    to={`/photo/${relatedPhoto.id}`}
-                    className="flex-shrink-0 group"
-                  >
-                    <div className="w-32 h-32 md:w-40 md:h-40 rounded-lg overflow-hidden bg-muted">
-                      <img
-                        src={relatedPhoto.imageUrl}
-                        alt={relatedPhoto.title}
-                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* Right sidebar */}
