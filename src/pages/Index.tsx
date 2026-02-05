@@ -1,31 +1,26 @@
 import { useState } from "react";
 import FitStockHeader from "../components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
-import HeroSection from "../components/content/HeroSection";
-import CategoryFilter from "../components/content/CategoryFilter";
+import CategoryTabs from "../components/content/CategoryTabs";
 import MasonryGallery from "../components/photo/MasonryGallery";
 import { photos } from "../data/photos";
 
 const Index = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("Portrait");
 
-  const filteredPhotos = selectedCategory === "All" 
-    ? photos 
-    : photos.filter(photo => photo.category === selectedCategory);
+  // For demo, show all photos regardless of category
+  const filteredPhotos = photos;
 
   return (
     <div className="min-h-screen bg-background">
       <FitStockHeader />
+      <CategoryTabs 
+        selectedCategory={selectedCategory} 
+        onCategoryChange={setSelectedCategory} 
+      />
       
       <main>
-        <HeroSection />
-        <CategoryFilter 
-          selectedCategory={selectedCategory} 
-          onCategoryChange={setSelectedCategory} 
-        />
-        <section className="pb-16">
-          <MasonryGallery photos={filteredPhotos} />
-        </section>
+        <MasonryGallery photos={filteredPhotos} />
       </main>
       
       <Footer />

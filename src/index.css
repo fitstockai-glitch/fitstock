@@ -6,9 +6,9 @@
 
 @layer base {
   :root {
-    /* Core neutral palette */
+    /* Core neutral palette - Clean, minimal */
     --background: 0 0% 100%;
-    --foreground: 0 0% 9%;
+    --foreground: 0 0% 13%;
     
     /* Status bar */
     --status-bar: 0 0% 0%;
@@ -16,52 +16,52 @@
     
     /* Navigation */
     --nav-background: 0 0% 100%;
-    --nav-foreground: 0 0% 20%;
-    --nav-hover: 35 85% 51%;
+    --nav-foreground: 0 0% 13%;
+    --nav-hover: 0 0% 9%;
     
-    /* Interactive elements - Primary: #ea891a (HSL: 35 85% 51%) */
+    /* Interactive elements - Keeping orange accent but more subtle */
     --primary: 35 85% 51%;
     --primary-foreground: 0 0% 100%;
     --primary-hover: 35 85% 45%;
     
-    /* Secondary: #f5f5f5 (HSL: 0 0% 96%) */
+    /* Secondary - Light gray background */
     --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 20%;
+    --secondary-foreground: 0 0% 13%;
     
     --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
+    --muted-foreground: 0 0% 50%;
     
-    --accent: 35 85% 95%;
-    --accent-foreground: 35 85% 35%;
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 13%;
     
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 35 85% 51%;
+    --border: 0 0% 92%;
+    --input: 0 0% 92%;
+    --ring: 0 0% 13%;
     
     /* Cards and surfaces */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 9%;
+    --card-foreground: 0 0% 13%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover-foreground: 0 0% 13%;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     
-    --radius: 0.5rem;
+    --radius: 0.75rem;
     
     /* Transitions */
     --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 35 85% 51%;
+    --sidebar-foreground: 0 0% 13%;
+    --sidebar-primary: 0 0% 13%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 35 85% 95%;
-    --sidebar-accent-foreground: 35 85% 35%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 35 85% 51%;
+    --sidebar-accent: 0 0% 96%;
+    --sidebar-accent-foreground: 0 0% 13%;
+    --sidebar-border: 0 0% 92%;
+    --sidebar-ring: 0 0% 13%;
   }
 
   .dark {
