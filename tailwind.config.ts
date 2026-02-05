@@ -15,7 +15,7 @@ export default {
   	extend: {
   		fontFamily: {
   			sans: [
-  				'Poppins',
+  				'Space Grotesk',
   				'ui-sans-serif',
   				'system-ui',
   				'sans-serif',
@@ -82,7 +82,7 @@ export default {
   				DEFAULT: 'hsl(var(--status-bar))',
   				foreground: 'hsl(var(--status-bar-foreground))'
   			},
-  			'nav': {
+  			nav: {
   				DEFAULT: 'hsl(var(--nav-background))',
   				foreground: 'hsl(var(--nav-foreground))',
   				hover: 'hsl(var(--nav-hover))'
@@ -153,8 +153,8 @@ export default {
   			'fade-in': 'fade-in 0.2s ease-out'
   		},
   		transitionTimingFunction: {
-  			'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
-  			'bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+  			smooth: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  			bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
   		}
   	}
   },
