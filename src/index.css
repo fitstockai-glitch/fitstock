@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,47 +10,47 @@
     /* Core neutral palette - Clean, minimal */
     --background: 0 0% 100%;
     --foreground: 0 0% 13%;
-    
+
     /* Status bar */
     --status-bar: 0 0% 0%;
     --status-bar-foreground: 0 0% 100%;
-    
+
     /* Navigation */
     --nav-background: 0 0% 100%;
     --nav-foreground: 0 0% 13%;
     --nav-hover: 0 0% 9%;
-    
+
     /* Interactive elements - Keeping orange accent but more subtle */
     --primary: 35 85% 51%;
     --primary-foreground: 0 0% 100%;
     --primary-hover: 35 85% 45%;
-    
+
     /* Secondary - Light gray background */
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 13%;
-    
+
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 50%;
-    
+
     --accent: 0 0% 96%;
     --accent-foreground: 0 0% 13%;
-    
+
     --border: 0 0% 92%;
     --input: 0 0% 92%;
     --ring: 0 0% 13%;
-    
+
     /* Cards and surfaces */
     --card: 0 0% 100%;
     --card-foreground: 0 0% 13%;
-    
+
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 13%;
-    
+
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    
+
     --radius: 0.75rem;
-    
+
     /* Transitions */
     --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -62,44 +63,46 @@
     --sidebar-accent-foreground: 0 0% 13%;
     --sidebar-border: 0 0% 92%;
     --sidebar-ring: 0 0% 13%;
+    --font-sans: Poppins, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   }
 
   .dark {
     --background: 0 0% 9%;
     --foreground: 0 0% 98%;
-    
+
     --status-bar: 0 0% 0%;
     --status-bar-foreground: 0 0% 100%;
-    
+
     --nav-background: 0 0% 9%;
     --nav-foreground: 0 0% 80%;
     --nav-hover: 35 85% 55%;
-    
+
     --primary: 35 85% 55%;
     --primary-foreground: 0 0% 9%;
     --primary-hover: 35 85% 60%;
-    
+
     --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 80%;
-    
+
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 60%;
-    
+
     --accent: 35 85% 20%;
     --accent-foreground: 35 85% 80%;
-    
+
     --border: 0 0% 20%;
     --input: 0 0% 20%;
     --ring: 35 85% 55%;
-    
+
     --card: 0 0% 9%;
     --card-foreground: 0 0% 98%;
-    
+
     --popover: 0 0% 9%;
     --popover-foreground: 0 0% 98%;
-    
+
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 98%;
+    --font-sans: Poppins, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   }
 }
 
