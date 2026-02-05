@@ -66,11 +66,7 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
         <div className={`absolute bottom-0 left-0 right-0 p-4 transition-opacity duration-300 ${
           isHovered ? "opacity-100" : "opacity-0"
         }`}>
-          <div className="flex items-end justify-between">
-            <div>
-              <p className="text-white/80 text-xs mb-0.5">by {photo.photographer}</p>
-            </div>
-            
+          <div className="flex items-end justify-end">
             <Button
               size="sm"
               className="rounded-full bg-white hover:bg-white/90 text-foreground font-medium shadow-md"
@@ -82,15 +78,6 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
           </div>
         </div>
       </div>
-
-      {/* Photographer badge - visible when not hovered (like Studio.Stock) */}
-      {!isHovered && (
-        <div className="absolute bottom-3 left-3">
-          <span className="bg-black/70 text-white text-xs px-2 py-1 rounded">
-            by /{photo.photographer.split(' ')[0]}
-          </span>
-        </div>
-      )}
     </div>
   );
 };
