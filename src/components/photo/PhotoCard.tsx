@@ -1,5 +1,6 @@
 import { Heart, Download } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Photo } from "@/data/photos";
 import { Button } from "@/components/ui/button";
 
@@ -12,21 +13,24 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     setIsLiked(!isLiked);
   };
 
   const handleDownload = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     window.open(photo.imageUrl, "_blank");
   };
 
   return (
-    <div 
-      className="group relative overflow-hidden rounded-xl bg-muted break-inside-avoid mb-4 cursor-pointer"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <Link to={`/photo/${photo.id}`}>
+      <div 
+        className="group relative overflow-hidden rounded-xl bg-muted break-inside-avoid mb-4 cursor-pointer"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
       <img
         src={photo.imageUrl}
         alt={photo.title}
@@ -68,7 +72,8 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </Link>
   );
 };
 
