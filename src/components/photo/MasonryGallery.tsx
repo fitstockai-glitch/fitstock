@@ -1,10 +1,18 @@
 import { Photo } from "@/data/photos";
 import PhotoCard from "./PhotoCard";
 import { useState, useEffect, useRef, useCallback } from "react";
+import Masonry from "react-masonry-css";
 
 interface MasonryGalleryProps {
   photos: Photo[];
 }
+
+const breakpointColumns = {
+  default: 4,
+  1280: 4,
+  1024: 3,
+  768: 2,
+};
 
 const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
   const [displayedPhotos, setDisplayedPhotos] = useState<Photo[]>([]);
@@ -22,7 +30,7 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
       const photo = photos[originalIndex];
       newPhotos.push({
         ...photo,
-        id: `${photo.id}-${pageNum}-${i}`, // Unique ID for each instance
+        id: `${photo.id}-${pageNum}-${i}`,
       });
     }
     
@@ -63,12 +71,16 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
   }, [page, getMorePhotos]);
 
   return (
-    <div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 md:px-8 py-6 auto-rows-max">
+    <div className="px-4 md:px-8 py-6">
+      <Masonry
+        breakpointCols={breakpointColumns}
+        className="flex -ml-4 w-auto"
+        columnClassName="pl-4 bg-clip-padding"
+      >
         {displayedPhotos.map((photo) => (
           <PhotoCard key={photo.id} photo={photo} />
         ))}
-      </div>
+      </Masonry>
       
       {/* Loader trigger */}
       <div 
