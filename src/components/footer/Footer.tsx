@@ -3,8 +3,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="w-full bg-background text-foreground pt-12 pb-6 px-4 md:px-8 border-t border-border">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           {/* Browse */}
           <div>
             <h4 className="text-sm font-semibold text-foreground mb-4">Browse</h4>
@@ -45,7 +44,6 @@ const Footer = () => {
               <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Instagram</a></li>
               <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Facebook</a></li>
             </ul>
-          </div>
         </div>
 
         {/* Bottom */}
