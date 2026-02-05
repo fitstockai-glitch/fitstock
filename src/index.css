@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Linea E-commerce Design System - Minimalist & Modern */
+/* FitStock Design System - Modern Photo Marketplace */
 
 @layer base {
   :root {
@@ -17,26 +17,26 @@
     /* Navigation */
     --nav-background: 0 0% 100%;
     --nav-foreground: 0 0% 20%;
-    --nav-hover: 0 0% 5%;
+    --nav-hover: 35 85% 51%;
     
-    /* Interactive elements */
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --primary-hover: 0 0% 15%;
+    /* Interactive elements - Primary: #ea891a (HSL: 35 85% 51%) */
+    --primary: 35 85% 51%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 35 85% 45%;
     
-    /* Subtle elements */
+    /* Secondary: #f5f5f5 (HSL: 0 0% 96%) */
     --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 20%;
     
     --muted: 0 0% 96%;
     --muted-foreground: 0 0% 45%;
     
-    --accent: 0 0% 96%;
-    --accent-foreground: 0 0% 9%;
+    --accent: 35 85% 95%;
+    --accent-foreground: 35 85% 35%;
     
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 0 0% 9%;
+    --ring: 35 85% 51%;
     
     /* Cards and surfaces */
     --card: 0 0% 100%;
@@ -48,27 +48,20 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
     
-    --radius: 0.375rem;
+    --radius: 0.5rem;
     
     /* Transitions */
     --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
+    --sidebar-primary: 35 85% 51%;
     --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
+    --sidebar-accent: 35 85% 95%;
+    --sidebar-accent-foreground: 35 85% 35%;
     --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 35 85% 51%;
   }
 
   .dark {
@@ -80,11 +73,11 @@
     
     --nav-background: 0 0% 9%;
     --nav-foreground: 0 0% 80%;
-    --nav-hover: 0 0% 95%;
+    --nav-hover: 35 85% 55%;
     
-    --primary: 0 0% 98%;
+    --primary: 35 85% 55%;
     --primary-foreground: 0 0% 9%;
-    --primary-hover: 0 0% 90%;
+    --primary-hover: 35 85% 60%;
     
     --secondary: 0 0% 15%;
     --secondary-foreground: 0 0% 80%;
@@ -92,12 +85,12 @@
     --muted: 0 0% 15%;
     --muted-foreground: 0 0% 60%;
     
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 35 85% 20%;
+    --accent-foreground: 35 85% 80%;
     
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 0 0% 98%;
+    --ring: 35 85% 55%;
     
     --card: 0 0% 9%;
     --card-foreground: 0 0% 98%;

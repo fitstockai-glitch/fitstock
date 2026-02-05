@@ -1,89 +1,82 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
   return (
-    <footer className="w-full bg-white text-black pt-8 pb-2 px-6 border-t border-[#e5e5e5] mt-48">
-      <div className="">
+    <footer className="w-full bg-secondary text-foreground pt-12 pb-4 px-4 md:px-6 border-t border-border">
+      <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-8">
           {/* Brand - Left side */}
           <div>
-            <img 
-              src="/Linea_Jewelry_Inc-2.svg" 
-              alt="Linea Jewelry Inc." 
-              className="mb-4 h-6 w-auto"
-            />
-            <p className="text-sm font-light text-black/70 leading-relaxed max-w-md mb-6">
-              Minimalist jewelry crafted for the modern individual
+            <Link to="/" className="block mb-4">
+              <span className="text-2xl font-bold text-primary">
+                Fit<span className="text-foreground">Stock</span>
+              </span>
+            </Link>
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-md mb-6">
+              高品質なストック写真を提供するプラットフォーム。
+              商用利用可能な写真を簡単に見つけてダウンロード。
             </p>
             
             {/* Contact Information */}
-            <div className="space-y-2 text-sm font-light text-black/70">
+            <div className="space-y-2 text-sm text-muted-foreground">
               <div>
-                <p className="font-normal text-black mb-1">Visit Us</p>
-                <p>123 Madison Avenue</p>
-                <p>New York, NY 10016</p>
-              </div>
-              <div>
-                <p className="font-normal text-black mb-1 mt-3">Contact</p>
-                <p>+1 (212) 555-0123</p>
-                <p>hello@lineajewelry.com</p>
+                <p className="font-medium text-foreground mb-1">お問い合わせ</p>
+                <p>support@fitstock.com</p>
               </div>
             </div>
           </div>
 
           {/* Link lists - Right side */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Shop */}
+            {/* Browse */}
             <div>
-              <h4 className="text-sm font-normal mb-4">Shop</h4>
+              <h4 className="text-sm font-medium text-foreground mb-4">写真を探す</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">New In</a></li>
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Rings</a></li>
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Earrings</a></li>
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Bracelets</a></li>
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Necklaces</a></li>
+                <li><Link to="/category/nature" className="text-sm text-muted-foreground hover:text-primary transition-colors">自然</Link></li>
+                <li><Link to="/category/architecture" className="text-sm text-muted-foreground hover:text-primary transition-colors">建築</Link></li>
+                <li><Link to="/category/urban" className="text-sm text-muted-foreground hover:text-primary transition-colors">都市</Link></li>
+                <li><Link to="/category/lifestyle" className="text-sm text-muted-foreground hover:text-primary transition-colors">ライフスタイル</Link></li>
+                <li><Link to="/category/abstract" className="text-sm text-muted-foreground hover:text-primary transition-colors">抽象</Link></li>
               </ul>
             </div>
 
             {/* Support */}
             <div>
-              <h4 className="text-sm font-normal mb-4">Support</h4>
+              <h4 className="text-sm font-medium text-foreground mb-4">サポート</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Size Guide</a></li>
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Care Instructions</a></li>
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Returns</a></li>
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Shipping</a></li>
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Contact</a></li>
+                <li><Link to="/about/our-story" className="text-sm text-muted-foreground hover:text-primary transition-colors">FitStockについて</Link></li>
+                <li><Link to="/about/customer-care" className="text-sm text-muted-foreground hover:text-primary transition-colors">ヘルプセンター</Link></li>
+                <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">ライセンス</a></li>
+                <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">よくある質問</a></li>
               </ul>
             </div>
 
             {/* Connect */}
             <div>
-              <h4 className="text-sm font-normal mb-4">Connect</h4>
+              <h4 className="text-sm font-medium text-foreground mb-4">フォロー</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Instagram</a></li>
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Pinterest</a></li>
-                <li><a href="#" className="text-sm font-light text-black/70 hover:text-black transition-colors">Newsletter</a></li>
+                <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Twitter</a></li>
+                <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Instagram</a></li>
+                <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Facebook</a></li>
               </ul>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom section - edge to edge separator */}
-      <div className="border-t border-[#e5e5e5] -mx-6 px-6 pt-2">
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <p className="text-sm font-light text-black mb-1 md:mb-0">
-            © 2024 Linea. All rights reserved. Template made by{" "}
-            <a href="https://www.liljeros.co" target="_blank" rel="noopener noreferrer" className="hover:text-black/70 transition-colors underline">
-              Rickard Liljeros
-            </a>
+      {/* Bottom section */}
+      <div className="max-w-7xl mx-auto border-t border-border pt-4">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-2">
+          <p className="text-sm text-muted-foreground">
+            © 2024 FitStock. All rights reserved.
           </p>
           <div className="flex space-x-6">
-            <a href="/privacy-policy" className="text-sm font-light text-black hover:text-black/70 transition-colors">
-              Privacy Policy
-            </a>
-            <a href="/terms-of-service" className="text-sm font-light text-black hover:text-black/70 transition-colors">
-              Terms of Service
-            </a>
+            <Link to="/privacy-policy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              プライバシーポリシー
+            </Link>
+            <Link to="/terms-of-service" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+              利用規約
+            </Link>
           </div>
         </div>
       </div>
