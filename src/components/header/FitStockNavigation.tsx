@@ -1,4 +1,4 @@
-import { Search, ImagePlus, Globe, Check } from "lucide-react";
+import { Search, ImagePlus, Globe, Check, User } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -102,13 +102,15 @@ const FitStockNavigation = () => {
             )}
           </div>
 
-          {/* Sign in */}
-          <Button 
-            variant="ghost" 
-            className="hidden md:inline-flex text-foreground hover:text-primary font-medium"
-          >
-            Sign in
-          </Button>
+          {/* User Account */}
+          <Link to="/account">
+            <button
+              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Account"
+            >
+              <User size={20} />
+            </button>
+          </Link>
 
           {/* Upgrade to Plus */}
           <Link to="/pricing">
