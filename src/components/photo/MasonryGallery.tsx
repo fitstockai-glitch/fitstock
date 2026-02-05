@@ -64,7 +64,7 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
 
   return (
     <div>
-      <div className="columns-2 md:columns-3 lg:columns-4 gap-4 px-4 md:px-8 py-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-4 md:px-8 py-6 auto-rows-max">
         {displayedPhotos.map((photo) => (
           <PhotoCard key={photo.id} photo={photo} />
         ))}

@@ -1,4 +1,4 @@
-import { Heart, Download, Crown } from "lucide-react";
+import { Heart, Download } from "lucide-react";
 import { useState } from "react";
 import { Photo } from "@/data/photos";
 import { Button } from "@/components/ui/button";
@@ -38,16 +38,6 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
       <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 ${
         isHovered ? "opacity-100" : "opacity-0"
       }`}>
-        {/* Premium badge - always visible */}
-        {photo.isPremium && (
-          <div className="absolute top-3 left-3">
-            <span className="flex items-center gap-1 bg-primary text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-full">
-              <Crown size={12} />
-              Premium
-            </span>
-          </div>
-        )}
-
         {/* Top right actions */}
         <div className={`absolute top-3 right-3 flex gap-2 transition-opacity duration-300 ${
           isHovered ? "opacity-100" : "opacity-0"
