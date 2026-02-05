@@ -1,22 +1,31 @@
-import Header from "../components/header/Header";
+import { useState } from "react";
+import FitStockHeader from "../components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
-import LargeHero from "../components/content/LargeHero";
-import FiftyFiftySection from "../components/content/FiftyFiftySection";
-import OneThirdTwoThirdsSection from "../components/content/OneThirdTwoThirdsSection";
-import ProductCarousel from "../components/content/ProductCarousel";
-import EditorialSection from "../components/content/EditorialSection";
+import HeroSection from "../components/content/HeroSection";
+import CategoryFilter from "../components/content/CategoryFilter";
+import MasonryGallery from "../components/photo/MasonryGallery";
+import { photos } from "../data/photos";
 
 const Index = () => {
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const filteredPhotos = selectedCategory === "All" 
+    ? photos 
+    : photos.filter(photo => photo.category === selectedCategory);
+
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <FitStockHeader />
       
-      <main className="pt-6">
-        <FiftyFiftySection />
-        <ProductCarousel />
-        <LargeHero />
-        <OneThirdTwoThirdsSection />
-        <EditorialSection />
+      <main>
+        <HeroSection />
+        <CategoryFilter 
+          selectedCategory={selectedCategory} 
+          onCategoryChange={setSelectedCategory} 
+        />
+        <section className="pb-16">
+          <MasonryGallery photos={filteredPhotos} />
+        </section>
       </main>
       
       <Footer />
