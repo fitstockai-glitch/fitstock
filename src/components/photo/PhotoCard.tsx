@@ -9,80 +9,88 @@ interface PhotoCardProps {
 
 const PhotoCard = ({ photo }: PhotoCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
-  const [likes, setLikes] = useState(photo.likes);
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleLike = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsLiked(!isLiked);
-    setLikes(isLiked ? likes - 1 : likes + 1);
   };
 
   const handleDownload = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // Download functionality will be implemented later
     window.open(photo.imageUrl, "_blank");
   };
 
   return (
-    <div className="group relative overflow-hidden rounded-lg bg-muted break-inside-avoid mb-4">
+    <div 
+      className="group relative overflow-hidden rounded-xl bg-muted break-inside-avoid mb-4 cursor-pointer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <img
         src={photo.imageUrl}
         alt={photo.title}
-        className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
+        className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
         loading="lazy"
       />
       
       {/* Overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        {/* Top badges */}
-        <div className="absolute top-3 left-3 flex gap-2">
-          {photo.isPremium && (
-            <span className="flex items-center gap-1 bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full">
+      <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 ${
+        isHovered ? "opacity-100" : "opacity-0"
+      }`}>
+        {/* Premium badge - always visible */}
+        {photo.isPremium && (
+          <div className="absolute top-3 left-3">
+            <span className="flex items-center gap-1 bg-primary text-primary-foreground text-xs font-medium px-2.5 py-1 rounded-full">
               <Crown size={12} />
               Premium
             </span>
-          )}
+          </div>
+        )}
+
+        {/* Top right actions */}
+        <div className={`absolute top-3 right-3 flex gap-2 transition-opacity duration-300 ${
+          isHovered ? "opacity-100" : "opacity-0"
+        }`}>
+          <Button
+            variant="secondary"
+            size="icon"
+            className="h-9 w-9 rounded-full bg-white/90 hover:bg-white text-foreground shadow-md"
+            onClick={handleLike}
+          >
+            <Heart size={16} className={isLiked ? "fill-red-500 text-red-500" : ""} />
+          </Button>
         </div>
 
         {/* Bottom content */}
-        <div className="absolute bottom-0 left-0 right-0 p-4">
-          <h3 className="text-white font-medium text-sm mb-1">{photo.title}</h3>
-          <p className="text-white/70 text-xs mb-3">by {photo.photographer}</p>
-          
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 text-white/80 text-xs">
-              <span className="flex items-center gap-1">
-                <Heart size={14} className={isLiked ? "fill-primary text-primary" : ""} />
-                {likes}
-              </span>
-              <span className="flex items-center gap-1">
-                <Download size={14} />
-                {photo.downloads}
-              </span>
+        <div className={`absolute bottom-0 left-0 right-0 p-4 transition-opacity duration-300 ${
+          isHovered ? "opacity-100" : "opacity-0"
+        }`}>
+          <div className="flex items-end justify-between">
+            <div>
+              <p className="text-white/80 text-xs mb-0.5">by {photo.photographer}</p>
             </div>
             
-            <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-white hover:text-primary hover:bg-white/20"
-                onClick={handleLike}
-              >
-                <Heart size={18} className={isLiked ? "fill-primary text-primary" : ""} />
-              </Button>
-              <Button
-                variant="default"
-                size="sm"
-                className="h-8 bg-primary hover:bg-primary-hover text-primary-foreground"
-                onClick={handleDownload}
-              >
-                <Download size={14} className="mr-1" />
-                Download
-              </Button>
-            </div>
+            <Button
+              size="sm"
+              className="rounded-full bg-white hover:bg-white/90 text-foreground font-medium shadow-md"
+              onClick={handleDownload}
+            >
+              <Download size={14} className="mr-1.5" />
+              Download
+            </Button>
           </div>
         </div>
       </div>
+
+      {/* Photographer badge - visible when not hovered (like Studio.Stock) */}
+      {!isHovered && (
+        <div className="absolute bottom-3 left-3">
+          <span className="bg-black/70 text-white text-xs px-2 py-1 rounded">
+            by /{photo.photographer.split(' ')[0]}
+          </span>
+        </div>
+      )}
     </div>
   );
 };
