@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { Heart, Download, Share2, X, Facebook, Link2, Check } from "lucide-react";
+import { Heart, Download, Share2, X, Facebook, Link2, Check, ZoomIn } from "lucide-react";
 import { useState } from "react";
 import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
@@ -7,12 +7,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { photos } from "@/data/photos";
 import MasonryGallery from "@/components/photo/MasonryGallery";
+import {
+  Dialog,
+  DialogContent,
+} from "@/components/ui/dialog";
 
 const PhotoDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [isLiked, setIsLiked] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
 
   // Find the photo by id (handle the infinite scroll id format)
   const baseId = id?.split("-")[0] || "1";
@@ -57,12 +62,19 @@ const PhotoDetail = () => {
           {/* Left side - Photo */}
           <div className="flex-1 space-y-8">
             {/* Main photo */}
-            <div className="rounded-xl overflow-hidden bg-muted">
+            <div 
+              className="rounded-xl overflow-hidden bg-muted relative group cursor-zoom-in"
+              onClick={() => setIsZoomOpen(true)}
+            >
               <img
                 src={photo.imageUrl}
                 alt={photo.title}
                 className="w-full h-auto object-cover"
               />
+              {/* Zoom icon overlay */}
+              <div className="absolute top-4 right-4 p-2 bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <ZoomIn size={20} className="text-foreground" />
+              </div>
             </div>
 
           </div>
@@ -200,6 +212,17 @@ const PhotoDetail = () => {
       <MasonryGallery photos={relatedPhotos} />
 
       <Footer />
+
+      {/* Zoom Modal */}
+      <Dialog open={isZoomOpen} onOpenChange={setIsZoomOpen}>
+        <DialogContent className="max-w-[90vw] max-h-[90vh] p-0 bg-transparent border-none">
+          <img
+            src={photo.imageUrl}
+            alt={photo.title}
+            className="w-full h-full object-contain max-h-[90vh] rounded-lg"
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
