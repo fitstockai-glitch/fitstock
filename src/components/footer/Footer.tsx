@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="w-full bg-background text-foreground pt-12 pb-6 px-4 md:px-8 border-t border-border">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-8">
         {/* Browse */}
         <div>
           <h4 className="text-sm font-semibold text-foreground mb-4">Browse</h4>
@@ -23,16 +23,6 @@ const Footer = () => {
             <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">License</a></li>
             <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">API</a></li>
             <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">FAQ</a></li>
-          </ul>
-        </div>
-
-        {/* Company */}
-        <div>
-          <h4 className="text-sm font-semibold text-foreground mb-4">Company</h4>
-          <ul className="space-y-2">
-            <li><Link to="/about/our-story" className="text-sm text-muted-foreground hover:text-foreground transition-colors">About</Link></li>
-            <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Careers</a></li>
-            <li><Link to="/about/customer-care" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Contact</Link></li>
           </ul>
         </div>
 
