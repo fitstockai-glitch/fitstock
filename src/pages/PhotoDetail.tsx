@@ -6,6 +6,7 @@ import Footer from "@/components/footer/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { photos } from "@/data/photos";
+import MasonryGallery from "@/components/photo/MasonryGallery";
 
 const PhotoDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,6 +18,8 @@ const PhotoDetail = () => {
   const baseId = id?.split("-")[0] || "1";
   const photo = photos.find((p) => p.id === baseId) || photos[0];
 
+  // Get related photos (exclude current photo)
+  const relatedPhotos = photos.filter((p) => p.id !== baseId);
 
   const handleDownload = () => {
     window.open(photo.imageUrl, "_blank");
@@ -184,7 +187,17 @@ const PhotoDetail = () => {
             </div>
           </div>
         </div>
+
+        {/* Related Images Section */}
+        <section className="mt-16">
+          <h2 className="text-xl font-semibold text-foreground mb-6">
+            関連するイメージ
+          </h2>
+        </section>
       </main>
+
+      {/* Related Images Gallery - Full width */}
+      <MasonryGallery photos={relatedPhotos} />
 
       <Footer />
     </div>
