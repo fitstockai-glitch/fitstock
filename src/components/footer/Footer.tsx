@@ -50,6 +50,9 @@ const Footer = () => {
             <Link to="/terms-of-service" className="hover:text-foreground transition-colors">
               Terms
             </Link>
+            <a href="mailto:contact@fitstock.com" className="hover:text-foreground transition-colors">
+              Contact
+            </a>
             <span>© 2024 FitStock</span>
           </div>
         </div>
