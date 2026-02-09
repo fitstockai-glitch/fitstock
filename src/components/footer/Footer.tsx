@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="w-full bg-background text-foreground pt-12 pb-6 px-4 md:px-8 border-t border-border">
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Browse */}
         <div>
           <h4 className="text-sm font-semibold text-foreground mb-4">Browse</h4>
@@ -15,16 +15,8 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Resources */}
-        <div>
-          <h4 className="text-sm font-semibold text-foreground mb-4">Resources</h4>
-          <ul className="space-y-2">
-            <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Blog</a></li>
-            <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">License</a></li>
-            <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">API</a></li>
-            <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">FAQ</a></li>
-          </ul>
-        </div>
+
+
 
         {/* Social */}
         <div>
