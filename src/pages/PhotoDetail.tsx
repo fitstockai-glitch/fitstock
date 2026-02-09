@@ -112,6 +112,11 @@ const PhotoDetail = () => {
               </Link>
             </div>
 
+            {/* SEO description */}
+            <p className="text-xs text-muted-foreground/70 leading-relaxed">
+              「{photo.title}」は{photo.tags.map(t => `「${t}」`).join('、')}に関連するフリー素材です。商用利用可能な高品質写真をFitStockで無料ダウンロード。Webデザインや広告、SNS投稿にご活用ください。
+            </p>
+
             {/* Tags */}
             <div className="flex flex-wrap gap-2">
               {photo.tags.map((tag) => (
