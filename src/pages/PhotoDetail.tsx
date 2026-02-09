@@ -63,13 +63,13 @@ const PhotoDetail = () => {
           <div className="flex-1 space-y-8">
             {/* Main photo */}
             <div 
-              className="rounded-xl overflow-hidden bg-muted relative group cursor-zoom-in"
+              className="overflow-hidden relative group cursor-zoom-in aspect-square flex items-center justify-center"
               onClick={() => setIsZoomOpen(true)}
             >
               <img
                 src={photo.imageUrl}
                 alt={photo.title}
-                className="w-full h-auto object-cover"
+                className="max-w-full max-h-full object-contain"
               />
               {/* Zoom icon overlay */}
               <div className="absolute top-4 right-4 p-2 bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
