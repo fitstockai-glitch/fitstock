@@ -15,7 +15,7 @@ const breakpointColumns = {
 
 const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
   return (
-    <div className="px-4 md:px-8 py-6">
+    <div className="px-4 md:px-8 pt-4 pb-0">
       <Masonry
         breakpointCols={breakpointColumns}
         className="flex -ml-4 w-auto"
