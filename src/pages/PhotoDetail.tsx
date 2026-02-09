@@ -200,14 +200,15 @@ const PhotoDetail = () => {
           </div>
         </div>
 
-        {/* Related Images Section */}
-        <section className="mt-16">
-          <h2 className="text-xl font-semibold text-foreground mb-4">
-            関連するイメージ
-          </h2>
-          <MasonryGallery photos={relatedPhotos} />
-        </section>
       </main>
+
+      {/* Related Images Section - Full width */}
+      <section className="mt-16">
+        <h2 className="text-xl font-semibold text-foreground mb-4 px-4 md:px-8">
+          関連するイメージ
+        </h2>
+        <MasonryGallery photos={relatedPhotos} />
+      </section>
 
       <Footer />
 
