@@ -63,7 +63,7 @@ const PhotoDetail = () => {
           <div className="flex-1 space-y-8">
             {/* Main photo */}
             <div 
-              className="overflow-hidden relative group cursor-zoom-in aspect-square flex items-center justify-center"
+              className="overflow-hidden relative group cursor-zoom-in aspect-square flex items-start justify-center"
               onClick={() => setIsZoomOpen(true)}
             >
               <img
