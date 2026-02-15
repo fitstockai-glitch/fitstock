@@ -52,13 +52,13 @@ const Login = () => {
 
             <Button
               type="submit"
-              className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-none text-base"
+              className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-md text-base"
             >
               ログイン
             </Button>
           </form>
 
-          <div className="text-center">
+          <div className="text-center -mt-4">
             <Link
               to="/forgot-password"
               className="text-sm text-muted-foreground hover:text-foreground underline"
