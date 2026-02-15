@@ -5,7 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
-import signupHero from "@/assets/signup-hero.jpg";
+
+const heroImages = [
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80",
+  "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
+  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80",
+  "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&q=80",
+];
+const randomHero = heroImages[Math.floor(Math.random() * heroImages.length)];
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -22,9 +29,9 @@ const Register = () => {
       <FitStockHeader />
       <main className="flex-1 flex flex-col md:flex-row">
         {/* Left: Hero Image */}
-        <div className="w-full md:w-1/2 h-[300px] md:h-auto">
+        <div className="w-full md:w-1/2 h-[250px] md:h-auto">
           <img
-            src={signupHero}
+            src={randomHero}
             alt="Sign up hero"
             className="w-full h-full object-cover"
           />
