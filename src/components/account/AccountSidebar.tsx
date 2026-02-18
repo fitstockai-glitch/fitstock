@@ -18,13 +18,13 @@ const navItems: { id: AccountSection; label: string; icon: React.ReactNode }[] =
 
 const AccountSidebar = ({ activeSection, onSectionChange }: AccountSidebarProps) => {
   return (
-    <aside className="w-full md:w-52 flex-shrink-0 border-r border-border min-h-full">
-      <nav className="py-2">
+    <aside className="w-full md:w-64 flex-shrink-0 border-r border-border min-h-full">
+      <nav className="py-2 px-2">
         {navItems.map((item) => (
           <button
             key={item.id}
             onClick={() => onSectionChange(item.id)}
-          className={`w-full flex items-center gap-3 px-4 py-2.5 mx-2 text-sm transition-colors text-left rounded-md ${
+            className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors text-left rounded-md ${
               activeSection === item.id
                 ? "bg-muted text-foreground font-medium"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
@@ -38,7 +38,7 @@ const AccountSidebar = ({ activeSection, onSectionChange }: AccountSidebarProps)
         {/* Logout */}
         <button
           onClick={() => {}}
-          className="w-full flex items-center gap-3 px-5 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors text-left mt-4"
+          className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:rounded-md transition-colors text-left mt-4"
         >
           <LogOut size={16} />
           ログアウト
