@@ -40,8 +40,6 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      <Separator />
-
       {/* Password change */}
       <div className="space-y-4">
         <h2 className="text-lg font-semibold text-foreground">パスワードの変更</h2>
