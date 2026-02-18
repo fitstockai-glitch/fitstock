@@ -1,60 +1,71 @@
 import { useState } from "react";
 import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
-import ProfileSection from "@/components/account/ProfileSection";
+import AccountSidebar, { AccountSection } from "@/components/account/AccountSidebar";
+import ProfilePage from "@/components/account/ProfilePage";
 import PlanInfoSection from "@/components/account/PlanInfoSection";
 import DownloadHistorySection from "@/components/account/DownloadHistorySection";
 import FavoritesSection from "@/components/account/FavoritesSection";
-import SubscriptionHistorySection from "@/components/account/SubscriptionHistorySection";
 
 export type PlanStatus = "free" | "plus" | "cancelled";
 
 const Account = () => {
+  const [activeSection, setActiveSection] = useState<AccountSection>("profile");
   const [planStatus, setPlanStatus] = useState<PlanStatus>("free");
-  const [displayName, setDisplayName] = useState("ユーザー名");
 
-  const handleUpgrade = () => {
-    setPlanStatus("plus");
-  };
-
-  const handleCancel = () => {
-    setPlanStatus("cancelled");
-  };
-
-  const handleReactivate = () => {
-    setPlanStatus("plus");
+  const renderContent = () => {
+    switch (activeSection) {
+      case "profile":
+        return <ProfilePage />;
+      case "plan":
+        return (
+          <div className="max-w-xl space-y-6">
+            <h1 className="text-2xl font-semibold text-foreground">プラン</h1>
+            <PlanInfoSection
+              planStatus={planStatus}
+              onUpgrade={() => setPlanStatus("plus")}
+              onCancel={() => setPlanStatus("cancelled")}
+              onReactivate={() => setPlanStatus("plus")}
+            />
+          </div>
+        );
+      case "favorites":
+        return (
+          <div className="space-y-6">
+            <h1 className="text-2xl font-semibold text-foreground">お気に入り</h1>
+            <FavoritesSection />
+          </div>
+        );
+      case "downloads":
+        return (
+          <div className="space-y-6">
+            <h1 className="text-2xl font-semibold text-foreground">ダウンロード履歴</h1>
+            <DownloadHistorySection />
+          </div>
+        );
+      case "billing":
+        return (
+          <div className="max-w-xl space-y-6">
+            <h1 className="text-2xl font-semibold text-foreground">領収書発行</h1>
+            <p className="text-sm text-muted-foreground">領収書の発行機能は近日公開予定です。</p>
+          </div>
+        );
+      default:
+        return null;
+    }
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <FitStockHeader />
-      
-      <main className="max-w-4xl mx-auto px-4 md:px-8 py-8 space-y-6">
-        <h1 className="text-2xl md:text-3xl font-semibold text-foreground mb-8">
-          マイページ
-        </h1>
 
-        <ProfileSection 
-          displayName={displayName} 
-          onSave={setDisplayName} 
-        />
+      <div className="flex flex-1 flex-col md:flex-row">
+        <AccountSidebar activeSection={activeSection} onSectionChange={setActiveSection} />
+        <main className="flex-1 px-8 py-10">
+          {renderContent()}
+        </main>
+      </div>
 
-        <PlanInfoSection 
-          planStatus={planStatus}
-          onUpgrade={handleUpgrade}
-          onCancel={handleCancel}
-          onReactivate={handleReactivate}
-        />
-
-        <DownloadHistorySection />
-
-        <FavoritesSection />
-
-        {(planStatus === "plus" || planStatus === "cancelled") && (
-          <SubscriptionHistorySection />
-        )}
-      </main>
-      
       <Footer />
     </div>
   );
