@@ -1,0 +1,51 @@
+import { Link } from "react-router-dom";
+import { User, Heart, Download, FileText, LogOut, CreditCard } from "lucide-react";
+
+export type AccountSection = "profile" | "plan" | "favorites" | "downloads" | "billing" | "logout";
+
+interface AccountSidebarProps {
+  activeSection: AccountSection;
+  onSectionChange: (section: AccountSection) => void;
+}
+
+const navItems: { id: AccountSection; label: string; icon: React.ReactNode }[] = [
+  { id: "profile", label: "プロフィール", icon: <User size={16} /> },
+  { id: "plan", label: "プラン", icon: <CreditCard size={16} /> },
+  { id: "favorites", label: "お気に入り", icon: <Heart size={16} /> },
+  { id: "downloads", label: "ダウンロード履歴", icon: <Download size={16} /> },
+  { id: "billing", label: "領収書発行", icon: <FileText size={16} /> },
+];
+
+const AccountSidebar = ({ activeSection, onSectionChange }: AccountSidebarProps) => {
+  return (
+    <aside className="w-full md:w-52 flex-shrink-0 border-r border-border min-h-full">
+      <nav className="py-2">
+        {navItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => onSectionChange(item.id)}
+            className={`w-full flex items-center gap-3 px-5 py-3 text-sm transition-colors text-left ${
+              activeSection === item.id
+                ? "bg-muted text-foreground font-medium"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            }`}
+          >
+            {item.icon}
+            {item.label}
+          </button>
+        ))}
+
+        {/* Logout */}
+        <button
+          onClick={() => {}}
+          className="w-full flex items-center gap-3 px-5 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors text-left mt-4"
+        >
+          <LogOut size={16} />
+          ログアウト
+        </button>
+      </nav>
+    </aside>
+  );
+};
+
+export default AccountSidebar;
