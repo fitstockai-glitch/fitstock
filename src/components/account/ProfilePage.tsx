@@ -87,7 +87,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Delete account */}
-      <div className="space-y-3">
+      <div className="space-y-3 pt-6">
         <h2 className="text-lg font-semibold text-foreground">ユーザー詳細</h2>
         <div className="border border-border rounded-md p-4 space-y-2">
           <p className="text-sm text-muted-foreground">
