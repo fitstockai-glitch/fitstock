@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -94,9 +95,9 @@ const ProfilePage = () => {
           <p className="text-sm text-muted-foreground">
             これにより、個人データはすべて完全に削除されます。
           </p>
-          <button className="text-sm text-red-500 hover:text-red-600 transition-colors">
+          <Link to="/account/delete" className="text-sm text-destructive hover:text-destructive/80 transition-colors">
             アカウントを削除
-          </button>
+          </Link>
         </div>
       </div>
     </div>
