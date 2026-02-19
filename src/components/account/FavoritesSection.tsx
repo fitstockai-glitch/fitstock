@@ -27,12 +27,13 @@ const FavoritesSection = () => {
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </Link>
-              {/* Remove heart button on hover */}
+              {/* Remove button on hover */}
               <button
-                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-full bg-white/80 hover:bg-white"
+                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/90 hover:bg-white text-xs font-medium text-foreground shadow-sm"
                 onClick={() => handleRemove(item.id)}
               >
-                <Heart size={14} className="fill-red-500 text-red-500" />
+                <Heart size={12} className="fill-red-500 text-red-500" />
+                お気に入り削除
               </button>
             </div>
           ))}
