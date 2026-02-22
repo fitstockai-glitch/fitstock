@@ -17,7 +17,7 @@ const mockBilling = Array.from({ length: 10 }, (_, i) => ({
 
 const BillingSection = () => {
   return (
-    <div className="rounded-md border border-border overflow-hidden">
+    <div className="border-y border-border overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
