@@ -20,7 +20,7 @@ const BillingSection = () => {
     <div className="border-y border-border overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow className="hover:bg-transparent">
+          <TableRow className="hover:bg-transparent border-t-0">
             <TableHead className="text-muted-foreground font-normal pl-0">ご注文番号</TableHead>
             <TableHead className="text-muted-foreground font-normal">ご購入日</TableHead>
             <TableHead className="text-muted-foreground font-normal">金額</TableHead>
