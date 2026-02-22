@@ -6,6 +6,7 @@ import ProfilePage from "@/components/account/ProfilePage";
 import PlanInfoSection from "@/components/account/PlanInfoSection";
 import DownloadHistorySection from "@/components/account/DownloadHistorySection";
 import FavoritesSection from "@/components/account/FavoritesSection";
+import BillingSection from "@/components/account/BillingSection";
 
 export type PlanStatus = "free" | "plus" | "cancelled";
 
@@ -45,9 +46,9 @@ const Account = () => {
         );
       case "billing":
         return (
-          <div className="max-w-xl space-y-6">
+          <div className="space-y-6">
             <h1 className="text-2xl font-semibold text-foreground">領収書発行</h1>
-            <p className="text-sm text-muted-foreground">領収書の発行機能は近日公開予定です。</p>
+            <BillingSection />
           </div>
         );
       default:
