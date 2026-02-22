@@ -21,7 +21,7 @@ const BillingSection = () => {
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead className="text-muted-foreground font-normal">ご注文番号</TableHead>
+            <TableHead className="text-muted-foreground font-normal pl-0">ご注文番号</TableHead>
             <TableHead className="text-muted-foreground font-normal">ご購入日</TableHead>
             <TableHead className="text-muted-foreground font-normal">金額</TableHead>
             <TableHead className="text-muted-foreground font-normal text-right">ドキュメント</TableHead>
@@ -29,8 +29,8 @@ const BillingSection = () => {
         </TableHeader>
         <TableBody>
           {mockBilling.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell className="text-sm">{item.orderNumber}</TableCell>
+            <TableRow key={item.id} className="hover:bg-transparent">
+              <TableCell className="text-sm pl-0">{item.orderNumber}</TableCell>
               <TableCell className="text-sm">{item.date}</TableCell>
               <TableCell className="text-sm">{item.amount}</TableCell>
               <TableCell className="text-right">
