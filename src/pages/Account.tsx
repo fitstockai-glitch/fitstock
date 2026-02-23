@@ -22,6 +22,7 @@ const Account = () => {
         return (
           <div className="max-w-xl space-y-6">
             <h1 className="text-2xl font-semibold text-foreground">プラン</h1>
+            <p className="text-sm text-muted-foreground">最高品質の素材を無制限にダウンロードできるプランに入会しませんか。</p>
             <PlanInfoSection
               planStatus={planStatus}
               onUpgrade={() => setPlanStatus("plus")}

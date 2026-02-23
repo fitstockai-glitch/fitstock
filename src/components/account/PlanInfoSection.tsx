@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Check } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,21 +36,43 @@ const PlanInfoSection = ({
 
   if (planStatus === "free") {
     return (
-      <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-background">
-        <CardContent className="p-6">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="text-xl">📦</span>
-              <h3 className="text-lg font-semibold text-foreground">
-                現在のプラン: Free Member
-              </h3>
+      <Card className="border border-border">
+        <CardContent className="p-8">
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-2xl font-semibold text-foreground">FitStock Plus</h3>
+              <p className="text-muted-foreground mt-1">無制限ダウンロード定額プラン</p>
             </div>
+
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <Check size={18} className="text-muted-foreground mt-0.5 shrink-0" />
+                <span className="text-sm text-muted-foreground">画像ライブラリのすべての素材がダウンロード可能</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <Check size={18} className="text-muted-foreground mt-0.5 shrink-0" />
+                <span className="text-sm text-muted-foreground">クリエイティブデジタルおよび印刷物に使用できる加工可能なライセンス</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <Check size={18} className="text-muted-foreground mt-0.5 shrink-0" />
+                <span className="text-sm text-muted-foreground">業界最安値</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-bold text-foreground">¥1,000</span>
+                <span className="text-base text-foreground">/ 月</span>
+              </div>
+              <p className="text-sm text-muted-foreground mt-1">¥12,000、年払い</p>
+            </div>
+
             <Button 
               onClick={onUpgrade}
               size="lg"
-              className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium py-6 text-base"
+              className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium py-6 text-base rounded-lg"
             >
-              FitStock Plusで無制限ダウンロード (¥1,000/月)
+              FitStock Plusに入会する
             </Button>
           </div>
         </CardContent>
@@ -60,16 +83,14 @@ const PlanInfoSection = ({
   if (planStatus === "plus") {
     return (
       <>
-        <Card className="border-2 border-primary bg-gradient-to-br from-primary/10 to-background">
-          <CardContent className="p-6">
-            <div className="space-y-4">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">⭐</span>
-                <h3 className="text-lg font-semibold text-foreground">
-                  現在のプラン: FitStock Plus
-                </h3>
+        <Card className="border border-border">
+          <CardContent className="p-8">
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-2xl font-semibold text-foreground">FitStock Plus</h3>
+                <p className="text-muted-foreground mt-1">現在ご利用中</p>
               </div>
-              
+
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between py-2 border-b border-border">
                   <span className="text-muted-foreground">ダウンロード</span>
@@ -102,24 +123,13 @@ const PlanInfoSection = ({
             <AlertDialogHeader>
               <AlertDialogTitle>本当にキャンセルしますか？</AlertDialogTitle>
               <AlertDialogDescription className="space-y-2">
-                <p>
-                  キャンセルしても、現在の請求期間の終了（2024年2月1日）まではFitStock Plusをご利用いただけます。
-                </p>
-                <p>
-                  その後、アカウントはFree Memberに戻ります。
-                </p>
+                <p>キャンセルしても、現在の請求期間の終了（2024年2月1日）まではFitStock Plusをご利用いただけます。</p>
+                <p>その後、アカウントはFree Memberに戻ります。</p>
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel className="bg-secondary text-foreground hover:bg-secondary/80">
-                戻る
-              </AlertDialogCancel>
-              <AlertDialogAction 
-                onClick={handleCancelConfirm}
-                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-              >
-                キャンセルを続ける
-              </AlertDialogAction>
+              <AlertDialogCancel className="bg-secondary text-foreground hover:bg-secondary/80">戻る</AlertDialogCancel>
+              <AlertDialogAction onClick={handleCancelConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">キャンセルを続ける</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -129,21 +139,15 @@ const PlanInfoSection = ({
 
   // Cancelled status
   return (
-    <Card className="border-2 border-yellow-500/50 bg-gradient-to-br from-yellow-50 to-background">
-      <CardContent className="p-6">
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">⚠️</span>
-            <h3 className="text-lg font-semibold text-foreground">
-              現在のプラン: FitStock Plus（キャンセル済み）
-            </h3>
+    <Card className="border border-border">
+      <CardContent className="p-8">
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-2xl font-semibold text-foreground">FitStock Plus（キャンセル済み）</h3>
+            <p className="text-muted-foreground mt-1">利用可能期限: 2024年2月1日まで</p>
           </div>
-          
+
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between py-2 border-b border-border">
-              <span className="text-muted-foreground">利用可能期限</span>
-              <span className="font-medium text-foreground">2024年2月1日まで</span>
-            </div>
             <div className="flex justify-between py-2">
               <span className="text-muted-foreground">その後</span>
               <span className="font-medium text-foreground">Free Memberに戻ります</span>
@@ -152,7 +156,7 @@ const PlanInfoSection = ({
 
           <Button 
             onClick={onReactivate}
-            className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium"
+            className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium rounded-lg"
           >
             再アップグレード
           </Button>
