@@ -52,7 +52,7 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --radius: 0.75rem;
+    --radius: 0.5rem;
 
     /* Transitions */
     --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -106,6 +106,7 @@
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 98%;
     --font-sans: "Source Sans Pro", ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    --radius: 0.5rem;
   }
 }
 
