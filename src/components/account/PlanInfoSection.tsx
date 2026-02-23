@@ -36,8 +36,7 @@ const PlanInfoSection = ({
 
   if (planStatus === "free") {
     return (
-      <Card className="border border-border">
-        <CardContent className="p-8">
+      <div>
           <div className="space-y-6">
             <div>
               <h3 className="text-2xl font-semibold text-foreground">FitStock Plus</h3>
@@ -75,8 +74,7 @@ const PlanInfoSection = ({
               FitStock Plusに入会する
             </Button>
           </div>
-        </CardContent>
-      </Card>
+      </div>
     );
   }
 
