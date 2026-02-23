@@ -36,7 +36,7 @@ const PlanInfoSection = ({
 
   if (planStatus === "free") {
     return (
-      <div>
+      <div className="border border-border rounded-lg p-8">
           <div className="space-y-6">
             <div>
               <h3 className="text-2xl font-semibold text-foreground">FitStock Plus</h3>
