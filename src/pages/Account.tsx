@@ -48,7 +48,11 @@ const Account = () => {
       case "billing":
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl font-semibold text-foreground">領収書発行</h1>
+            <div>
+              <h1 className="text-2xl font-semibold text-foreground">領収書発行</h1>
+              <p className="text-sm text-muted-foreground mt-2">過去の支払い履歴と領収書のダウンロードが可能です。</p>
+              <a href="#" className="text-sm text-destructive hover:text-destructive/80 transition-colors mt-1 inline-block">領収書の宛名・住所</a>
+            </div>
             <BillingSection />
           </div>
         );
