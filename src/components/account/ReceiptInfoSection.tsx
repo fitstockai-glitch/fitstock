@@ -48,7 +48,7 @@ const ReceiptInfoSection = () => {
 
         <Button
           onClick={handleSave}
-          className="rounded-sm"
+          className="rounded-sm bg-foreground text-background hover:bg-foreground/90"
         >
           変更を保存
         </Button>
