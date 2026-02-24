@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { User, Heart, Download, FileText, LogOut, CreditCard } from "lucide-react";
 
-export type AccountSection = "profile" | "plan" | "favorites" | "downloads" | "billing" | "logout";
+export type AccountSection = "profile" | "plan" | "favorites" | "downloads" | "billing" | "receipt-info" | "logout";
 
 interface AccountSidebarProps {
   activeSection: AccountSection;

@@ -7,6 +7,7 @@ import PlanInfoSection from "@/components/account/PlanInfoSection";
 import DownloadHistorySection from "@/components/account/DownloadHistorySection";
 import FavoritesSection from "@/components/account/FavoritesSection";
 import BillingSection from "@/components/account/BillingSection";
+import ReceiptInfoSection from "@/components/account/ReceiptInfoSection";
 
 export type PlanStatus = "free" | "plus" | "cancelled";
 
@@ -53,11 +54,13 @@ const Account = () => {
             </div>
             <div>
               <p className="text-sm text-muted-foreground">過去の支払い履歴と領収書のダウンロードが可能です。</p>
-              <a href="#" className="text-sm text-destructive hover:text-destructive/80 transition-colors mt-1 inline-block">領収書の宛名・住所</a>
+              <button onClick={() => setActiveSection("receipt-info")} className="text-sm text-destructive hover:text-destructive/80 transition-colors mt-1 inline-block">領収書の宛名・住所</button>
             </div>
             <BillingSection />
           </div>
         );
+      case "receipt-info":
+        return <ReceiptInfoSection />;
       default:
         return null;
     }
