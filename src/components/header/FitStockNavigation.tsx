@@ -1,4 +1,4 @@
-import { Search, ImagePlus, Globe, Check, User } from "lucide-react";
+import { Search, ImagePlus, Globe, Check, User, Heart } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -101,6 +101,16 @@ const FitStockNavigation = () => {
               </div>
             )}
           </div>
+
+          {/* Favorites */}
+          <Link to="/account?section=favorites">
+            <button
+              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Favorites"
+            >
+              <Heart size={20} />
+            </button>
+          </Link>
 
           {/* User Account */}
           <Link to="/account">
