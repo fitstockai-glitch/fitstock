@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import Header from "../components/header/Header";
+import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
 
 const PrivacyPolicy = () => {
@@ -9,7 +9,7 @@ const PrivacyPolicy = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <FitStockHeader />
       
       <main className="pt-6">
         <div className="max-w-4xl mx-auto px-6 py-12">
