@@ -64,7 +64,7 @@ const PhotoDetail = () => {
           {/* Left side - Photo */}
           <div className="flex-1">
             <div 
-              className="overflow-hidden relative group cursor-zoom-in aspect-square flex items-start justify-center"
+              className="overflow-hidden relative group cursor-zoom-in aspect-[4/3] flex items-start justify-center"
               onClick={() => setIsZoomOpen(true)}
             >
               <img
@@ -83,7 +83,7 @@ const PhotoDetail = () => {
             {/* Download button */}
             <Button
               onClick={handleDownload}
-              className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium py-6"
+              className="w-full bg-foreground hover:bg-foreground/90 text-background font-medium py-6"
               size="lg"
             >
               ダウンロード
