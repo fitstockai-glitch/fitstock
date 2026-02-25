@@ -19,11 +19,8 @@ const PhotoDetail = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
 
-  // Find the photo by id (handle the infinite scroll id format)
   const baseId = id?.split("-")[0] || "1";
   const photo = photos.find((p) => p.id === baseId) || photos[0];
-
-  // Get related photos (exclude current photo)
   const relatedPhotos = photos.filter((p) => p.id !== baseId);
 
   const handleDownload = () => {
@@ -57,11 +54,15 @@ const PhotoDetail = () => {
       <FitStockHeader />
 
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+        {/* Title - Full width above columns */}
+        <h1 className="text-base md:text-lg font-normal text-foreground mb-6">
+          {photo.title}
+        </h1>
+
         {/* Main content - 2 column layout */}
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left side - Photo */}
-          <div className="flex-1 space-y-8">
-            {/* Main photo */}
+          <div className="flex-1">
             <div 
               className="overflow-hidden relative group cursor-zoom-in aspect-square flex items-start justify-center"
               onClick={() => setIsZoomOpen(true)}
@@ -71,43 +72,45 @@ const PhotoDetail = () => {
                 alt={photo.title}
                 className="max-w-full max-h-full object-contain"
               />
-              {/* Zoom icon overlay */}
               <div className="absolute top-4 right-4 p-2 bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 <ZoomIn size={20} className="text-foreground" />
               </div>
             </div>
-
           </div>
 
           {/* Right sidebar */}
-          <div className="lg:w-80 space-y-6">
-            {/* Title */}
-            <h1 className="text-2xl md:text-3xl font-semibold text-foreground">
-              {photo.title}
-            </h1>
-
+          <div className="lg:w-80 space-y-5">
             {/* Download button */}
             <Button
               onClick={handleDownload}
               className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium py-6"
               size="lg"
             >
-              <Download className="mr-2" size={20} />
               ダウンロード
             </Button>
 
-            {/* FitStock Plus card */}
-            <div className="bg-secondary rounded-xl p-5 space-y-3">
-              <h3 className="font-semibold text-foreground">FitStock Plus</h3>
-              <p className="text-sm text-muted-foreground">
-                無制限ダウンロード / 広告なし / 月額¥1,000
-              </p>
+            {/* Plus plan card */}
+            <div className="border border-border rounded-lg p-5 space-y-4">
+              <h3 className="font-semibold text-foreground">無制限ダウンロード定額プラン</h3>
+              <ul className="space-y-2.5">
+                <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
+                  <span>画像ライブラリのすべての素材がダウンロード可能</span>
+                </li>
+                <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
+                  <span>クリエイティブデジタルおよび印刷物に使用できる加工可能なライセンス</span>
+                </li>
+                <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
+                  <span>業界最安値</span>
+                </li>
+              </ul>
               <Link to="/pricing">
                 <Button
-                  variant="outline"
-                  className="w-full border-foreground text-foreground hover:bg-foreground hover:text-background"
+                  className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium mt-2"
                 >
-                  今すぐアップグレード
+                  FitStock Plusに参加する
                 </Button>
               </Link>
             </div>
@@ -117,49 +120,32 @@ const PhotoDetail = () => {
               「{photo.title}」は{photo.tags.map(t => `「${t}」`).join('、')}に関連するフリー素材です。商用利用可能な高品質写真をFitStockで無料ダウンロード。Webデザインや広告、SNS投稿にご活用ください。
             </p>
 
-            {/* Tags */}
-            <div className="flex flex-wrap gap-2">
-              {photo.tags.map((tag) => (
-                <Link key={tag} to={`/category/${tag}`}>
-                  <Badge
-                    variant="secondary"
-                    className="cursor-pointer hover:bg-accent transition-colors px-3 py-1.5 text-sm"
-                  >
-                    #{tag}
-                  </Badge>
-                </Link>
-              ))}
-            </div>
-
             {/* Action buttons */}
             <div className="flex items-center gap-3">
-              {/* Favorite button */}
               <Button
                 variant="outline"
-                size="icon"
-                className={`h-12 w-12 rounded-full ${
+                className={`flex-1 h-11 gap-2 rounded-md ${
                   isLiked ? "bg-red-50 border-red-200" : ""
                 }`}
                 onClick={() => setIsLiked(!isLiked)}
               >
                 <Heart
-                  size={20}
+                  size={16}
                   className={isLiked ? "fill-red-500 text-red-500" : "text-foreground"}
                 />
+                <span className="text-sm">お気に入りに追加</span>
               </Button>
 
-              {/* Share button */}
-              <div className="relative">
+              <div className="relative flex-1">
                 <Button
                   variant="outline"
-                  size="icon"
-                  className="h-12 w-12 rounded-full"
+                  className="w-full h-11 gap-2 rounded-md"
                   onClick={() => setIsShareOpen(!isShareOpen)}
                 >
-                  <Share2 size={20} className="text-foreground" />
+                  <Share2 size={16} className="text-foreground" />
+                  <span className="text-sm">シェア</span>
                 </Button>
 
-                {/* Share dropdown */}
                 {isShareOpen && (
                   <>
                     <div
@@ -205,10 +191,23 @@ const PhotoDetail = () => {
           </div>
         </div>
 
+        {/* Tags - Full width below columns */}
+        <div className="flex flex-wrap gap-2 mt-8">
+          {photo.tags.map((tag) => (
+            <Link key={tag} to={`/category/${tag}`}>
+              <Badge
+                variant="outline"
+                className="cursor-pointer hover:bg-accent transition-colors px-3 py-1.5 text-sm font-normal rounded-sm"
+              >
+                {tag}
+              </Badge>
+            </Link>
+          ))}
+        </div>
       </main>
 
-      {/* Related Images Section - Full width */}
-      <section className="mt-16">
+      {/* Related Images Section */}
+      <section className="mt-8">
         <h2 className="text-xl font-semibold text-foreground mb-1 px-4 md:px-8">
           関連するイメージ
         </h2>
