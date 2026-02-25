@@ -197,7 +197,7 @@ const PhotoDetail = () => {
             <Link key={tag} to={`/category/${tag}`}>
               <Badge
                 variant="outline"
-                className="cursor-pointer hover:bg-accent transition-colors px-3 py-1.5 text-sm font-normal rounded-sm"
+                className="cursor-pointer hover:bg-accent transition-colors px-3 py-1.5 text-sm font-normal rounded-sm bg-muted border-transparent text-muted-foreground"
               >
                 {tag}
               </Badge>
