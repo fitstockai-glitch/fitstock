@@ -341,7 +341,7 @@ const PrivacyPolicy = () => {
               </p>
             </section>
 
-            <div className="border-t border-border pt-8 mt-8 text-center">
+            <div className="border-t border-border pt-8 mt-8 text-left">
               <p className="text-muted-foreground">以上</p>
               <p className="text-muted-foreground mt-2">FitStock 運営チーム</p>
             </div>
