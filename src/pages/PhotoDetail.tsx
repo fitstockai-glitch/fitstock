@@ -66,16 +66,18 @@ const PhotoDetail = () => {
           {/* Left side - Photo */}
           <div className="flex-1">
             <div 
-              className="overflow-hidden relative group cursor-zoom-in aspect-[20/13] flex items-start justify-center"
+              className="overflow-hidden group cursor-zoom-in aspect-[20/13] flex items-start justify-center"
               onClick={() => setIsZoomOpen(true)}
             >
-              <img
-                src={photo.imageUrl}
-                alt={photo.title}
-                className="max-w-full max-h-full object-contain"
-              />
-              <div className="absolute top-4 right-4 p-2 bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <ZoomIn size={20} className="text-foreground" />
+              <div className="relative inline-block max-w-full max-h-full">
+                <img
+                  src={photo.imageUrl}
+                  alt={photo.title}
+                  className="max-w-full max-h-full object-contain"
+                />
+                <div className="absolute top-4 right-4 p-2 bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <ZoomIn size={20} className="text-foreground" />
+                </div>
               </div>
             </div>
           </div>
