@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Photo } from "@/data/photos";
 import { Button } from "@/components/ui/button";
+import DownloadModal from "@/components/photo/DownloadModal";
 
 interface PhotoCardProps {
   photo: Photo;
@@ -11,6 +12,7 @@ interface PhotoCardProps {
 const PhotoCard = ({ photo }: PhotoCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -21,10 +23,11 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
   const handleDownload = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    window.open(photo.imageUrl, "_blank");
+    setIsDownloadModalOpen(true);
   };
 
   return (
+    <>
     <Link to={`/photo/${photo.id}`}>
       <div 
         className="group relative overflow-hidden rounded-xl bg-muted break-inside-avoid mb-4 cursor-pointer"
@@ -74,6 +77,8 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
       </div>
       </div>
     </Link>
+    <DownloadModal open={isDownloadModalOpen} onOpenChange={setIsDownloadModalOpen} />
+    </>
   );
 };
 
