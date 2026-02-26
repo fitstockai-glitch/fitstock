@@ -45,7 +45,7 @@ const Footer = () => {
             <a href="mailto:contact@fitstock.com" className="hover:text-foreground transition-colors">
               Contact
             </a>
-            <span>© 2024 FitStock</span>
+            <span>© 2026 FitStock</span>
           </div>
         </div>
       </div>
