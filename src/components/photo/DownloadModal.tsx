@@ -29,8 +29,8 @@ const DownloadModal = ({ open, onOpenChange }: DownloadModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-3xl p-0 overflow-hidden">
-        <div className="flex flex-col sm:flex-row">
+      <DialogContent className="sm:max-w-3xl p-0 overflow-hidden border-none">
+        <div className="flex flex-col sm:flex-row min-h-[420px]">
           {/* Left: Hero Image */}
           <div className="hidden sm:block sm:w-1/2">
             <img
