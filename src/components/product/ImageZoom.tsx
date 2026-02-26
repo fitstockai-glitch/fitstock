@@ -51,14 +51,13 @@ const ImageZoom = ({ images, initialIndex, isOpen, onClose }: ImageZoomProps) =>
       />
       
       {/* Close button */}
-      <Button
-        variant="ghost"
-        size="sm"
+      <button
         onClick={onClose}
-        className="absolute top-6 right-6 z-10 hover:bg-transparent text-black border-none p-2"
+        className="absolute top-6 right-6 z-10 p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition-colors"
+        aria-label="Close"
       >
-        <X className="h-8 w-8" />
-      </Button>
+        <X className="h-6 w-6" />
+      </button>
 
       {/* Scrollable image container */}
       <div ref={scrollRef} className="relative w-full h-full overflow-y-auto">
