@@ -7,11 +7,19 @@ const Footer = () => {
         {/* Browse */}
         <div>
           <h4 className="text-sm font-semibold text-foreground mb-4">Browse</h4>
-          <ul className="space-y-2">
+          <ul className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-2">
             <li><Link to="/category/portrait" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Portrait</Link></li>
             <li><Link to="/category/landscape" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Landscape</Link></li>
             <li><Link to="/category/abstract" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Abstract</Link></li>
             <li><Link to="/category/business" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Business</Link></li>
+            <li><Link to="/category/mockup" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Mockup</Link></li>
+            <li><Link to="/category/food" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Food</Link></li>
+            <li><Link to="/category/family" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Family</Link></li>
+            <li><Link to="/category/building" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Building</Link></li>
+            <li><Link to="/category/autumn" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Autumn</Link></li>
+            <li><Link to="/category/winter" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Winter</Link></li>
+            <li><Link to="/category/wedding" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Wedding</Link></li>
+            <li><Link to="/category/technology" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Technology</Link></li>
           </ul>
         </div>
 
