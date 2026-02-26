@@ -53,10 +53,10 @@ const ImageZoom = ({ images, initialIndex, isOpen, onClose }: ImageZoomProps) =>
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-6 right-6 z-10 p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition-colors"
+        className="absolute top-6 right-6 z-10 p-2 text-white hover:text-white/70 transition-colors"
         aria-label="Close"
       >
-        <X className="h-6 w-6" />
+        <X className="h-7 w-7" />
       </button>
 
       {/* Scrollable image container */}
