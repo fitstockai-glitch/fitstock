@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { photos } from "@/data/photos";
 import MasonryGallery from "@/components/photo/MasonryGallery";
+import DownloadModal from "@/components/photo/DownloadModal";
 import {
   Dialog,
   DialogContent,
@@ -18,13 +19,14 @@ const PhotoDetail = () => {
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
   const baseId = id?.split("-")[0] || "1";
   const photo = photos.find((p) => p.id === baseId) || photos[0];
   const relatedPhotos = photos.filter((p) => p.id !== baseId);
 
   const handleDownload = () => {
-    window.open(photo.imageUrl, "_blank");
+    setIsDownloadModalOpen(true);
   };
 
   const handleCopyLink = async () => {
@@ -215,6 +217,8 @@ const PhotoDetail = () => {
       </section>
 
       <Footer />
+
+      <DownloadModal open={isDownloadModalOpen} onOpenChange={setIsDownloadModalOpen} />
 
       {/* Zoom Modal */}
       <Dialog open={isZoomOpen} onOpenChange={setIsZoomOpen}>
