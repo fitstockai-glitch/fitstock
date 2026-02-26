@@ -1,32 +1,35 @@
-import { useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
-import Header from "../components/header/Header";
+import { useParams } from "react-router-dom";
+import FitStockHeader from "../components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
-import CategoryHeader from "../components/category/CategoryHeader";
-import FilterSortBar from "../components/category/FilterSortBar";
-import ProductGrid from "../components/category/ProductGrid";
+import CategoryTabs from "../components/content/CategoryTabs";
+import MasonryGallery from "../components/photo/MasonryGallery";
+import { photos } from "../data/photos";
 
 const Category = () => {
   const { category } = useParams();
-  const [searchParams] = useSearchParams();
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  
+  // Capitalize first letter to match tab names
+  const activeCategory = category 
+    ? category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()
+    : "Portrait";
+
+  // For demo, show all photos regardless of category
+  const filteredPhotos = photos;
+
+  const handleCategoryChange = (newCategory: string) => {
+    // Navigation is handled by CategoryTabs
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <FitStockHeader />
+      <CategoryTabs 
+        selectedCategory={activeCategory} 
+        onCategoryChange={handleCategoryChange} 
+      />
       
-      <main className="pt-6">
-        <CategoryHeader 
-          category={category || 'All Products'} 
-        />
-        
-        <FilterSortBar 
-          filtersOpen={filtersOpen}
-          setFiltersOpen={setFiltersOpen}
-          itemCount={24}
-        />
-        
-        <ProductGrid />
+      <main>
+        <MasonryGallery photos={filteredPhotos} />
       </main>
       
       <Footer />
