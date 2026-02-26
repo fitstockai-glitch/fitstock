@@ -30,7 +30,7 @@ const DownloadModal = ({ open, onOpenChange }: DownloadModalProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-3xl p-0 overflow-hidden border-none">
-        <div className="flex flex-col sm:flex-row min-h-[520px]">
+        <div className="flex flex-col sm:flex-row min-h-[480px]">
           {/* Left: Hero Image */}
           <div className="hidden sm:block sm:w-1/2">
             <img
@@ -51,7 +51,7 @@ const DownloadModal = ({ open, onOpenChange }: DownloadModalProps) => {
               </DialogDescription>
             </DialogHeader>
 
-            <div className="flex flex-col gap-3 mt-4">
+            <div className="flex flex-col gap-3 mt-6">
               <Link to="/pricing">
                 <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-6 text-base rounded-lg">
                   FitStock Plusに参加する
