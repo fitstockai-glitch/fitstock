@@ -51,7 +51,7 @@ const DownloadModal = ({ open, onOpenChange }: DownloadModalProps) => {
               </DialogDescription>
             </DialogHeader>
 
-            <div className="flex flex-col gap-3 mt-6">
+            <div className="flex flex-col gap-3 mt-10">
               <Link to="/pricing">
                 <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-6 text-base rounded-lg">
                   FitStock Plusに参加する
