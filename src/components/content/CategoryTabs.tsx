@@ -1,5 +1,6 @@
 import { ChevronDown } from "lucide-react";
 import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface CategoryTabsProps {
   selectedCategory: string;
@@ -26,6 +27,12 @@ const categories = [
 const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [sortOption, setSortOption] = useState("Daily Picks");
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (category: string) => {
+    onCategoryChange(category);
+    navigate(`/category/${category.toLowerCase()}`);
+  };
 
   return (
     <div className="border-b border-border bg-background sticky top-16 z-40">
@@ -39,7 +46,7 @@ const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps)
           {categories.map((category) => (
             <button
               key={category}
-              onClick={() => onCategoryChange(category)}
+              onClick={() => handleCategoryClick(category)}
               className={`px-4 py-2 text-sm font-medium whitespace-nowrap rounded-md transition-colors ${
                 selectedCategory === category
                   ? "bg-foreground text-background"
