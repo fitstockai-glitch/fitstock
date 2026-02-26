@@ -20,6 +20,14 @@ const Footer = () => {
             <li><Link to="/category/winter" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Winter</Link></li>
             <li><Link to="/category/wedding" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Wedding</Link></li>
             <li><Link to="/category/technology" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Technology</Link></li>
+            <li><Link to="/category/nature" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Nature</Link></li>
+            <li><Link to="/category/animals" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Animals</Link></li>
+            <li><Link to="/category/travel" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Travel</Link></li>
+            <li><Link to="/category/fitness" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Fitness</Link></li>
+            <li><Link to="/category/fashion" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Fashion</Link></li>
+            <li><Link to="/category/interior" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Interior</Link></li>
+            <li><Link to="/category/music" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Music</Link></li>
+            <li><Link to="/category/education" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Education</Link></li>
           </ul>
         </div>
 
