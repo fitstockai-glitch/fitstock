@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="w-full bg-background text-foreground pt-12 pb-6 px-4 md:px-8 border-t border-border">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+      <div className="flex flex-col md:flex-row gap-8 mb-8">
         {/* Browse */}
-        <div>
+        <div className="flex-1">
           <h4 className="text-sm font-semibold text-foreground mb-4">Browse</h4>
-          <ul className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-2">
+          <ul className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-2">
             <li><Link to="/category/portrait" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Portrait</Link></li>
             <li><Link to="/category/landscape" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Landscape</Link></li>
             <li><Link to="/category/abstract" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Abstract</Link></li>
@@ -35,7 +35,7 @@ const Footer = () => {
 
 
         {/* Social */}
-        <div>
+        <div className="md:ml-auto">
           <h4 className="text-sm font-semibold text-foreground mb-4">Follow us</h4>
           <ul className="space-y-2">
             <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Twitter</a></li>
