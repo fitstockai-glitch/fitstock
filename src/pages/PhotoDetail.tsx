@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { Heart, Download, Share2, X, Facebook, Link2, Check, ZoomIn } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,9 @@ const PhotoDetail = () => {
   const [isCopied, setIsCopied] = useState(false);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const imageAreaRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [zoomIconPosition, setZoomIconPosition] = useState({ top: 16, left: 16 });
 
   const baseId = id?.split("-")[0] || "1";
   const photo = photos.find((p) => p.id === baseId) || photos[0];
@@ -51,6 +54,36 @@ const PhotoDetail = () => {
     setIsShareOpen(false);
   };
 
+  useEffect(() => {
+    const updateZoomIconPosition = () => {
+      if (!imageAreaRef.current || !imageRef.current) return;
+
+      const areaRect = imageAreaRef.current.getBoundingClientRect();
+      const imageRect = imageRef.current.getBoundingClientRect();
+
+      setZoomIconPosition({
+        top: Math.max(8, imageRect.top - areaRect.top + 12),
+        left: Math.max(8, imageRect.right - areaRect.left - 12),
+      });
+    };
+
+    updateZoomIconPosition();
+
+    const imageEl = imageRef.current;
+    if (imageEl && !imageEl.complete) {
+      imageEl.addEventListener("load", updateZoomIconPosition);
+    }
+
+    window.addEventListener("resize", updateZoomIconPosition);
+
+    return () => {
+      window.removeEventListener("resize", updateZoomIconPosition);
+      if (imageEl) {
+        imageEl.removeEventListener("load", updateZoomIconPosition);
+      }
+    };
+  }, [photo.imageUrl]);
+
   return (
     <div className="min-h-screen bg-background">
       <FitStockHeader />
@@ -66,15 +99,24 @@ const PhotoDetail = () => {
           {/* Left side - Photo */}
           <div className="flex-1">
             <div 
+              ref={imageAreaRef}
               className="overflow-hidden relative group cursor-zoom-in aspect-[20/13] flex items-start justify-center"
               onClick={() => setIsZoomOpen(true)}
             >
               <img
+                ref={imageRef}
                 src={photo.imageUrl}
                 alt={photo.title}
                 className="max-w-full max-h-full object-contain"
               />
-              <div className="absolute top-4 right-4 p-2 bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <div
+                className="absolute p-2 bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                style={{
+                  top: `${zoomIconPosition.top}px`,
+                  left: `${zoomIconPosition.left}px`,
+                  transform: "translateX(-100%)",
+                }}
+              >
                 <ZoomIn size={20} className="text-foreground" />
               </div>
             </div>
