@@ -6,7 +6,7 @@ import MasonryGallery from "../components/photo/MasonryGallery";
 import { photos } from "../data/photos";
 
 const Index = () => {
-  const [selectedCategory, setSelectedCategory] = useState("Portrait");
+  const [selectedCategory, setSelectedCategory] = useState("portrait");
 
   // For demo, show all photos regardless of category
   const filteredPhotos = photos;

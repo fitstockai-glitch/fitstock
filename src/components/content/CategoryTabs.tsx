@@ -8,20 +8,20 @@ interface CategoryTabsProps {
 }
 
 const categories = [
-  "Portrait",
-  "Landscape",
-  "Abstract",
-  "Business",
-  "Mockup",
-  "Food",
-  "Family",
-  "Building",
-  "Autumn",
-  "Winter",
-  "Wedding",
-  "Technology",
-  "Nature",
-  "Animals",
+  { key: "portrait", label: "ポートレート" },
+  { key: "landscape", label: "風景" },
+  { key: "abstract", label: "抽象" },
+  { key: "business", label: "ビジネス" },
+  { key: "mockup", label: "モックアップ" },
+  { key: "food", label: "フード" },
+  { key: "family", label: "ファミリー" },
+  { key: "building", label: "建物" },
+  { key: "autumn", label: "秋" },
+  { key: "winter", label: "冬" },
+  { key: "wedding", label: "ウェディング" },
+  { key: "technology", label: "テクノロジー" },
+  { key: "nature", label: "自然" },
+  { key: "animals", label: "動物" },
 ];
 
 const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps) => {
@@ -29,9 +29,9 @@ const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps)
   const [sortOption, setSortOption] = useState("Daily Picks");
   const navigate = useNavigate();
 
-  const handleCategoryClick = (category: string) => {
-    onCategoryChange(category);
-    navigate(`/category/${category.toLowerCase()}`);
+  const handleCategoryClick = (key: string) => {
+    onCategoryChange(key);
+    navigate(`/category/${key}`);
   };
 
   return (
@@ -43,17 +43,17 @@ const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps)
           className="flex items-center gap-1 overflow-x-auto scrollbar-hide py-3 flex-1"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {categories.map((category) => (
+          {categories.map((cat) => (
             <button
-              key={category}
-              onClick={() => handleCategoryClick(category)}
+              key={cat.key}
+              onClick={() => handleCategoryClick(cat.key)}
               className={`px-4 py-2 text-sm font-medium whitespace-nowrap rounded-md transition-colors ${
-                selectedCategory === category
+                selectedCategory === cat.key
                   ? "bg-foreground text-background"
                   : "text-foreground hover:bg-secondary"
               }`}
             >
-              {category}
+              {cat.label}
             </button>
           ))}
         </div>

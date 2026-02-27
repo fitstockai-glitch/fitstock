@@ -9,9 +9,7 @@ const Category = () => {
   const { category } = useParams();
   
   // Capitalize first letter to match tab names
-  const activeCategory = category 
-    ? category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()
-    : "Portrait";
+  const activeCategory = category || "portrait";
 
   // For demo, show all photos regardless of category
   const filteredPhotos = photos;
