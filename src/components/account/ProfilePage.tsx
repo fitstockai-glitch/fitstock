@@ -43,7 +43,7 @@ const ProfilePage = () => {
 
       {/* Password change */}
       <div className="space-y-4">
-        <h2 className="text-lg font-semibold text-foreground">パスワードの変更</h2>
+        <h2 className="text-base font-semibold text-foreground">パスワードの変更</h2>
         <div className="space-y-1.5">
           <Label className="text-sm text-muted-foreground font-normal">
             現在のパスワード（変更しない場合は空欄）
@@ -88,7 +88,7 @@ const ProfilePage = () => {
 
       {/* Delete account */}
       <div className="space-y-3 pt-6">
-        <h2 className="text-lg font-semibold text-foreground">ユーザー詳細</h2>
+        <h2 className="text-base font-semibold text-foreground">ユーザー詳細</h2>
         <div className="border border-border rounded-md p-4 space-y-2">
           <p className="text-sm text-muted-foreground">
             これにより、個人データはすべて完全に削除されます。
