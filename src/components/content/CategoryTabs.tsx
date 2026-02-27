@@ -35,7 +35,7 @@ const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps)
   };
 
   return (
-    <div className="bg-background sticky top-16 z-40">
+    <div className="border-b border-border bg-background sticky top-16 z-40">
       <div className="flex items-center justify-between px-4 md:px-8">
         {/* Scrollable categories */}
         <div 
