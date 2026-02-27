@@ -19,7 +19,7 @@ const navItems: { id: AccountSection; label: string; icon: React.ReactNode }[] =
 const AccountSidebar = ({ activeSection, onSectionChange }: AccountSidebarProps) => {
   return (
     <aside className="w-full md:w-52 flex-shrink-0 border-r border-border min-h-full">
-      <nav className="pt-[38px] pb-2 px-2">
+      <nav className="pt-[36px] pb-2 px-2">
         {navItems.map((item) => (
           <button
             key={item.id}
