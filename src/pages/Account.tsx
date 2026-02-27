@@ -35,7 +35,7 @@ const Account = () => {
       case "favorites":
         return (
           <div className="space-y-6">
-            <h1 className="text-xl font-medium text-foreground">お気に入り</h1>
+            <h1 className="text-2xl font-semibold text-foreground">お気に入り</h1>
             <FavoritesSection />
           </div>
         );
