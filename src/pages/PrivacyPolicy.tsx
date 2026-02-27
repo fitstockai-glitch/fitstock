@@ -115,63 +115,62 @@ const PrivacyPolicy = () => {
 
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">4. 第三者への情報提供</h2>
-              <p className="text-muted-foreground leading-relaxed mb-4">当サービスでは、以下のサービスプロバイダーに個人情報を提供します。これらのプロバイダーは、サービスの提供に必要な範囲でのみ情報を利用し、適切なセキュリティ対策を講じています。</p>
+              <p className="text-muted-foreground leading-relaxed mb-4">当サービスでは、サービスの提供に必要な範囲で、以下の第三者サービスプロバイダーに個人情報を提供します。これらのプロバイダーは、適切なセキュリティ対策を講じています。</p>
 
               <h3 className="text-xl font-light text-foreground mb-2">4.1 必須サービス</h3>
               <div className="space-y-4 mb-6">
                 <div className="text-muted-foreground">
-                  <p className="font-medium text-foreground">Supabase（米国）</p>
+                  <p className="font-medium text-foreground">認証・データベースサービス</p>
                   <ul className="list-disc list-inside space-y-1 mt-1">
                     <li>提供情報: ユーザー認証情報、データベース情報、ストレージファイル</li>
-                    <li>目的: 認証、データベース管理、画像ストレージ</li>
-                    <li>プライバシーポリシー: https://supabase.com/privacy</li>
+                    <li>目的: アカウント管理、データ保存、画像ストレージ</li>
+                    <li>所在地: 米国</li>
                   </ul>
                 </div>
                 <div className="text-muted-foreground">
-                  <p className="font-medium text-foreground">Lemon Squeezy（米国）</p>
+                  <p className="font-medium text-foreground">決済代行サービス</p>
                   <ul className="list-disc list-inside space-y-1 mt-1">
                     <li>提供情報: 決済情報、サブスクリプション情報</li>
                     <li>目的: 決済処理、サブスクリプション管理</li>
-                    <li>プライバシーポリシー: https://www.lemonsqueezy.com/privacy</li>
+                    <li>所在地: 米国</li>
                   </ul>
                 </div>
                 <div className="text-muted-foreground">
-                  <p className="font-medium text-foreground">Vercel（米国）</p>
+                  <p className="font-medium text-foreground">ホスティングサービス</p>
                   <ul className="list-disc list-inside space-y-1 mt-1">
                     <li>提供情報: アクセスログ、利用統計</li>
-                    <li>目的: ホスティング、パフォーマンス分析</li>
-                    <li>プライバシーポリシー: https://vercel.com/legal/privacy-policy</li>
+                    <li>目的: サーバー運用、パフォーマンス分析</li>
+                    <li>所在地: 米国</li>
                   </ul>
                 </div>
               </div>
 
               <h3 className="text-xl font-light text-foreground mb-2">4.2 任意サービス（OAuth認証時のみ）</h3>
               <div className="text-muted-foreground mb-6">
-                <p className="font-medium text-foreground">Google（米国）</p>
+                <p className="font-medium text-foreground">外部認証サービス</p>
                 <ul className="list-disc list-inside space-y-1 mt-1">
-                  <li>提供情報: Googleアカウント情報</li>
-                  <li>目的: OAuth認証</li>
-                  <li>プライバシーポリシー: https://policies.google.com/privacy</li>
+                  <li>提供情報: 外部アカウント情報（Googleアカウント等）</li>
+                  <li>目的: ソーシャルログイン認証</li>
+                  <li>所在地: 米国</li>
                 </ul>
               </div>
 
               <h3 className="text-xl font-light text-foreground mb-2">4.3 広告サービス（Free Member / Guest のみ）</h3>
               <div className="space-y-4 text-muted-foreground mb-4">
                 <div>
-                  <p className="font-medium text-foreground">Google AdSense（米国）</p>
+                  <p className="font-medium text-foreground">広告配信サービス</p>
                   <ul className="list-disc list-inside space-y-1 mt-1">
                     <li>提供情報: Cookie、アクセス情報</li>
                     <li>目的: パーソナライズド広告の配信</li>
-                    <li>プライバシーポリシー: https://policies.google.com/privacy</li>
-                    <li>オプトアウト: https://adssettings.google.com/</li>
+                    <li>所在地: 米国</li>
                   </ul>
                 </div>
                 <div>
                   <p className="font-medium text-foreground">アフィリエイトプログラム</p>
                   <ul className="list-disc list-inside space-y-1 mt-1">
-                    <li>Amazon Associates、Adobe Affiliate Program、Shutterstock Affiliate</li>
                     <li>提供情報: Cookie、クリック情報</li>
                     <li>目的: アフィリエイト広告の効果測定</li>
+                    <li>所在地: 米国・日本</li>
                   </ul>
                 </div>
               </div>
@@ -197,13 +196,13 @@ const PrivacyPolicy = () => {
 
               <h3 className="text-xl font-light text-foreground mb-2">5.3 分析Cookie</h3>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-4">
-                <li>Vercel Analytics（匿名化された利用統計）</li>
+                <li>アクセス解析ツール（匿名化された利用統計）</li>
                 <li>サービス改善のためのアクセス解析</li>
               </ul>
 
               <h3 className="text-xl font-light text-foreground mb-2">5.4 広告Cookie（Free Member / Guest のみ）</h3>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-4">
-                <li>Google AdSense（パーソナライズド広告）</li>
+                <li>広告配信サービス（パーソナライズド広告）</li>
                 <li>アフィリエイトトラッキング</li>
               </ul>
 
@@ -228,13 +227,13 @@ const PrivacyPolicy = () => {
 
               <h3 className="text-xl font-light text-foreground mb-2">アクセス制御</h3>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-4">
-                <li>Supabase Row Level Security（RLS）によるデータベースアクセス制限</li>
-                <li>役割ベースのアクセス制御</li>
+                <li>データベースレベルでのアクセス制限</li>
+                <li>役割ベースのアクセス制御（RBAC）</li>
               </ul>
 
               <h3 className="text-xl font-light text-foreground mb-2">パスワード保護</h3>
               <ul className="list-disc list-inside text-muted-foreground space-y-1 mb-4">
-                <li>bcryptによるパスワードのハッシュ化</li>
+                <li>業界標準の暗号化アルゴリズムによるパスワードのハッシュ化</li>
                 <li>平文での保存は一切行いません</li>
               </ul>
 
@@ -246,7 +245,7 @@ const PrivacyPolicy = () => {
 
               <h3 className="text-xl font-light text-foreground mb-2">バックアップ</h3>
               <ul className="list-disc list-inside text-muted-foreground space-y-1">
-                <li>日次の自動バックアップ（Backblaze B2）</li>
+                <li>日次の自動バックアップ</li>
                 <li>災害復旧計画の策定</li>
               </ul>
             </section>
@@ -308,7 +307,7 @@ const PrivacyPolicy = () => {
               </ul>
 
               <h3 className="text-xl font-light text-foreground mb-2">10.2 EU域外へのデータ転送</h3>
-              <p className="text-muted-foreground leading-relaxed mb-4">当サービスでは、米国のサービスプロバイダー（Supabase、Lemon Squeezy、Vercel等）を利用しています。これらのプロバイダーは、適切なデータ保護措置を講じています。</p>
+              <p className="text-muted-foreground leading-relaxed mb-4">当サービスでは、米国のサービスプロバイダーを利用しています。これらのプロバイダーは、適切なデータ保護措置（標準契約条項等）を講じています。</p>
 
               <h3 className="text-xl font-light text-foreground mb-2">10.3 データ保護責任者</h3>
               <p className="text-muted-foreground leading-relaxed">お問い合わせ先: privacy@fitstock.example.com</p>
