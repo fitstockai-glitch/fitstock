@@ -35,7 +35,7 @@ const Footer = () => {
 
 
         {/* Social */}
-        <div className="md:ml-auto">
+        <div className="md:ml-auto md:mr-8 lg:mr-16">
           <h4 className="text-sm font-semibold text-foreground mb-4">Follow us</h4>
           <ul className="space-y-2">
             <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Twitter</a></li>
