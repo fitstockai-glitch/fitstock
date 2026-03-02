@@ -152,7 +152,7 @@ const PhotoDetail = () => {
               </ul>
               <Link to="/pricing">
                 <Button
-                  className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium mt-2"
+                  className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-medium mt-2"
                 >
                   FitStock Plusに参加する
                 </Button>
