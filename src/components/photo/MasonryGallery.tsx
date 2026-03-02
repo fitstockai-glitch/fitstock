@@ -11,6 +11,7 @@ const breakpointColumns = {
   1280: 4,
   1024: 3,
   768: 2,
+  640: 1,
 };
 
 const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
