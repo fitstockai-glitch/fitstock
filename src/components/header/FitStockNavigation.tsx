@@ -57,12 +57,12 @@ const FitStockNavigation = () => {
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-0 md:gap-0.5">
+        <div className="flex items-center gap-0">
           {/* Language Switcher */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsLanguageDropdownOpen(!isLanguageDropdownOpen)}
-              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
               aria-label="Language"
             >
               <Globe size={20} />
@@ -94,7 +94,7 @@ const FitStockNavigation = () => {
           {/* Favorites */}
           <Link to="/account?section=favorites">
             <button
-              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
               aria-label="Favorites"
             >
               <Heart size={20} />
@@ -104,7 +104,7 @@ const FitStockNavigation = () => {
           {/* User Account */}
           <Link to="/account">
             <button
-              className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
               aria-label="Account"
             >
               <User size={20} />
