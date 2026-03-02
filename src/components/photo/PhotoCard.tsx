@@ -69,7 +69,7 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
               className="rounded-full bg-white hover:bg-white/90 text-foreground font-medium shadow-md"
               onClick={handleDownload}
             >
-              <Download size={14} className="mr-0.5" />
+              <Download size={14} />
               Download
             </Button>
           </div>
