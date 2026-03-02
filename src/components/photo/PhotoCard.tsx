@@ -43,7 +43,7 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
           />
           
           {/* Overlay on hover - desktop only */}
-          <div className={`hidden md:block absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 ${
+          <div className={`hidden lg:block absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 ${
             isHovered ? "opacity-100" : "opacity-0"
           }`}>
             <div className={`absolute top-3 right-3 flex gap-2 transition-opacity duration-300 ${
@@ -78,7 +78,7 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
       </Link>
 
       {/* Actions below image - mobile/tablet only */}
-      <div className="flex md:hidden items-center justify-between px-1 py-2">
+      <div className="flex lg:hidden items-center justify-between px-1 py-2">
         <Button
           variant="ghost"
           size="icon"
