@@ -2,7 +2,9 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-background text-foreground pt-12 pb-6 px-4 md:px-8 border-t border-border">
+    <footer className="w-full bg-background text-foreground">
+      <div className="border-t border-border" />
+      <div className="pt-12 pb-6 px-4 md:px-8">
       <div className="flex flex-col md:flex-row gap-8 mb-8">
         {/* Browse */}
         <div className="flex-1">
@@ -33,7 +35,6 @@ const Footer = () => {
 
 
 
-
         {/* Social */}
         <div className="md:ml-auto md:mr-16 lg:mr-32">
           <h4 className="text-sm font-semibold text-foreground mb-4">Follow us</h4>
@@ -44,9 +45,11 @@ const Footer = () => {
           </ul>
         </div>
       </div>
+      </div>
 
       {/* Bottom */}
-      <div className="border-t border-border pt-6">
+      <div className="border-t border-border" />
+      <div className="pt-6 pb-6 px-4 md:px-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <Link to="/" className="flex items-center gap-2">
             <svg width="100" height="22" viewBox="0 0 172 38" fill="none" xmlns="http://www.w3.org/2000/svg">
