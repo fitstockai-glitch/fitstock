@@ -57,7 +57,7 @@ const FitStockNavigation = () => {
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-1 md:gap-2">
+        <div className="flex items-center gap-0 md:gap-0.5">
           {/* Language Switcher */}
           <div className="relative" ref={dropdownRef}>
             <button
