@@ -48,7 +48,7 @@ const FitStockNavigation = () => {
             <Search size={18} className="text-muted-foreground mr-3" />
             <input
               type="text"
-              placeholder="Search for anything"
+            placeholder="画像を検索する"
               className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
@@ -128,7 +128,7 @@ const FitStockNavigation = () => {
           <Search size={18} className="text-muted-foreground mr-3" />
           <input
             type="text"
-            placeholder="Search for anything"
+            placeholder="画像を検索する"
             className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
           />
         </div>
