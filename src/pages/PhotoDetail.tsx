@@ -168,7 +168,7 @@ const PhotoDetail = () => {
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
-                className={`flex-1 h-11 gap-2 rounded-md ${
+                className={`flex-1 h-11 gap-2 rounded-md justify-start ${
                   isLiked ? "bg-red-50 border-red-200" : ""
                 }`}
                 onClick={() => setIsLiked(!isLiked)}
@@ -183,7 +183,7 @@ const PhotoDetail = () => {
               <div className="relative flex-1">
                 <Button
                   variant="outline"
-                  className="w-full h-11 gap-2 rounded-md"
+                  className="w-full h-11 gap-2 rounded-md justify-start"
                   onClick={() => setIsShareOpen(!isShareOpen)}
                 >
                   <Share2 size={16} className="text-foreground" />
