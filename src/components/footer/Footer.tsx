@@ -8,28 +8,28 @@ const Footer = () => {
       <div className="flex flex-col md:flex-row gap-8 mb-8">
         {/* Browse */}
         <div className="flex-1">
-          <h4 className="text-sm font-semibold text-foreground mb-4">Browse</h4>
+          <h4 className="text-sm font-semibold text-foreground mb-4">カテゴリ</h4>
           <ul className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-2">
-            <li><Link to="/category/portrait" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Portrait</Link></li>
-            <li><Link to="/category/landscape" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Landscape</Link></li>
-            <li><Link to="/category/abstract" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Abstract</Link></li>
-            <li><Link to="/category/business" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Business</Link></li>
-            <li><Link to="/category/mockup" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Mockup</Link></li>
-            <li><Link to="/category/food" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Food</Link></li>
-            <li><Link to="/category/family" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Family</Link></li>
-            <li><Link to="/category/building" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Building</Link></li>
-            <li><Link to="/category/autumn" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Autumn</Link></li>
-            <li><Link to="/category/winter" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Winter</Link></li>
-            <li><Link to="/category/wedding" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Wedding</Link></li>
-            <li><Link to="/category/technology" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Technology</Link></li>
-            <li><Link to="/category/nature" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Nature</Link></li>
-            <li><Link to="/category/animals" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Animals</Link></li>
-            <li><Link to="/category/travel" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Travel</Link></li>
-            <li><Link to="/category/fitness" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Fitness</Link></li>
-            <li><Link to="/category/fashion" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Fashion</Link></li>
-            <li><Link to="/category/interior" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Interior</Link></li>
-            <li><Link to="/category/music" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Music</Link></li>
-            <li><Link to="/category/education" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Education</Link></li>
+            <li><Link to="/category/portrait" className="text-sm text-muted-foreground hover:text-foreground transition-colors">ポートレート</Link></li>
+            <li><Link to="/category/landscape" className="text-sm text-muted-foreground hover:text-foreground transition-colors">風景</Link></li>
+            <li><Link to="/category/abstract" className="text-sm text-muted-foreground hover:text-foreground transition-colors">抽象</Link></li>
+            <li><Link to="/category/business" className="text-sm text-muted-foreground hover:text-foreground transition-colors">ビジネス</Link></li>
+            <li><Link to="/category/mockup" className="text-sm text-muted-foreground hover:text-foreground transition-colors">モックアップ</Link></li>
+            <li><Link to="/category/food" className="text-sm text-muted-foreground hover:text-foreground transition-colors">フード</Link></li>
+            <li><Link to="/category/family" className="text-sm text-muted-foreground hover:text-foreground transition-colors">ファミリー</Link></li>
+            <li><Link to="/category/building" className="text-sm text-muted-foreground hover:text-foreground transition-colors">建物</Link></li>
+            <li><Link to="/category/autumn" className="text-sm text-muted-foreground hover:text-foreground transition-colors">秋</Link></li>
+            <li><Link to="/category/winter" className="text-sm text-muted-foreground hover:text-foreground transition-colors">冬</Link></li>
+            <li><Link to="/category/wedding" className="text-sm text-muted-foreground hover:text-foreground transition-colors">ウェディング</Link></li>
+            <li><Link to="/category/technology" className="text-sm text-muted-foreground hover:text-foreground transition-colors">テクノロジー</Link></li>
+            <li><Link to="/category/nature" className="text-sm text-muted-foreground hover:text-foreground transition-colors">自然</Link></li>
+            <li><Link to="/category/animals" className="text-sm text-muted-foreground hover:text-foreground transition-colors">動物</Link></li>
+            <li><Link to="/category/travel" className="text-sm text-muted-foreground hover:text-foreground transition-colors">旅行</Link></li>
+            <li><Link to="/category/fitness" className="text-sm text-muted-foreground hover:text-foreground transition-colors">フィットネス</Link></li>
+            <li><Link to="/category/fashion" className="text-sm text-muted-foreground hover:text-foreground transition-colors">ファッション</Link></li>
+            <li><Link to="/category/interior" className="text-sm text-muted-foreground hover:text-foreground transition-colors">インテリア</Link></li>
+            <li><Link to="/category/music" className="text-sm text-muted-foreground hover:text-foreground transition-colors">音楽</Link></li>
+            <li><Link to="/category/education" className="text-sm text-muted-foreground hover:text-foreground transition-colors">教育</Link></li>
           </ul>
         </div>
 
