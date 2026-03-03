@@ -183,11 +183,11 @@ const PhotoDetail = () => {
               <div className="relative flex-1">
                 <Button
                   variant="outline"
-                  className="w-full h-11 gap-2 rounded-md justify-start"
+                  className="w-full h-11 rounded-md justify-start relative"
                   onClick={() => setIsShareOpen(!isShareOpen)}
                 >
                   <Share2 size={16} className="text-foreground" />
-                  <span className="text-sm">シェア</span>
+                  <span className="text-sm absolute inset-0 flex items-center justify-center">シェア</span>
                 </Button>
 
                 {isShareOpen && (
