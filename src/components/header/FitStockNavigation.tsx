@@ -111,8 +111,8 @@ const FitStockNavigation = () => {
             </button>
           </Link>
 
-          {/* Upgrade to Plus */}
-          <Link to="/pricing" className="ml-2">
+          {/* Upgrade to Plus - hidden on mobile */}
+          <Link to="/pricing" className="ml-2 hidden md:block">
             <Button 
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90 font-medium text-sm px-4"
             >
