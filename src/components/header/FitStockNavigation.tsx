@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 
 type Language = "ja" | "en";
 
-const FitStockNavigation = () => {
+interface FitStockNavigationProps {
+  hideSearch?: boolean;
+}
+
+const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<Language>("ja");
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
@@ -123,16 +127,18 @@ const FitStockNavigation = () => {
       </div>
 
       {/* Mobile search - Shows below header on mobile */}
-      <div className="md:hidden px-4 pb-3">
-        <div className="flex items-center w-full bg-secondary rounded-full px-4 py-2.5">
-          <Search size={18} className="text-muted-foreground mr-3" />
-          <input
-            type="text"
-            placeholder="画像を検索する"
-            className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
-          />
+      {!hideSearch && (
+        <div className="md:hidden px-4 pb-3">
+          <div className="flex items-center w-full bg-secondary rounded-full px-4 py-2.5">
+            <Search size={18} className="text-muted-foreground mr-3" />
+            <input
+              type="text"
+              placeholder="画像を検索する"
+              className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
+            />
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 };
