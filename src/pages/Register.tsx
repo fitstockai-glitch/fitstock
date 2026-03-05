@@ -29,18 +29,17 @@ const Register = () => {
     <div className="min-h-screen flex flex-col bg-background">
       <FitStockHeader />
       <main className="flex-1 flex flex-col md:flex-row">
-        {/* Mobile: background image with overlay form */}
+        {/* Mobile: background image with white card form */}
         <div
-          className="relative flex-1 flex flex-col md:hidden"
+          className="relative flex-1 flex flex-col md:hidden min-h-[80vh]"
           style={{
             backgroundImage: `url(${randomHero})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
         >
-          <div className="absolute inset-0 bg-background/85" />
-          <div className="relative z-10 flex-1 flex items-center justify-center px-6 py-16">
-            <div className="w-full max-w-md space-y-8">
+          <div className="flex-1 flex items-center justify-center px-4 py-10">
+            <div className="w-full max-w-md bg-background rounded-xl p-6 space-y-6">
               <h1 className="text-2xl font-bold text-foreground">
                 アカウント作成
               </h1>
@@ -48,44 +47,18 @@ const Register = () => {
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
                   <Label htmlFor="name-mobile" className="text-sm font-medium text-foreground">お名前</Label>
-                  <Input
-                    id="name-mobile"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    className="h-12 bg-background/60 border-border"
-                  />
+                  <Input id="name-mobile" type="text" value={name} onChange={(e) => setName(e.target.value)} required className="h-12" />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="email-mobile" className="text-sm font-medium text-foreground">メールアドレス</Label>
-                  <Input
-                    id="email-mobile"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="h-12 bg-background/60 border-border"
-                  />
+                  <Input id="email-mobile" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="h-12" />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="password-mobile" className="text-sm font-medium text-foreground">パスワード</Label>
-                  <Input
-                    id="password-mobile"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    className="h-12 bg-background/60 border-border"
-                  />
+                  <Input id="password-mobile" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="h-12" />
                 </div>
 
-                <Button
-                  type="submit"
-                  className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-md text-base"
-                >
+                <Button type="submit" className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-md text-base">
                   登録する
                 </Button>
               </form>
@@ -93,12 +66,7 @@ const Register = () => {
               <div className="text-center">
                 <p className="text-sm text-muted-foreground">
                   すでにアカウントをお持ちですか？{" "}
-                  <Link
-                    to="/login"
-                    className="font-semibold text-foreground underline underline-offset-4 hover:text-foreground/80"
-                  >
-                    ログイン
-                  </Link>
+                  <Link to="/login" className="font-semibold text-foreground underline underline-offset-4 hover:text-foreground/80">ログイン</Link>
                 </p>
               </div>
             </div>
