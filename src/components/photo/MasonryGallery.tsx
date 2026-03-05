@@ -19,7 +19,7 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
   const [displayedPhotos, setDisplayedPhotos] = useState<Photo[]>([]);
   const batchRef = useRef(0);
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const isLoadingRef = useRef(false);
+  const lastLoadTime = useRef(0);
 
   const generateBatch = useCallback((batchNum: number): Photo[] => {
     const shuffled = [...photos].sort(() => Math.random() - 0.5);
@@ -31,39 +31,33 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
   }, [photos]);
 
   const loadMore = useCallback(() => {
-    if (isLoadingRef.current || photos.length === 0) return;
-    isLoadingRef.current = true;
+    if (photos.length === 0) return;
 
-    const next = batchRef.current + 1;
-    batchRef.current = next;
+    // Throttle to max once per 50ms to avoid runaway loops
+    const now = Date.now();
+    if (now - lastLoadTime.current < 50) return;
+    lastLoadTime.current = now;
 
-    // Load 2 batches at once for speed
-    const batch1 = generateBatch(next);
-    const next2 = next + 1;
+    const next1 = batchRef.current + 1;
+    const next2 = next1 + 1;
     batchRef.current = next2;
+
+    const batch1 = generateBatch(next1);
     const batch2 = generateBatch(next2);
 
     setDisplayedPhotos((current) => [...current, ...batch1, ...batch2]);
-
-    // Allow next load on next frame
-    requestAnimationFrame(() => {
-      isLoadingRef.current = false;
-    });
   }, [photos, generateBatch]);
 
-  // Load initial photos immediately
+  // Load initial photos + preload
   useEffect(() => {
     if (photos.length > 0 && displayedPhotos.length === 0) {
-      batchRef.current = 1;
-      setDisplayedPhotos(photos);
-      // Preload second batch immediately
-      const batch2 = generateBatch(2);
       batchRef.current = 2;
-      setDisplayedPhotos((c) => [...c, ...batch2]);
+      const batch2 = generateBatch(2);
+      setDisplayedPhotos([...photos, ...batch2]);
     }
   }, [photos]);
 
-  // Intersection Observer for infinite scroll
+  // Intersection Observer
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
@@ -81,6 +75,21 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
     return () => observer.disconnect();
   }, [loadMore]);
 
+  // Backup: scroll listener to guarantee continuous loading
+  useEffect(() => {
+    const handleScroll = () => {
+      const sentinel = sentinelRef.current;
+      if (!sentinel) return;
+      const rect = sentinel.getBoundingClientRect();
+      if (rect.top < window.innerHeight + 8000) {
+        loadMore();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loadMore]);
+
   return (
     <div className="px-4 md:px-8 pt-4 pb-0">
       <Masonry
@@ -93,7 +102,6 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
         ))}
       </Masonry>
 
-      {/* Sentinel element for infinite scroll trigger */}
       <div ref={sentinelRef} className="w-full h-10" />
     </div>
   );
