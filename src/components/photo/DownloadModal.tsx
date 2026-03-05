@@ -29,8 +29,8 @@ const DownloadModal = ({ open, onOpenChange }: DownloadModalProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-3xl p-0 overflow-hidden border-none">
-        <div className="flex flex-col sm:flex-row min-h-[480px]">
+      <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-3xl p-0 overflow-hidden border-none">
+        <div className="flex flex-col sm:flex-row sm:min-h-[480px]">
           {/* Left: Hero Image */}
           <div className="hidden sm:block sm:w-1/2">
             <img
@@ -41,7 +41,7 @@ const DownloadModal = ({ open, onOpenChange }: DownloadModalProps) => {
           </div>
 
           {/* Right: Content */}
-          <div className="sm:w-1/2 p-8 flex flex-col justify-center">
+          <div className="sm:w-1/2 p-6 sm:p-8 flex flex-col justify-center">
             <DialogHeader className="space-y-3">
               <DialogTitle className="text-2xl font-bold leading-tight">
                 制限を気にせず、クリエイティブに集中しよう
