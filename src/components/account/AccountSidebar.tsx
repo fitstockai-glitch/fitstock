@@ -36,7 +36,7 @@ const AccountSidebar = ({ activeSection, onSectionChange }: AccountSidebarProps)
         ))}
 
         {/* Logout */}
-        <div className="border-t border-border mt-1 pt-2">
+        <div className="border-t border-border mt-1 pt-1">
         <button
           onClick={() => {}}
           className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:rounded-md transition-colors text-left"
