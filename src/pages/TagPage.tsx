@@ -16,8 +16,7 @@ const TagPage = () => {
       <FitStockHeader />
 
       <div className="px-4 md:px-8 pt-8 pb-4">
-        <p className="text-sm text-muted-foreground mb-1">タグ</p>
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground">#{activeTag}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{activeTag}</h1>
       </div>
 
       <main>
