@@ -8,7 +8,7 @@ import DownloadHistorySection from "@/components/account/DownloadHistorySection"
 import FavoritesSection from "@/components/account/FavoritesSection";
 import BillingSection from "@/components/account/BillingSection";
 import ReceiptInfoSection from "@/components/account/ReceiptInfoSection";
-import { ChevronUp, ChevronDown } from "lucide-react";
+import { ChevronUp, ChevronDown, ChevronLeft } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export type PlanStatus = "free" | "plus" | "cancelled";
@@ -135,51 +135,63 @@ const Account = () => {
       {/* Mobile layout */}
       <div className="md:hidden flex-1">
         {/* Dropdown selector */}
-        <div className="relative bg-muted" ref={dropdownRef}>
-          <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="w-full flex items-center justify-between px-4 py-3.5 text-sm text-foreground"
-          >
-            <span>{currentLabel}</span>
-            {isDropdownOpen ? (
-              <ChevronUp size={18} className="text-muted-foreground" />
-            ) : (
-              <ChevronDown size={18} className="text-muted-foreground" />
-            )}
-          </button>
+        {activeSection === "receipt-info" ? (
+          <div className="bg-muted">
+            <button
+              onClick={() => setActiveSection("billing")}
+              className="flex items-center gap-1 px-4 py-3.5 text-sm text-foreground"
+            >
+              <ChevronLeft size={18} className="text-muted-foreground" />
+              <span>領収書発行</span>
+            </button>
+          </div>
+        ) : (
+          <div className="relative bg-muted" ref={dropdownRef}>
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full flex items-center justify-between px-4 py-3.5 text-sm text-foreground"
+            >
+              <span>{currentLabel}</span>
+              {isDropdownOpen ? (
+                <ChevronUp size={18} className="text-muted-foreground" />
+              ) : (
+                <ChevronDown size={18} className="text-muted-foreground" />
+              )}
+            </button>
 
-          {isDropdownOpen && (
-            <div className="absolute left-0 right-0 top-full bg-muted border-b border-border shadow-lg z-40">
-              {mobileNavItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    setActiveSection(item.id);
-                    setIsDropdownOpen(false);
-                  }}
-                  className={`w-full text-left px-6 py-3.5 text-sm transition-colors ${
-                    activeSection === item.id
-                      ? "bg-muted text-foreground font-medium"
-                      : "text-foreground hover:bg-muted/50"
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-              <div className="px-6 py-3">
-                <button
-                  onClick={() => {
-                    setIsDropdownOpen(false);
-                    // TODO: logout logic
-                  }}
-                  className="w-full bg-foreground text-background text-sm font-medium py-2.5 rounded-md hover:bg-foreground/90 transition-colors"
-                >
-                  ログアウト
-                </button>
+            {isDropdownOpen && (
+              <div className="absolute left-0 right-0 top-full bg-muted border-b border-border shadow-lg z-40">
+                {mobileNavItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setActiveSection(item.id);
+                      setIsDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-6 py-3.5 text-sm transition-colors ${
+                      activeSection === item.id
+                        ? "bg-muted text-foreground font-medium"
+                        : "text-foreground hover:bg-muted/50"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+                <div className="px-6 py-3">
+                  <button
+                    onClick={() => {
+                      setIsDropdownOpen(false);
+                      // TODO: logout logic
+                    }}
+                    className="w-full bg-foreground text-background text-sm font-medium py-2.5 rounded-md hover:bg-foreground/90 transition-colors"
+                  >
+                    ログアウト
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
 
         {/* Content */}
         <div className="px-4 py-4">
