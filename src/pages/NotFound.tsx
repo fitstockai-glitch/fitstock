@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import Header from "@/components/header/Header";
+import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
 
 const NotFound = () => {
@@ -12,7 +12,7 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
-      <Header />
+      <FitStockHeader />
       <main className="flex-1 flex items-center justify-center px-4">
         <div className="text-center space-y-6">
           <h1 className="text-8xl font-light tracking-tight">404</h1>
