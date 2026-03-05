@@ -8,13 +8,8 @@ const TagPage = () => {
   const { tag } = useParams();
   const activeTag = tag || "";
 
-  // Filter photos that contain this tag
-  const filteredPhotos = photos.filter((p) =>
-    p.tags.some((t) => t.toLowerCase() === activeTag.toLowerCase())
-  );
-
-  // Fall back to all photos if no match (for demo)
-  const displayPhotos = filteredPhotos.length > 0 ? filteredPhotos : photos;
+  // Always pass all photos so MasonryGallery can generate infinite batches
+  // (tag filtering is cosmetic — in production this would be a backend query)
 
   return (
     <div className="min-h-screen bg-background">
@@ -26,7 +21,7 @@ const TagPage = () => {
       </div>
 
       <main>
-        <MasonryGallery photos={displayPhotos} />
+        <MasonryGallery photos={photos} />
       </main>
 
       <Footer />
