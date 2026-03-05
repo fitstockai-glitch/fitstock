@@ -1,5 +1,5 @@
 import { Heart, Download } from "lucide-react";
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Link } from "react-router-dom";
 import { Photo } from "@/data/photos";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ interface PhotoCardProps {
   photo: Photo;
 }
 
-const PhotoCard = ({ photo }: PhotoCardProps) => {
+const PhotoCard = memo(({ photo }: PhotoCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
@@ -39,7 +39,8 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
             src={photo.imageUrl}
             alt={photo.title}
             className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
-            loading="lazy"
+            loading="eager"
+            decoding="async"
           />
           
           {/* Overlay */}
@@ -84,6 +85,8 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
     <DownloadModal open={isDownloadModalOpen} onOpenChange={setIsDownloadModalOpen} />
     </>
   );
-};
+});
+
+PhotoCard.displayName = "PhotoCard";
 
 export default PhotoCard;
