@@ -44,8 +44,8 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
           
           {/* Overlay */}
           <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 ${
-            isHovered ? "opacity-100" : "opacity-0 lg:opacity-0"
-          } opacity-100 lg:opacity-0`}>
+            isHovered ? "opacity-100" : "opacity-0"
+          }`}>
             <div className="absolute top-3 right-3 flex gap-2">
               <Button
                 variant="secondary"
