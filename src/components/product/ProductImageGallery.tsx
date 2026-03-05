@@ -84,10 +84,10 @@ const ProductImageGallery = () => {
       </div>
 
       {/* Tablet/Mobile: Image slider (below 1024px) */}
-      <div className="lg:hidden">
+      <div className="lg:hidden -mx-6">
         <div className="relative">
           <div 
-            className="w-full aspect-square overflow-hidden cursor-pointer group touch-pan-y"
+            className="w-screen overflow-hidden cursor-pointer group touch-pan-y"
             onClick={() => handleImageClick(currentImageIndex)}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -96,7 +96,7 @@ const ProductImageGallery = () => {
             <img
               src={productImages[currentImageIndex]}
               alt={`Product view ${currentImageIndex + 1}`}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 select-none"
+              className="w-full h-auto object-contain select-none"
             />
           </div>
           
