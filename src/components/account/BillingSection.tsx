@@ -37,7 +37,7 @@ const BillingSection = () => {
               <TableRow key={`${item.id}-dl`} className="hover:bg-transparent">
                 <TableCell colSpan={3} className="text-sm pl-0 pt-0">
                   <button
-                    className="inline-flex items-center gap-1.5 text-sm text-destructive hover:underline"
+                    className="inline-flex items-center gap-1.5 text-sm text-destructive border border-destructive rounded-md px-3 py-1.5 hover:bg-destructive hover:text-destructive-foreground transition-colors"
                     onClick={() => console.log("Download receipt:", item.id)}
                   >
                     <Download size={14} />
