@@ -166,7 +166,7 @@ const Account = () => {
                   {item.label}
                 </button>
               ))}
-              <div className="border-t border-border px-6 py-3">
+              <div className="px-6 py-3">
                 <button
                   onClick={() => {
                     setIsDropdownOpen(false);
