@@ -15,6 +15,7 @@ const sortOptions = [
 ];
 
 const categories = [
+  { key: "all", label: "すべて" },
   { key: "portrait", label: "ポートレート" },
   { key: "landscape", label: "風景" },
   { key: "abstract", label: "抽象" },
