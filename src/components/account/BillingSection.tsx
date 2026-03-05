@@ -26,7 +26,7 @@ const BillingSection = () => {
               <TableHead className="text-muted-foreground font-normal pl-0">ご注文番号</TableHead>
               <TableHead className="text-muted-foreground font-normal">ご購入日</TableHead>
               <TableHead className="text-muted-foreground font-normal">金額</TableHead>
-              <TableHead className="text-muted-foreground font-normal pr-0 text-right">ドキュメント</TableHead>
+              <TableHead className="text-muted-foreground font-normal pr-0">ドキュメント</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -35,7 +35,7 @@ const BillingSection = () => {
                 <TableCell className="text-sm pl-0">{item.orderNumber}</TableCell>
                 <TableCell className="text-sm">{item.date}</TableCell>
                 <TableCell className="text-sm">{item.amount}</TableCell>
-                <TableCell className="pr-0 text-right">
+                <TableCell className="pr-0">
                   <button
                     className="inline-flex items-center gap-1.5 text-sm text-destructive hover:underline"
                     onClick={() => console.log("Download receipt:", item.id)}
