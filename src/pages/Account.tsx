@@ -166,6 +166,17 @@ const Account = () => {
                   {item.label}
                 </button>
               ))}
+              <div className="border-t border-border">
+                <button
+                  onClick={() => {
+                    setIsDropdownOpen(false);
+                    // TODO: logout logic
+                  }}
+                  className="w-full text-left px-6 py-3.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  ログアウト
+                </button>
+              </div>
             </div>
           )}
         </div>
