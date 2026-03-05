@@ -149,7 +149,7 @@ const Account = () => {
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute left-0 right-0 top-full bg-background border-b border-border shadow-lg z-40">
+            <div className="absolute left-0 right-0 top-full bg-muted border-b border-border shadow-lg z-40">
               {mobileNavItems.map((item) => (
                 <button
                   key={item.id}
