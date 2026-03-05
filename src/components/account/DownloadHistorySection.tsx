@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const mockDownloads = [
@@ -66,13 +67,13 @@ const DownloadHistorySection = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
           {mockDownloads.map((item) => (
             <div key={item.id}>
-              <div className="aspect-[4/3] overflow-hidden bg-muted rounded-sm mb-2">
+              <Link to={`/photo/${item.id}`} className="block aspect-[4/3] overflow-hidden bg-muted rounded-sm mb-2 group">
                 <img
                   src={item.imageUrl}
                   alt={item.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
-              </div>
+              </Link>
               <p className="text-xs text-muted-foreground mb-1">{item.downloadedAt}</p>
               <p className="text-sm font-medium text-foreground truncate mb-2">{item.title}</p>
               <Button
