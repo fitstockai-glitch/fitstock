@@ -13,7 +13,7 @@ const DeleteAccount = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <FitStockHeader />
+      <FitStockHeader hideSearch />
 
       <main className="flex-1 flex items-center justify-center px-4 py-16">
         <Card className="w-full max-w-sm p-8 text-center space-y-6 border border-border rounded-xl shadow-sm">
