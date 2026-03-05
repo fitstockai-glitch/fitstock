@@ -18,9 +18,17 @@ const Category = () => {
     // Navigation is handled by CategoryTabs
   };
 
+  const categoryLabel = activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1);
+
   return (
     <div className="min-h-screen bg-background">
       <FitStockHeader />
+      
+      {/* Category title */}
+      <div className="px-4 md:px-8 pt-8 pb-4">
+        <h1 className="text-2xl md:text-3xl font-light text-foreground">{categoryLabel}</h1>
+      </div>
+
       <CategoryTabs 
         selectedCategory={activeCategory} 
         onCategoryChange={handleCategoryChange} 
