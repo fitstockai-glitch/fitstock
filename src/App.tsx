@@ -17,6 +17,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import DeleteAccount from "./pages/DeleteAccount";
 import Pricing from "./pages/Pricing";
+import TagPage from "./pages/TagPage";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/register" element={<Register />} />
           <Route path="/account/delete" element={<DeleteAccount />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/tag/:tag" element={<TagPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

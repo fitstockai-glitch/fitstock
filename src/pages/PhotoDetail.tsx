@@ -240,7 +240,7 @@ const PhotoDetail = () => {
         {/* Tags - Full width below columns */}
         <div className="flex flex-wrap gap-2 mt-8">
           {photo.tags.map((tag) => (
-            <Link key={tag} to={`/category/${tag}`}>
+            <Link key={tag} to={`/tag/${tag}`}>
               <Badge
                 variant="outline"
                 className="cursor-pointer hover:bg-accent transition-colors px-3 py-1.5 text-sm font-normal rounded-sm bg-muted border-transparent text-muted-foreground"
