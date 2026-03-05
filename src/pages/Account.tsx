@@ -135,7 +135,7 @@ const Account = () => {
       {/* Mobile layout */}
       <div className="md:hidden flex-1">
         {/* Dropdown selector */}
-        <div className="relative border-b border-border bg-muted" ref={dropdownRef}>
+        <div className="relative bg-muted" ref={dropdownRef}>
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             className="w-full flex items-center justify-between px-4 py-3.5 text-sm text-foreground"
