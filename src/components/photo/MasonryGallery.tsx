@@ -15,38 +15,51 @@ const breakpointColumns = {
   640: 1,
 };
 
-const BATCH_SIZE = 12;
-
 const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
   const [displayedPhotos, setDisplayedPhotos] = useState<Photo[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [batchCount, setBatchCount] = useState(0);
+  const batchRef = useRef(0);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const isLoadingRef = useRef(false);
 
-  // Generate a new batch of photos with unique keys by shuffling and offsetting IDs
+  const generateBatch = useCallback((batchNum: number): Photo[] => {
+    const shuffled = [...photos].sort(() => Math.random() - 0.5);
+    return shuffled.map((p, i) => ({
+      ...p,
+      id: `${p.id}-b${batchNum}-${i}`,
+      imageUrl: `${p.imageUrl}&sig=${batchNum}-${i}`,
+    }));
+  }, [photos]);
+
   const loadMore = useCallback(() => {
-    if (loading || photos.length === 0) return;
-    setLoading(true);
+    if (isLoadingRef.current || photos.length === 0) return;
+    isLoadingRef.current = true;
 
-    setBatchCount((prev) => {
-      const nextBatch = prev + 1;
-      const shuffled = [...photos].sort(() => Math.random() - 0.5);
-      const newPhotos = shuffled.map((p, i) => ({
-        ...p,
-        id: `${p.id}-batch${nextBatch}-${i}`,
-        imageUrl: `${p.imageUrl}&sig=${nextBatch}-${i}`,
-      }));
-      setDisplayedPhotos((current) => [...current, ...newPhotos]);
-      return nextBatch;
+    const next = batchRef.current + 1;
+    batchRef.current = next;
+
+    // Load 2 batches at once for speed
+    const batch1 = generateBatch(next);
+    const next2 = next + 1;
+    batchRef.current = next2;
+    const batch2 = generateBatch(next2);
+
+    setDisplayedPhotos((current) => [...current, ...batch1, ...batch2]);
+
+    // Allow next load on next frame
+    requestAnimationFrame(() => {
+      isLoadingRef.current = false;
     });
-    setLoading(false);
-  }, [loading, photos]);
+  }, [photos, generateBatch]);
 
-  // Load initial batch
+  // Load initial photos immediately
   useEffect(() => {
     if (photos.length > 0 && displayedPhotos.length === 0) {
+      batchRef.current = 1;
       setDisplayedPhotos(photos);
-      setBatchCount(1);
+      // Preload second batch immediately
+      const batch2 = generateBatch(2);
+      batchRef.current = 2;
+      setDisplayedPhotos((c) => [...c, ...batch2]);
     }
   }, [photos]);
 
@@ -57,7 +70,7 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && !loading) {
+        if (entries[0].isIntersecting) {
           loadMore();
         }
       },
@@ -66,7 +79,7 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [loadMore, loading]);
+  }, [loadMore]);
 
   return (
     <div className="px-4 md:px-8 pt-4 pb-0">
@@ -82,12 +95,6 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
 
       {/* Sentinel element for infinite scroll trigger */}
       <div ref={sentinelRef} className="w-full h-10" />
-
-      {loading && (
-        <div className="flex justify-center py-8">
-          <div className="w-6 h-6 border-2 border-muted-foreground border-t-transparent rounded-full animate-spin" />
-        </div>
-      )}
     </div>
   );
 };
