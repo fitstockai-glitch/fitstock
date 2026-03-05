@@ -172,7 +172,7 @@ const Account = () => {
                     setIsDropdownOpen(false);
                     // TODO: logout logic
                   }}
-                  className="w-full text-left px-6 py-3.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  className="w-full text-left px-6 py-3.5 text-sm text-foreground font-medium hover:opacity-80 transition-colors"
                 >
                   ログアウト
                 </button>
