@@ -42,13 +42,11 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
             loading="lazy"
           />
           
-          {/* Overlay on hover - desktop only */}
-          <div className={`hidden lg:block absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 ${
-            isHovered ? "opacity-100" : "opacity-0"
-          }`}>
-            <div className={`absolute top-3 right-3 flex gap-2 transition-opacity duration-300 ${
-              isHovered ? "opacity-100" : "opacity-0"
-            }`}>
+          {/* Overlay */}
+          <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 ${
+            isHovered ? "opacity-100" : "opacity-0 lg:opacity-0"
+          } opacity-100 lg:opacity-0`}>
+            <div className="absolute top-3 right-3 flex gap-2">
               <Button
                 variant="secondary"
                 size="icon"
@@ -59,9 +57,7 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
               </Button>
             </div>
 
-            <div className={`absolute bottom-0 left-0 right-0 p-4 transition-opacity duration-300 ${
-              isHovered ? "opacity-100" : "opacity-0"
-            }`}>
+            <div className="absolute bottom-0 left-0 right-0 p-4">
               <div className="flex items-end justify-end">
                 <Button
                   size="sm"
@@ -76,27 +72,6 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
           </div>
         </div>
       </Link>
-
-      {/* Actions below image - mobile/tablet only */}
-      <div className="flex lg:hidden items-center justify-between px-1 py-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground"
-          onClick={handleLike}
-        >
-          <Heart size={16} className={isLiked ? "fill-red-500 text-red-500" : ""} />
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="rounded-full text-muted-foreground hover:text-foreground font-medium text-xs"
-          onClick={handleDownload}
-        >
-          <Download size={14} />
-          Download
-        </Button>
-      </div>
     </div>
     <DownloadModal open={isDownloadModalOpen} onOpenChange={setIsDownloadModalOpen} />
     </>
