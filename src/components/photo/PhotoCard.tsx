@@ -13,6 +13,7 @@ const PhotoCard = memo(({ photo }: PhotoCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleLike = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -26,6 +27,9 @@ const PhotoCard = memo(({ photo }: PhotoCardProps) => {
     setIsDownloadModalOpen(true);
   };
 
+  // Estimate aspect ratio from photo dimensions for skeleton
+  const aspectRatio = photo.height / photo.width;
+
   return (
     <>
     <div className="break-inside-avoid mb-4">
@@ -35,12 +39,22 @@ const PhotoCard = memo(({ photo }: PhotoCardProps) => {
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
+          {/* Skeleton placeholder */}
+          {!isLoaded && (
+            <div
+              className="w-full animate-pulse bg-muted"
+              style={{ paddingBottom: `${aspectRatio * 100}%` }}
+            />
+          )}
           <img
             src={photo.imageUrl}
             alt={photo.title}
-            className="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105"
+            className={`w-full h-auto object-cover transition-all duration-500 group-hover:scale-105 ${
+              isLoaded ? "opacity-100" : "opacity-0 absolute inset-0"
+            }`}
             loading="eager"
             decoding="async"
+            onLoad={() => setIsLoaded(true)}
           />
           
           {/* Overlay */}
