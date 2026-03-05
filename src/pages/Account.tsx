@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
 import AccountSidebar, { AccountSection } from "@/components/account/AccountSidebar";
@@ -8,26 +8,37 @@ import DownloadHistorySection from "@/components/account/DownloadHistorySection"
 import FavoritesSection from "@/components/account/FavoritesSection";
 import BillingSection from "@/components/account/BillingSection";
 import ReceiptInfoSection from "@/components/account/ReceiptInfoSection";
-import { User, CreditCard, Heart, Download, FileText, LogOut, ChevronRight, ArrowLeft } from "lucide-react";
+import { ChevronUp, ChevronDown } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export type PlanStatus = "free" | "plus" | "cancelled";
 
-const mobileNavItems: { id: AccountSection; label: string; icon: React.ReactNode }[] = [
-  { id: "profile", label: "プロフィール", icon: <User size={18} /> },
-  { id: "plan", label: "プラン", icon: <CreditCard size={18} /> },
-  { id: "favorites", label: "お気に入り", icon: <Heart size={18} /> },
-  { id: "downloads", label: "ダウンロード履歴", icon: <Download size={18} /> },
-  { id: "billing", label: "領収書発行", icon: <FileText size={18} /> },
+const mobileNavItems: { id: AccountSection; label: string }[] = [
+  { id: "profile", label: "プロフィール" },
+  { id: "plan", label: "プラン" },
+  { id: "favorites", label: "お気に入り" },
+  { id: "downloads", label: "ダウンロード履歴" },
+  { id: "billing", label: "領収書発行" },
 ];
 
 const Account = () => {
-  const [activeSection, setActiveSection] = useState<AccountSection | null>(null);
+  const [activeSection, setActiveSection] = useState<AccountSection>("profile");
   const [planStatus, setPlanStatus] = useState<PlanStatus>("free");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const isMobile = useIsMobile();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // For desktop, default to profile
-  const desktopSection = activeSection || "profile";
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const currentLabel = mobileNavItems.find((item) => item.id === activeSection)?.label || activeSection;
 
   const renderSectionContent = (section: AccountSection) => {
     switch (section) {
@@ -67,8 +78,7 @@ const Account = () => {
   };
 
   const renderDesktopContent = () => {
-    const section = desktopSection;
-    switch (section) {
+    switch (activeSection) {
       case "profile":
         return <ProfilePage />;
       case "plan":
@@ -118,58 +128,57 @@ const Account = () => {
     }
   };
 
-  const sectionLabel = mobileNavItems.find((item) => item.id === activeSection)?.label || activeSection;
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <FitStockHeader hideSearch={isMobile} />
 
       {/* Mobile layout */}
       <div className="md:hidden flex-1">
-        {activeSection === null ? (
-          // Menu list
-          <nav className="divide-y divide-border border-b border-border">
-            {mobileNavItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => setActiveSection(item.id)}
-                className="w-full flex items-center justify-between px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-muted-foreground">{item.icon}</span>
-                  <span>{item.label}</span>
-                </div>
-                <ChevronRight size={16} className="text-muted-foreground" />
-              </button>
-            ))}
-            <button
-              onClick={() => {}}
-              className="w-full flex items-center gap-3 px-4 py-4 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-            >
-              <LogOut size={18} />
-              ログアウト
-            </button>
-          </nav>
-        ) : (
-          // Section content with back
-          <div>
-            <button
-              onClick={() => setActiveSection(null)}
-              className="flex items-center gap-2 px-4 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors border-b border-border w-full"
-            >
-              <ArrowLeft size={16} />
-              <span>{sectionLabel}</span>
-            </button>
-            <div className="px-4 py-6">
-              {renderSectionContent(activeSection)}
+        {/* Dropdown selector */}
+        <div className="relative border-b border-border" ref={dropdownRef}>
+          <button
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="w-full flex items-center justify-between px-4 py-3.5 text-sm text-foreground"
+          >
+            <span>{currentLabel}</span>
+            {isDropdownOpen ? (
+              <ChevronUp size={18} className="text-muted-foreground" />
+            ) : (
+              <ChevronDown size={18} className="text-muted-foreground" />
+            )}
+          </button>
+
+          {isDropdownOpen && (
+            <div className="absolute left-0 right-0 top-full bg-background border-b border-border shadow-lg z-40">
+              {mobileNavItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setActiveSection(item.id);
+                    setIsDropdownOpen(false);
+                  }}
+                  className={`w-full text-left px-6 py-3.5 text-sm transition-colors ${
+                    activeSection === item.id
+                      ? "bg-muted text-foreground font-medium"
+                      : "text-foreground hover:bg-muted/50"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
             </div>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="px-4 py-6">
+          {renderSectionContent(activeSection)}
+        </div>
       </div>
 
       {/* Desktop: Sidebar layout */}
       <div className="hidden md:flex flex-1 flex-row">
-        <AccountSidebar activeSection={desktopSection} onSectionChange={setActiveSection} />
+        <AccountSidebar activeSection={activeSection} onSectionChange={setActiveSection} />
         <main className="flex-1 px-8 py-10">
           {renderDesktopContent()}
         </main>
