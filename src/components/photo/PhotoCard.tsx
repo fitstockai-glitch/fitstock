@@ -46,7 +46,7 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
           <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 ${
             isHovered ? "opacity-100" : "opacity-100 lg:opacity-0"
           }`}>
-            <div className="absolute top-3 right-3 flex gap-2">
+            <div className="absolute top-3 right-3 lg:flex gap-2 hidden">
               <Button
                 variant="secondary"
                 size="icon"
@@ -58,10 +58,18 @@ const PhotoCard = ({ photo }: PhotoCardProps) => {
             </div>
 
             <div className="absolute bottom-0 left-0 right-0 p-4">
-              <div className="flex items-end justify-end">
+              <div className="flex items-end justify-between">
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className="h-9 w-9 rounded-full bg-white/90 hover:bg-white text-foreground shadow-md lg:hidden"
+                  onClick={handleLike}
+                >
+                  <Heart size={16} className={isLiked ? "fill-red-500 text-red-500" : ""} />
+                </Button>
                 <Button
                   size="sm"
-                  className="rounded-full bg-white hover:bg-white/90 text-foreground font-medium shadow-md"
+                  className="rounded-full bg-white hover:bg-white/90 text-foreground font-medium shadow-md ml-auto"
                   onClick={handleDownload}
                 >
                   <Download size={14} />
