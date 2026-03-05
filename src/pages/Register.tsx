@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
+import signupHero from "@/assets/signup-hero.jpg";
 
 const heroImages = [
   "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80",
@@ -28,17 +29,91 @@ const Register = () => {
     <div className="min-h-screen flex flex-col bg-background">
       <FitStockHeader />
       <main className="flex-1 flex flex-col md:flex-row">
-        {/* Left: Hero Image */}
-        <div className="w-full md:w-1/2 h-[250px] md:h-auto">
+        {/* Mobile: background image with overlay form */}
+        <div
+          className="relative flex-1 flex flex-col md:hidden"
+          style={{
+            backgroundImage: `url(${randomHero})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="absolute inset-0 bg-background/85" />
+          <div className="relative z-10 flex-1 flex items-center justify-center px-6 py-16">
+            <div className="w-full max-w-md space-y-8">
+              <h1 className="text-2xl font-bold text-foreground">
+                アカウント作成
+              </h1>
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="name-mobile" className="text-sm font-medium text-foreground">お名前</Label>
+                  <Input
+                    id="name-mobile"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    className="h-12 bg-background/60 border-border"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email-mobile" className="text-sm font-medium text-foreground">メールアドレス</Label>
+                  <Input
+                    id="email-mobile"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="h-12 bg-background/60 border-border"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password-mobile" className="text-sm font-medium text-foreground">パスワード</Label>
+                  <Input
+                    id="password-mobile"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    className="h-12 bg-background/60 border-border"
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-md text-base"
+                >
+                  登録する
+                </Button>
+              </form>
+
+              <div className="text-center">
+                <p className="text-sm text-muted-foreground">
+                  すでにアカウントをお持ちですか？{" "}
+                  <Link
+                    to="/login"
+                    className="font-semibold text-foreground underline underline-offset-4 hover:text-foreground/80"
+                  >
+                    ログイン
+                  </Link>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop: side-by-side layout */}
+        <div className="hidden md:block w-1/2 h-auto">
           <img
             src={randomHero}
             alt="Sign up hero"
             className="w-full h-full object-cover"
           />
         </div>
-
-        {/* Right: Sign up form */}
-        <div className="w-full md:w-1/2 flex items-center justify-center px-6 py-16">
+        <div className="hidden md:flex w-1/2 items-center justify-center px-6 py-16">
           <div className="w-full max-w-md space-y-8">
             <h1 className="text-2xl font-bold text-foreground">
               アカウント作成
