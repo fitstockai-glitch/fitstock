@@ -29,6 +29,11 @@ const Category = () => {
         <h1 className="text-2xl md:text-3xl font-bold text-foreground">{categoryLabel}</h1>
       </div>
 
+      <CategoryTabs 
+        selectedCategory={activeCategory} 
+        onCategoryChange={handleCategoryChange} 
+      />
+
       <main>
         <MasonryGallery photos={filteredPhotos} />
       </main>
