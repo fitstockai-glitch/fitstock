@@ -32,10 +32,11 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
     setTimeout(() => {
       setBatchCount((prev) => {
         const nextBatch = prev + 1;
-        const shuffled = [...photos].sort(() => Math.random() - 0.5);
+      const shuffled = [...photos].sort(() => Math.random() - 0.5);
         const newPhotos = shuffled.map((p, i) => ({
           ...p,
           id: `${p.id}-batch${nextBatch}-${i}`,
+          imageUrl: `${p.imageUrl}&sig=${nextBatch}-${i}`,
         }));
         setDisplayedPhotos((current) => [...current, ...newPhotos]);
         return nextBatch;
