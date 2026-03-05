@@ -8,24 +8,26 @@ import DownloadHistorySection from "@/components/account/DownloadHistorySection"
 import FavoritesSection from "@/components/account/FavoritesSection";
 import BillingSection from "@/components/account/BillingSection";
 import ReceiptInfoSection from "@/components/account/ReceiptInfoSection";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { User, CreditCard, Heart, Download, FileText, LogOut } from "lucide-react";
+import { User, CreditCard, Heart, Download, FileText, LogOut, ChevronRight, ArrowLeft } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 export type PlanStatus = "free" | "plus" | "cancelled";
 
-const accordionItems: { id: AccountSection; label: string; icon: React.ReactNode }[] = [
-  { id: "profile", label: "プロフィール", icon: <User size={16} /> },
-  { id: "plan", label: "プラン", icon: <CreditCard size={16} /> },
-  { id: "favorites", label: "お気に入り", icon: <Heart size={16} /> },
-  { id: "downloads", label: "ダウンロード履歴", icon: <Download size={16} /> },
-  { id: "billing", label: "領収書発行", icon: <FileText size={16} /> },
+const mobileNavItems: { id: AccountSection; label: string; icon: React.ReactNode }[] = [
+  { id: "profile", label: "プロフィール", icon: <User size={18} /> },
+  { id: "plan", label: "プラン", icon: <CreditCard size={18} /> },
+  { id: "favorites", label: "お気に入り", icon: <Heart size={18} /> },
+  { id: "downloads", label: "ダウンロード履歴", icon: <Download size={18} /> },
+  { id: "billing", label: "領収書発行", icon: <FileText size={18} /> },
 ];
 
 const Account = () => {
-  const [activeSection, setActiveSection] = useState<AccountSection>("profile");
+  const [activeSection, setActiveSection] = useState<AccountSection | null>(null);
   const [planStatus, setPlanStatus] = useState<PlanStatus>("free");
   const isMobile = useIsMobile();
+
+  // For desktop, default to profile
+  const desktopSection = activeSection || "profile";
 
   const renderSectionContent = (section: AccountSection) => {
     switch (section) {
@@ -65,8 +67,7 @@ const Account = () => {
   };
 
   const renderDesktopContent = () => {
-    const section = activeSection;
-    // Wrap with titles for desktop
+    const section = desktopSection;
     switch (section) {
       case "profile":
         return <ProfilePage />;
@@ -117,39 +118,58 @@ const Account = () => {
     }
   };
 
+  const sectionLabel = mobileNavItems.find((item) => item.id === activeSection)?.label || activeSection;
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <FitStockHeader hideSearch={isMobile} />
 
-      {/* Mobile: Accordion layout */}
+      {/* Mobile layout */}
       <div className="md:hidden flex-1">
-        <Accordion type="single" collapsible defaultValue="profile">
-          {accordionItems.map((item) => (
-            <AccordionItem key={item.id} value={item.id} className="border-b border-border">
-              <AccordionTrigger className="px-4 py-3 text-sm font-normal hover:no-underline">
+        {activeSection === null ? (
+          // Menu list
+          <nav className="divide-y divide-border border-b border-border">
+            {mobileNavItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setActiveSection(item.id)}
+                className="w-full flex items-center justify-between px-4 py-4 text-sm text-foreground hover:bg-muted/50 transition-colors"
+              >
                 <div className="flex items-center gap-3">
                   <span className="text-muted-foreground">{item.icon}</span>
                   <span>{item.label}</span>
                 </div>
-              </AccordionTrigger>
-              <AccordionContent className="px-4 pb-6">
-                {renderSectionContent(item.id)}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-          {/* Logout */}
-          <div className="border-b border-border">
-            <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors text-left">
-              <LogOut size={16} />
+                <ChevronRight size={16} className="text-muted-foreground" />
+              </button>
+            ))}
+            <button
+              onClick={() => {}}
+              className="w-full flex items-center gap-3 px-4 py-4 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            >
+              <LogOut size={18} />
               ログアウト
             </button>
+          </nav>
+        ) : (
+          // Section content with back
+          <div>
+            <button
+              onClick={() => setActiveSection(null)}
+              className="flex items-center gap-2 px-4 py-3 text-sm text-muted-foreground hover:text-foreground transition-colors border-b border-border w-full"
+            >
+              <ArrowLeft size={16} />
+              <span>{sectionLabel}</span>
+            </button>
+            <div className="px-4 py-6">
+              {renderSectionContent(activeSection)}
+            </div>
           </div>
-        </Accordion>
+        )}
       </div>
 
       {/* Desktop: Sidebar layout */}
       <div className="hidden md:flex flex-1 flex-row">
-        <AccountSidebar activeSection={activeSection} onSectionChange={setActiveSection} />
+        <AccountSidebar activeSection={desktopSection} onSectionChange={setActiveSection} />
         <main className="flex-1 px-8 py-10">
           {renderDesktopContent()}
         </main>
