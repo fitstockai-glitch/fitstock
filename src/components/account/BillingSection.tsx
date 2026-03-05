@@ -17,32 +17,35 @@ const mockBilling = Array.from({ length: 10 }, (_, i) => ({
 
 const BillingSection = () => {
   return (
-    <div className="border-b border-border overflow-x-auto">
-      <Table className="min-w-[500px]">
+    <div className="border-b border-border">
+      <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent border-t-0">
             <TableHead className="text-muted-foreground font-normal pl-0">ご注文番号</TableHead>
             <TableHead className="text-muted-foreground font-normal">ご購入日</TableHead>
-            <TableHead className="text-muted-foreground font-normal">金額</TableHead>
-            <TableHead className="text-muted-foreground font-normal pr-0">ドキュメント</TableHead>
+            <TableHead className="text-muted-foreground font-normal pr-0">金額</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {mockBilling.map((item) => (
-            <TableRow key={item.id} className="hover:bg-transparent">
-              <TableCell className="text-sm pl-0">{item.orderNumber}</TableCell>
-              <TableCell className="text-sm">{item.date}</TableCell>
-              <TableCell className="text-sm">{item.amount}</TableCell>
-              <TableCell className="pr-0">
-                <button
-                  className="inline-flex items-center gap-1.5 text-sm text-destructive hover:underline"
-                  onClick={() => console.log("Download receipt:", item.id)}
-                >
-                  <Download size={14} />
-                  ダウンロード
-                </button>
-              </TableCell>
-            </TableRow>
+            <>
+              <TableRow key={item.id} className="hover:bg-transparent border-b-0">
+                <TableCell className="text-sm pl-0 pb-1">{item.orderNumber}</TableCell>
+                <TableCell className="text-sm pb-1">{item.date}</TableCell>
+                <TableCell className="text-sm pr-0 pb-1">{item.amount}</TableCell>
+              </TableRow>
+              <TableRow key={`${item.id}-dl`} className="hover:bg-transparent">
+                <TableCell colSpan={3} className="text-sm pl-0 pt-0">
+                  <button
+                    className="inline-flex items-center gap-1.5 text-sm text-destructive hover:underline"
+                    onClick={() => console.log("Download receipt:", item.id)}
+                  >
+                    <Download size={14} />
+                    ダウンロード
+                  </button>
+                </TableCell>
+              </TableRow>
+            </>
           ))}
         </TableBody>
       </Table>
