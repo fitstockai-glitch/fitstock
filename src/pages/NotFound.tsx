@@ -17,7 +17,7 @@ const NotFound = () => {
       <main className="flex-1 flex items-center justify-center px-4">
         <div className="text-center">
           <h1 className="text-8xl font-light tracking-tight mb-6">404</h1>
-          <p className="text-lg text-muted-foreground mb-10">お探しのページは見つかりませんでした。</p>
+          <p className="text-lg text-muted-foreground mb-5">お探しのページは見つかりませんでした。</p>
           <Link to="/">
             <Button className="bg-foreground hover:bg-foreground/90 text-background font-medium px-8 py-6 rounded-md">
               ホームへ戻る
