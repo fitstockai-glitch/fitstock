@@ -97,7 +97,7 @@ const PhotoDetail = () => {
         {/* Main content - 2 column layout */}
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left side - Photo */}
-          <div className="flex-1">
+          <div className="flex-1 -mx-4 md:mx-0">
             <div 
               ref={imageAreaRef}
               className="overflow-hidden relative group cursor-zoom-in aspect-[20/13] flex items-start justify-center"
