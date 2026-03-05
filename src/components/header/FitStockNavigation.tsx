@@ -61,7 +61,7 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-0">
+        <div className="flex items-center gap-1">
           {/* Language Switcher */}
           <div className="relative" ref={dropdownRef}>
             <button
