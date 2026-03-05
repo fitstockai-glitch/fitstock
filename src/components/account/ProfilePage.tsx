@@ -17,11 +17,11 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="max-w-xl space-y-8">
-      <h1 className="text-2xl font-semibold text-foreground hidden md:block">プロフィール</h1>
+    <div className="max-w-xl">
+      <h1 className="text-2xl font-semibold text-foreground hidden md:block mb-8">プロフィール</h1>
 
       {/* Basic info */}
-      <div className="space-y-4 md:mt-0">
+      <div className="space-y-4">
         <div className="space-y-1.5">
           <Label className="text-sm text-muted-foreground font-normal">お名前</Label>
           <Input
@@ -42,7 +42,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Password change */}
-      <div className="space-y-4">
+      <div className="space-y-4 mt-8">
         <h2 className="text-base font-semibold text-foreground">パスワードの変更</h2>
         <div className="space-y-1.5">
           <Label className="text-sm text-muted-foreground font-normal">
@@ -87,7 +87,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Delete account */}
-      <div className="space-y-3 pt-6">
+      <div className="space-y-3 pt-6 mt-2">
         <h2 className="text-base font-semibold text-foreground">ユーザー詳細</h2>
         <div className="border border-border rounded-md p-4 space-y-2">
           <p className="text-sm text-muted-foreground">
