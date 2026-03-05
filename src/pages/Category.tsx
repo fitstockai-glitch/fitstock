@@ -24,15 +24,15 @@ const Category = () => {
     <div className="min-h-screen bg-background">
       <FitStockHeader />
       
-      {/* Category title */}
-      <div className="px-4 md:px-8 pt-8 pb-4">
-        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{categoryLabel}</h1>
-      </div>
-
       <CategoryTabs 
         selectedCategory={activeCategory} 
         onCategoryChange={handleCategoryChange} 
       />
+
+      {/* Category title */}
+      <div className="px-4 md:px-8 pt-8 pb-4">
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground">{categoryLabel}</h1>
+      </div>
 
       <main>
         <MasonryGallery photos={filteredPhotos} />
