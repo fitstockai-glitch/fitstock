@@ -21,7 +21,7 @@ const ProfilePage = () => {
       <h1 className="text-2xl font-semibold text-foreground hidden md:block">プロフィール</h1>
 
       {/* Basic info */}
-      <div className="space-y-4">
+      <div className="space-y-4 md:mt-0">
         <div className="space-y-1.5">
           <Label className="text-sm text-muted-foreground font-normal">お名前</Label>
           <Input

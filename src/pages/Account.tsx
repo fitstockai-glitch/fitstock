@@ -171,7 +171,7 @@ const Account = () => {
         </div>
 
         {/* Content */}
-        <div className="px-4 py-6">
+        <div className="px-4 py-4">
           {renderSectionContent(activeSection)}
         </div>
       </div>
