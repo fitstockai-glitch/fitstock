@@ -42,7 +42,7 @@ const DownloadModal = ({ open, onOpenChange }: DownloadModalProps) => {
 
           {/* Right: Content */}
           <div className="sm:w-1/2 p-6 sm:p-8 flex flex-col justify-center">
-            <DialogHeader className="space-y-3">
+            <DialogHeader className="space-y-3 mt-6 sm:mt-0">
               <DialogTitle className="text-2xl font-bold leading-tight">
                 制限を気にせず、クリエイティブに集中しよう
               </DialogTitle>
