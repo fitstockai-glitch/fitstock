@@ -28,21 +28,18 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
     if (loading || photos.length === 0) return;
     setLoading(true);
 
-    // Simulate loading delay for natural feel
-    setTimeout(() => {
-      setBatchCount((prev) => {
-        const nextBatch = prev + 1;
+    setBatchCount((prev) => {
+      const nextBatch = prev + 1;
       const shuffled = [...photos].sort(() => Math.random() - 0.5);
-        const newPhotos = shuffled.map((p, i) => ({
-          ...p,
-          id: `${p.id}-batch${nextBatch}-${i}`,
-          imageUrl: `${p.imageUrl}&sig=${nextBatch}-${i}`,
-        }));
-        setDisplayedPhotos((current) => [...current, ...newPhotos]);
-        return nextBatch;
-      });
-      setLoading(false);
-    }, 300);
+      const newPhotos = shuffled.map((p, i) => ({
+        ...p,
+        id: `${p.id}-batch${nextBatch}-${i}`,
+        imageUrl: `${p.imageUrl}&sig=${nextBatch}-${i}`,
+      }));
+      setDisplayedPhotos((current) => [...current, ...newPhotos]);
+      return nextBatch;
+    });
+    setLoading(false);
   }, [loading, photos]);
 
   // Load initial batch
