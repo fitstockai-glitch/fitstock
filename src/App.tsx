@@ -27,8 +27,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <PasswordGate>
-        <BrowserRouter>
+        
           <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
