@@ -27,26 +27,28 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="/category/:category" element={<Category />} />
-          <Route path="/product/:productId" element={<ProductDetail />} />
-          <Route path="/photo/:id" element={<PhotoDetail />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/account/delete" element={<DeleteAccount />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/tag/:tag" element={<TagPage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <PasswordGate>
+        <BrowserRouter>
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/category/:category" element={<Category />} />
+            <Route path="/product/:productId" element={<ProductDetail />} />
+            <Route path="/photo/:id" element={<PhotoDetail />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-of-service" element={<TermsOfService />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/account/delete" element={<DeleteAccount />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/tag/:tag" element={<TagPage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </PasswordGate>
     </TooltipProvider>
   </QueryClientProvider>
 );
