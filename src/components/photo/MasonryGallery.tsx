@@ -68,7 +68,7 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
           loadMore();
         }
       },
-      { rootMargin: "3000px" }
+      { rootMargin: "2000px" }
     );
 
     observer.observe(sentinel);
