@@ -270,7 +270,7 @@ const PhotoDetail = () => {
           <img
             src={photo.imageUrl}
             alt={photo.title}
-            className="w-full h-full object-contain max-h-[90vh] rounded-lg"
+            className="w-full h-full object-contain max-h-[90vh]"
           />
         </DialogContent>
       </Dialog>
