@@ -5,7 +5,7 @@ import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { photos } from "@/data/photos";
+import { usePhoto, usePhotos } from "@/hooks/usePhotos";
 import MasonryGallery from "@/components/photo/MasonryGallery";
 import DownloadModal from "@/components/photo/DownloadModal";
 import {
@@ -24,9 +24,11 @@ const PhotoDetail = () => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [zoomIconPosition, setZoomIconPosition] = useState({ top: 16, left: 16 });
 
-  const baseId = id?.split("-")[0] || "1";
-  const photo = photos.find((p) => p.id === baseId) || photos[0];
-  const relatedPhotos = photos.filter((p) => p.id !== baseId);
+  // Extract base UUID (strip batch suffixes if present)
+  const baseId = id?.includes("-b") ? id.split("-b")[0] : id;
+  const { data: photo, isLoading } = usePhoto(baseId);
+  const { data: allPhotos = [] } = usePhotos();
+  const relatedPhotos = allPhotos.filter((p) => p.id !== baseId);
 
   const handleDownload = () => {
     setIsDownloadModalOpen(true);
@@ -39,6 +41,7 @@ const PhotoDetail = () => {
   };
 
   const handleShare = (platform: string) => {
+    if (!photo) return;
     const url = encodeURIComponent(window.location.href);
     const text = encodeURIComponent(photo.title);
     
@@ -82,21 +85,36 @@ const PhotoDetail = () => {
         imageEl.removeEventListener("load", updateZoomIconPosition);
       }
     };
-  }, [photo.imageUrl]);
+  }, [photo?.imageUrl]);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <FitStockHeader />
+        <div className="flex justify-center py-20 text-muted-foreground">読み込み中...</div>
+      </div>
+    );
+  }
+
+  if (!photo) {
+    return (
+      <div className="min-h-screen bg-background">
+        <FitStockHeader />
+        <div className="flex justify-center py-20 text-muted-foreground">写真が見つかりませんでした</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
       <FitStockHeader />
 
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-8">
-        {/* Title - Full width above columns */}
         <h1 className="text-base md:text-lg font-normal text-foreground mb-6">
           {photo.title}
         </h1>
 
-        {/* Main content - 2 column layout */}
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left side - Photo */}
           <div className="flex-1 -mx-4 md:mx-0">
             <div 
               ref={imageAreaRef}
@@ -122,9 +140,7 @@ const PhotoDetail = () => {
             </div>
           </div>
 
-          {/* Right sidebar */}
           <div className="lg:w-80 space-y-5">
-            {/* Download button */}
             <Button
               onClick={handleDownload}
               className="w-full bg-foreground hover:bg-foreground/90 text-background font-medium py-6"
@@ -133,7 +149,6 @@ const PhotoDetail = () => {
               ダウンロード
             </Button>
 
-            {/* Plus plan card */}
             <div className="border border-border rounded-lg p-5 space-y-4">
               <h3 className="font-semibold text-foreground">無制限ダウンロード定額プラン</h3>
               <ul className="space-y-2.5">
@@ -159,12 +174,10 @@ const PhotoDetail = () => {
               </Link>
             </div>
 
-            {/* SEO description */}
             <p className="text-xs text-muted-foreground/70 leading-relaxed">
               「{photo.title}」は{photo.tags.map(t => `「${t}」`).join('、')}に関連するフリー素材です。商用利用可能な高品質写真をFitStockで無料ダウンロード。Webデザインや広告、SNS投稿にご活用ください。
             </p>
 
-            {/* Action buttons */}
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
@@ -237,7 +250,6 @@ const PhotoDetail = () => {
           </div>
         </div>
 
-        {/* Tags - Full width below columns */}
         <div className="flex flex-wrap gap-2 mt-8">
           {photo.tags.map((tag) => (
             <Link key={tag} to={`/tag/${tag}`}>
@@ -252,7 +264,6 @@ const PhotoDetail = () => {
         </div>
       </main>
 
-      {/* Related Images Section */}
       <section className="mt-8">
         <h2 className="text-xl font-semibold text-foreground mb-1 px-4 md:px-8">
           関連するイメージ
@@ -264,7 +275,6 @@ const PhotoDetail = () => {
 
       <DownloadModal open={isDownloadModalOpen} onOpenChange={setIsDownloadModalOpen} />
 
-      {/* Zoom Modal */}
       <Dialog open={isZoomOpen} onOpenChange={setIsZoomOpen}>
         <DialogContent className="max-w-[90vw] max-h-[90vh] p-0 bg-transparent border-none shadow-none [&>button]:text-white [&>button]:opacity-100 [&>button]:hover:text-white/70 [&>button>svg]:h-6 [&>button>svg]:w-6 [&>button]:ring-0 [&>button]:ring-offset-0 [&>button]:focus:ring-0 [&>button]:focus:ring-offset-0">
           <img

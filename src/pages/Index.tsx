@@ -3,13 +3,11 @@ import FitStockHeader from "../components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
 import CategoryTabs from "../components/content/CategoryTabs";
 import MasonryGallery from "../components/photo/MasonryGallery";
-import { photos } from "../data/photos";
+import { usePhotos } from "@/hooks/usePhotos";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
-
-  // For demo, show all photos regardless of category
-  const filteredPhotos = photos;
+  const { data: photos = [], isLoading } = usePhotos();
 
   return (
     <div className="min-h-screen bg-background">
@@ -20,7 +18,11 @@ const Index = () => {
       />
       
       <main>
-        <MasonryGallery photos={filteredPhotos} />
+        {isLoading ? (
+          <div className="flex justify-center py-20 text-muted-foreground">読み込み中...</div>
+        ) : (
+          <MasonryGallery photos={photos} />
+        )}
       </main>
       
       <Footer />

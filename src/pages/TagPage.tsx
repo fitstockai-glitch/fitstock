@@ -2,14 +2,17 @@ import { useParams } from "react-router-dom";
 import FitStockHeader from "../components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
 import MasonryGallery from "../components/photo/MasonryGallery";
-import { photos } from "../data/photos";
+import { usePhotos } from "@/hooks/usePhotos";
 
 const TagPage = () => {
   const { tag } = useParams();
   const activeTag = tag || "";
+  const { data: photos = [], isLoading } = usePhotos();
 
-  // Always pass all photos so MasonryGallery can generate infinite batches
-  // (tag filtering is cosmetic — in production this would be a backend query)
+  // Filter photos that contain this tag
+  const filteredPhotos = photos.filter((p) =>
+    p.tags.some((t) => t.toLowerCase() === activeTag.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -20,7 +23,11 @@ const TagPage = () => {
       </div>
 
       <main>
-        <MasonryGallery photos={photos} />
+        {isLoading ? (
+          <div className="flex justify-center py-20 text-muted-foreground">読み込み中...</div>
+        ) : (
+          <MasonryGallery photos={filteredPhotos.length > 0 ? filteredPhotos : photos} />
+        )}
       </main>
 
       <Footer />

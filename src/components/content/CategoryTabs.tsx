@@ -1,6 +1,7 @@
 import { ChevronDown } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCategories } from "@/hooks/useCategories";
 
 interface CategoryTabsProps {
   selectedCategory: string;
@@ -14,30 +15,13 @@ const sortOptions = [
   { key: "trending", label: "トレンド" },
 ];
 
-const categories = [
-  { key: "all", label: "すべて" },
-  { key: "portrait", label: "ポートレート" },
-  { key: "landscape", label: "風景" },
-  { key: "abstract", label: "抽象" },
-  { key: "business", label: "ビジネス" },
-  { key: "mockup", label: "モックアップ" },
-  { key: "food", label: "フード" },
-  { key: "family", label: "ファミリー" },
-  { key: "building", label: "建物" },
-  { key: "autumn", label: "秋" },
-  { key: "winter", label: "冬" },
-  { key: "wedding", label: "ウェディング" },
-  { key: "technology", label: "テクノロジー" },
-  { key: "nature", label: "自然" },
-  { key: "animals", label: "動物" },
-];
-
 const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { data: categories = [{ key: "all", label: "すべて" }] } = useCategories();
 
   const handleCategoryClick = (key: string) => {
     onCategoryChange(key);
@@ -57,7 +41,6 @@ const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps)
   return (
     <div className="border-b border-border bg-background sticky top-16 z-40">
       <div className="flex items-center justify-between px-4 md:px-8">
-        {/* Scrollable categories */}
         <div 
           ref={scrollRef}
           className="flex items-center gap-1 overflow-x-auto scrollbar-hide py-3 flex-1"
@@ -78,7 +61,6 @@ const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps)
           ))}
         </div>
 
-        {/* Sort dropdown */}
         <div className="hidden md:flex items-center gap-2 pl-4 border-l border-border ml-4 relative" ref={dropdownRef}>
           <button
             onClick={() => setIsSortOpen(!isSortOpen)}
