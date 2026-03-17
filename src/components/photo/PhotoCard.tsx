@@ -1,7 +1,7 @@
 import { Heart, Download } from "lucide-react";
 import { useState, memo } from "react";
 import { Link } from "react-router-dom";
-import { Photo } from "@/data/photos";
+import { Photo } from "@/types/photo";
 import { Button } from "@/components/ui/button";
 import DownloadModal from "@/components/photo/DownloadModal";
 

@@ -3,18 +3,14 @@ import FitStockHeader from "../components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
 import CategoryTabs from "../components/content/CategoryTabs";
 import MasonryGallery from "../components/photo/MasonryGallery";
-import { photos } from "../data/photos";
+import { usePhotos } from "@/hooks/usePhotos";
 
 const Category = () => {
   const { category } = useParams();
-  
-  // Capitalize first letter to match tab names
-  const activeCategory = category || "portrait";
+  const activeCategory = category || "all";
+  const { data: photos = [], isLoading } = usePhotos(activeCategory);
 
-  // For demo, show all photos regardless of category
-  const filteredPhotos = photos;
-
-  const handleCategoryChange = (newCategory: string) => {
+  const handleCategoryChange = (_newCategory: string) => {
     // Navigation is handled by CategoryTabs
   };
 
@@ -28,7 +24,11 @@ const Category = () => {
       />
 
       <main>
-        <MasonryGallery photos={filteredPhotos} />
+        {isLoading ? (
+          <div className="flex justify-center py-20 text-muted-foreground">読み込み中...</div>
+        ) : (
+          <MasonryGallery photos={photos} />
+        )}
       </main>
       
       <Footer />

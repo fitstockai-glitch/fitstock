@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Photo } from "@/data/photos";
+import { Photo } from "@/types/photo";
 import PhotoCard from "./PhotoCard";
 import Masonry from "react-masonry-css";
 
@@ -26,14 +26,13 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
     return shuffled.map((p, i) => ({
       ...p,
       id: `${p.id}-b${batchNum}-${i}`,
-      imageUrl: `${p.imageUrl}&sig=${batchNum}-${i}`,
+      imageUrl: `${p.imageUrl}`,
     }));
   }, [photos]);
 
   const loadMore = useCallback(() => {
     if (photos.length === 0) return;
 
-    // Throttle to max once per 50ms to avoid runaway loops
     const now = Date.now();
     if (now - lastLoadTime.current < 50) return;
     lastLoadTime.current = now;
@@ -50,7 +49,7 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
 
   // Load initial photos + preload
   useEffect(() => {
-    if (photos.length > 0 && displayedPhotos.length === 0) {
+    if (photos.length > 0) {
       batchRef.current = 2;
       const batch2 = generateBatch(2);
       setDisplayedPhotos([...photos, ...batch2]);
@@ -75,7 +74,7 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
     return () => observer.disconnect();
   }, [loadMore]);
 
-  // Backup: scroll listener to guarantee continuous loading
+  // Backup: scroll listener
   useEffect(() => {
     const handleScroll = () => {
       const sentinel = sentinelRef.current;
