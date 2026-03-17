@@ -1,19 +1,34 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: implement authentication
-    console.log("Login attempt", { email });
+    setIsLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      toast.error(error.message === "Invalid login credentials"
+        ? "メールアドレスまたはパスワードが正しくありません"
+        : error.message);
+    } else {
+      toast.success("ログインしました");
+      navigate("/");
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -52,9 +67,10 @@ const Login = () => {
 
             <Button
               type="submit"
+              disabled={isLoading}
               className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-md text-base"
             >
-              ログイン
+              {isLoading ? "ログイン中..." : "ログイン"}
             </Button>
           </form>
 

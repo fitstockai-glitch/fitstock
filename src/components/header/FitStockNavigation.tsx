@@ -1,7 +1,8 @@
-import { Search, ImagePlus, Globe, Check, User, Heart } from "lucide-react";
+import { Search, Globe, Check, User, Heart, LogOut } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 type Language = "ja" | "en";
 
@@ -13,24 +14,36 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<Language>("ja");
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const languages = [
     { code: "ja" as Language, label: "日本語" },
     { code: "en" as Language, label: "English" },
   ];
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsLanguageDropdownOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleSignOut = async () => {
+    await signOut();
+    setIsUserMenuOpen(false);
+    navigate("/");
+  };
 
   return (
     <nav className="bg-background border-b border-border">
@@ -44,7 +57,7 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
           </Link>
         </div>
 
-        {/* Center search bar - Hidden on mobile */}
+        {/* Center search bar */}
         <div className="hidden md:flex flex-1 max-w-xl mx-8">
           <div className={`flex items-center w-full bg-secondary rounded-full px-4 py-2.5 transition-all duration-200 ${
             isSearchFocused ? "ring-2 ring-primary/20" : ""
@@ -52,7 +65,7 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
             <Search size={18} className="text-muted-foreground mr-3" />
             <input
               type="text"
-            placeholder="画像を検索する"
+              placeholder="画像を検索する"
               className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
@@ -105,28 +118,65 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
             </button>
           </Link>
 
-          {/* User Account */}
-          <Link to="/account">
-            <button
-              className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Account"
-            >
-              <User size={20} />
-            </button>
-          </Link>
+          {user ? (
+            /* Logged in: user avatar with dropdown */
+            <div className="relative" ref={userMenuRef}>
+              <button
+                onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                className="p-1 ml-1 rounded-full bg-foreground text-background w-8 h-8 flex items-center justify-center text-sm font-medium hover:opacity-80 transition-opacity"
+                aria-label="User menu"
+              >
+                {user.email?.charAt(0).toUpperCase() || "U"}
+              </button>
 
-          {/* Upgrade to Plus - hidden on mobile */}
-          <Link to="/pricing" className="ml-2 hidden md:block">
-            <Button 
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90 font-medium text-sm px-4"
-            >
-              Upgrade to Plus
-            </Button>
-          </Link>
+              {isUserMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-48 bg-background border border-border rounded-lg shadow-lg z-50 py-1">
+                  <div className="px-4 py-2 border-b border-border">
+                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                  </div>
+                  <Link
+                    to="/account"
+                    onClick={() => setIsUserMenuOpen(false)}
+                    className="w-full px-4 py-2.5 text-sm text-left hover:bg-secondary transition-colors flex items-center gap-2"
+                  >
+                    <User size={16} />
+                    アカウント
+                  </Link>
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full px-4 py-2.5 text-sm text-left hover:bg-secondary transition-colors flex items-center gap-2 text-destructive"
+                  >
+                    <LogOut size={16} />
+                    ログアウト
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            /* Not logged in: login/signup buttons */
+            <>
+              <Link to="/login">
+                <button
+                  className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Account"
+                >
+                  <User size={20} />
+                </button>
+              </Link>
+
+              <Link to="/pricing" className="ml-2 hidden md:block">
+                <Button 
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90 font-medium text-sm px-4"
+                >
+                  Upgrade to Plus
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </div>
 
-      {/* Mobile search - Shows below header on mobile */}
+      {/* Mobile search */}
       {!hideSearch && (
         <div className="md:hidden px-4 pb-3">
           <div className="flex items-center w-full bg-secondary rounded-full px-4 py-2.5">
