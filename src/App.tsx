@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
+import { AuthProvider } from "./contexts/AuthContext";
 
 import Index from "./pages/Index";
 import Account from "./pages/Account";
@@ -24,30 +25,32 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-        <BrowserRouter>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/category/:category" element={<Category />} />
-            <Route path="/product/:productId" element={<ProductDetail />} />
-            <Route path="/photo/:id" element={<PhotoDetail />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/account/delete" element={<DeleteAccount />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/tag/:tag" element={<TagPage />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+          <BrowserRouter>
+            <ScrollToTop />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/category/:category" element={<Category />} />
+              <Route path="/product/:productId" element={<ProductDetail />} />
+              <Route path="/photo/:id" element={<PhotoDetail />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/account/delete" element={<DeleteAccount />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/tag/:tag" element={<TagPage />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 
