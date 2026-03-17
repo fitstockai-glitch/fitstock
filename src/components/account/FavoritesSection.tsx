@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-import { photos } from "@/data/photos";
+import { usePhotos } from "@/hooks/usePhotos";
 
 const FavoritesSection = () => {
+  const { data: photos = [] } = usePhotos();
   const [favorites, setFavorites] = useState(photos.slice(0, 20));
 
   const handleRemove = (id: string) => {
