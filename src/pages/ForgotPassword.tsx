@@ -7,6 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowLeft, Mail } from "lucide-react";
 import FitStockNavigation from "@/components/header/FitStockNavigation";
+import Footer from "@/components/footer/Footer";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ArrowLeft, Mail } from "lucide-react";
+import FitStockNavigation from "@/components/header/FitStockNavigation";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
