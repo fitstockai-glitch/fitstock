@@ -33,9 +33,9 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen flex flex-col bg-background">
       <FitStockNavigation hideSearch />
-      <div className="flex items-center justify-center px-4 py-20">
+      <div className="flex-1 flex items-center justify-center px-4 py-20">
         <div className="w-full max-w-md space-y-6">
           <div className="text-center space-y-2">
             <h1 className="text-2xl font-bold text-foreground">パスワードをリセット</h1>
@@ -75,10 +75,15 @@ const ForgotPassword = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="example@email.com"
                   required
+                  className="h-12"
                 />
               </div>
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "送信中..." : "リセットリンクを送信"}
+              <Button
+                type="submit"
+                className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-md text-base"
+                disabled={loading}
+              >
+                {loading ? "送信中..." : "リンクを送信"}
               </Button>
               <div className="text-center">
                 <Link to="/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -90,6 +95,7 @@ const ForgotPassword = () => {
           )}
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
