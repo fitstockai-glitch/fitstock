@@ -63,6 +63,14 @@ const Login = () => {
                 required
                 className="h-12"
               />
+              <div>
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-muted-foreground hover:text-foreground underline"
+                >
+                  パスワードをお忘れですか？
+                </Link>
+              </div>
             </div>
 
             <Button
@@ -73,24 +81,6 @@ const Login = () => {
               {isLoading ? "ログイン中..." : "ログイン"}
             </Button>
           </form>
-
-          <div className="text-center -mt-4">
-            <Link
-              to="/forgot-password"
-              className="text-sm text-muted-foreground hover:text-foreground underline"
-            >
-              パスワードをお忘れですか？
-            </Link>
-          </div>
-
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-border" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">または</span>
-            </div>
-          </div>
 
           <Button
             type="button"
@@ -113,16 +103,13 @@ const Login = () => {
             Googleでログイン
           </Button>
 
-          <div className="border border-border p-6 text-center space-y-3">
-            <p className="text-sm text-muted-foreground">
-              アカウントをお持ちではありませんか？
-            </p>
-            <Link
-              to="/register"
-              className="text-sm font-semibold text-foreground underline underline-offset-4 hover:text-foreground/80"
-            >
-              登録する
-            </Link>
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">または</span>
+            </div>
           </div>
         </div>
       </main>
