@@ -131,7 +131,7 @@ const PlanInfoSection = ({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel className="bg-secondary text-foreground hover:bg-secondary/80">戻る</AlertDialogCancel>
-              <AlertDialogAction onClick={handleCancelConfirm} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">キャンセルを続ける</AlertDialogAction>
+              <AlertDialogAction onClick={handleCancelConfirm} className="bg-foreground text-background hover:bg-foreground/90">キャンセルを続ける</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
