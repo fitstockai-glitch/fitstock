@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useCategories } from "@/hooks/useCategories";
 
 const Footer = () => {
+  const { data: categories = [] } = useCategories();
+
   return (
     <footer className="w-full bg-background text-foreground">
       <div className="border-t border-border" />
@@ -10,26 +13,16 @@ const Footer = () => {
         <div className="flex-1">
           <h4 className="text-sm font-semibold text-foreground mb-4">カテゴリ</h4>
           <ul className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-2">
-            <li><Link to="/category/portrait" className="text-sm text-muted-foreground hover:text-foreground transition-colors">ポートレート</Link></li>
-            <li><Link to="/category/landscape" className="text-sm text-muted-foreground hover:text-foreground transition-colors">風景</Link></li>
-            <li><Link to="/category/abstract" className="text-sm text-muted-foreground hover:text-foreground transition-colors">抽象</Link></li>
-            <li><Link to="/category/business" className="text-sm text-muted-foreground hover:text-foreground transition-colors">ビジネス</Link></li>
-            <li><Link to="/category/mockup" className="text-sm text-muted-foreground hover:text-foreground transition-colors">モックアップ</Link></li>
-            <li><Link to="/category/food" className="text-sm text-muted-foreground hover:text-foreground transition-colors">フード</Link></li>
-            <li><Link to="/category/family" className="text-sm text-muted-foreground hover:text-foreground transition-colors">ファミリー</Link></li>
-            <li><Link to="/category/building" className="text-sm text-muted-foreground hover:text-foreground transition-colors">建物</Link></li>
-            <li><Link to="/category/autumn" className="text-sm text-muted-foreground hover:text-foreground transition-colors">秋</Link></li>
-            <li><Link to="/category/winter" className="text-sm text-muted-foreground hover:text-foreground transition-colors">冬</Link></li>
-            <li><Link to="/category/wedding" className="text-sm text-muted-foreground hover:text-foreground transition-colors">ウェディング</Link></li>
-            <li><Link to="/category/technology" className="text-sm text-muted-foreground hover:text-foreground transition-colors">テクノロジー</Link></li>
-            <li><Link to="/category/nature" className="text-sm text-muted-foreground hover:text-foreground transition-colors">自然</Link></li>
-            <li><Link to="/category/animals" className="text-sm text-muted-foreground hover:text-foreground transition-colors">動物</Link></li>
-            <li><Link to="/category/travel" className="text-sm text-muted-foreground hover:text-foreground transition-colors">旅行</Link></li>
-            <li><Link to="/category/fitness" className="text-sm text-muted-foreground hover:text-foreground transition-colors">フィットネス</Link></li>
-            <li><Link to="/category/fashion" className="text-sm text-muted-foreground hover:text-foreground transition-colors">ファッション</Link></li>
-            <li><Link to="/category/interior" className="text-sm text-muted-foreground hover:text-foreground transition-colors">インテリア</Link></li>
-            <li><Link to="/category/music" className="text-sm text-muted-foreground hover:text-foreground transition-colors">音楽</Link></li>
-            <li><Link to="/category/education" className="text-sm text-muted-foreground hover:text-foreground transition-colors">教育</Link></li>
+            {categories.map((cat) => (
+                <li key={cat.key}>
+                  <Link
+                    to={`/category/${cat.key}`}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {cat.label}
+                  </Link>
+                </li>
+              ))}
           </ul>
         </div>
 
@@ -64,7 +57,12 @@ const Footer = () => {
               <Link to="/terms-of-service" className="hover:text-foreground transition-colors">
                 Terms
               </Link>
-              <a href="mailto:contact@fitstock.com" className="hover:text-foreground transition-colors">
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLScuM8dFtyjbjKnHvbU8iD7ywx3ud1zPWJNurheoaGItccCAKw/viewform?usp=header"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground transition-colors"
+              >
                 Contact
               </a>
             </div>

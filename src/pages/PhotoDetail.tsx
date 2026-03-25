@@ -1,6 +1,6 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Heart, Download, Share2, X, Facebook, Link2, Check, ZoomIn } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { usePhoto, usePhotos } from "@/hooks/usePhotos";
 import MasonryGallery from "@/components/photo/MasonryGallery";
 import DownloadModal from "@/components/photo/DownloadModal";
+import { useAuth } from "@/contexts/AuthContext";
+import { useFavoriteIds, useToggleFavorite } from "@/hooks/useFavorites";
+import { useDownload } from "@/hooks/useDownload";
+import { useMembershipTier } from "@/hooks/useMembership";
 import {
   Dialog,
   DialogContent,
@@ -15,23 +19,39 @@ import {
 
 const PhotoDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [isLiked, setIsLiked] = useState(false);
+  const { user } = useAuth();
+  const { data: membershipTier, isLoading: isMembershipLoading } = useMembershipTier();
+  const navigate = useNavigate();
+  const { data: favoriteIds } = useFavoriteIds();
+  const toggleFavorite = useToggleFavorite();
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
-  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const { requestDownload, modalState, closeModal, downloadAfterWait, isDownloading } = useDownload();
   const imageAreaRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const [zoomIconPosition, setZoomIconPosition] = useState({ top: 16, left: 16 });
 
-  // Extract base UUID (strip batch suffixes if present)
   const baseId = id?.includes("-b") ? id.split("-b")[0] : id;
   const { data: photo, isLoading } = usePhoto(baseId);
   const { data: allPhotos = [] } = usePhotos();
   const relatedPhotos = allPhotos.filter((p) => p.id !== baseId);
 
+  const isLiked = useMemo(() => favoriteIds?.has(baseId ?? "") ?? false, [favoriteIds, baseId]);
+
+  const handleLike = () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    if (baseId) {
+      toggleFavorite.mutate({ photoId: baseId, isFavorited: isLiked });
+    }
+  };
+
   const handleDownload = () => {
-    setIsDownloadModalOpen(true);
+    if (!baseId) return;
+    requestDownload(baseId);
   };
 
   const handleCopyLink = async () => {
@@ -48,7 +68,7 @@ const PhotoDetail = () => {
     const shareUrls: Record<string, string> = {
       twitter: `https://twitter.com/intent/tweet?url=${url}&text=${text}`,
       facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-      pinterest: `https://pinterest.com/pin/create/button/?url=${url}&description=${text}&media=${encodeURIComponent(photo.imageUrl)}`,
+      pinterest: `https://pinterest.com/pin/create/button/?url=${url}&description=${text}&media=${encodeURIComponent(photo.previewUrl ?? photo.imageUrl)}`,
     };
 
     if (shareUrls[platform]) {
@@ -85,7 +105,7 @@ const PhotoDetail = () => {
         imageEl.removeEventListener("load", updateZoomIconPosition);
       }
     };
-  }, [photo?.imageUrl]);
+  }, [photo?.previewUrl, photo?.imageUrl]);
 
   if (isLoading) {
     return (
@@ -105,6 +125,8 @@ const PhotoDetail = () => {
     );
   }
 
+  const detailImageSrc = photo.previewUrl ?? photo.imageUrl;
+
   return (
     <div className="min-h-screen bg-background">
       <FitStockHeader />
@@ -123,7 +145,7 @@ const PhotoDetail = () => {
             >
               <img
                 ref={imageRef}
-                src={photo.imageUrl}
+                src={detailImageSrc}
                 alt={photo.title}
                 className="max-w-full max-h-full object-contain"
               />
@@ -149,30 +171,32 @@ const PhotoDetail = () => {
               ダウンロード
             </Button>
 
-            <div className="border border-border rounded-lg p-5 space-y-4">
-              <h3 className="font-semibold text-foreground">無制限ダウンロード定額プラン</h3>
-              <ul className="space-y-2.5">
-                <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
-                  <span>画像ライブラリのすべての素材がダウンロード可能</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
-                  <span>クリエイティブデジタルおよび印刷物に使用できる加工可能なライセンス</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
-                  <span>業界最安値</span>
-                </li>
-              </ul>
-              <Link to="/pricing">
-                <Button
-                  className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-medium mt-2"
-                >
-                  FitStock Plusに参加する
-                </Button>
-              </Link>
-            </div>
+            {(!user || (!isMembershipLoading && membershipTier !== "plus")) && (
+              <div className="border border-border rounded-lg p-5 space-y-4">
+                <h3 className="font-semibold text-foreground">無制限ダウンロード定額プラン</h3>
+                <ul className="space-y-2.5">
+                  <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
+                    <span>画像ライブラリのすべての素材がダウンロード可能</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
+                    <span>クリエイティブデジタルおよび印刷物に使用できる加工可能なライセンス</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
+                    <span>業界最安値</span>
+                  </li>
+                </ul>
+                <Link to="/pricing">
+                  <Button
+                    className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-medium mt-2"
+                  >
+                    FitStock Plusに参加する
+                  </Button>
+                </Link>
+              </div>
+            )}
 
             <p className="text-xs text-muted-foreground/70 leading-relaxed">
               「{photo.title}」は{photo.tags.map(t => `「${t}」`).join('、')}に関連するフリー素材です。商用利用可能な高品質写真をFitStockで無料ダウンロード。Webデザインや広告、SNS投稿にご活用ください。
@@ -182,17 +206,18 @@ const PhotoDetail = () => {
               <Button
                 variant="outline"
                 className={`flex-1 h-11 gap-2 rounded-md justify-start ${
-                  isLiked ? "bg-red-50 border-red-200" : ""
+                  user && isLiked ? "bg-red-50 border-red-200" : ""
                 }`}
-                onClick={() => setIsLiked(!isLiked)}
+                onClick={handleLike}
               >
                 <Heart
                   size={16}
-                  className={isLiked ? "fill-red-500 text-red-500" : "text-foreground"}
+                  className={
+                    user && isLiked ? "fill-red-500 text-red-500" : "text-foreground"
+                  }
                 />
                 <span className="text-sm">お気に入りに追加</span>
               </Button>
-
               <div className="relative flex-1">
                 <Button
                   variant="outline"
@@ -273,12 +298,20 @@ const PhotoDetail = () => {
 
       <Footer />
 
-      <DownloadModal open={isDownloadModalOpen} onOpenChange={setIsDownloadModalOpen} />
+      <DownloadModal
+        open={modalState.open}
+        onOpenChange={(open) => {
+          if (!open) closeModal();
+        }}
+        mode={modalState.mode}
+        onDownload={downloadAfterWait}
+        isDownloading={isDownloading}
+      />
 
       <Dialog open={isZoomOpen} onOpenChange={setIsZoomOpen}>
         <DialogContent className="max-w-[90vw] max-h-[90vh] p-0 bg-transparent border-none shadow-none [&>button]:text-white [&>button]:opacity-100 [&>button]:hover:text-white/70 [&>button>svg]:h-6 [&>button>svg]:w-6 [&>button]:ring-0 [&>button]:ring-offset-0 [&>button]:focus:ring-0 [&>button]:focus:ring-offset-0">
           <img
-            src={photo.imageUrl}
+            src={detailImageSrc}
             alt={photo.title}
             className="w-full h-full object-contain max-h-[90vh]"
           />

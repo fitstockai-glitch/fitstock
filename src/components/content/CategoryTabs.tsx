@@ -6,6 +6,8 @@ import { useCategories } from "@/hooks/useCategories";
 interface CategoryTabsProps {
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
+  /** トップページ（/）では遷移せずその場でフィルタ。false の場合は /category/:key へ遷移 */
+  stayOnPage?: boolean;
 }
 
 const sortOptions = [
@@ -15,17 +17,24 @@ const sortOptions = [
   { key: "trending", label: "トレンド" },
 ];
 
-const CategoryTabs = ({ selectedCategory, onCategoryChange }: CategoryTabsProps) => {
+const CategoryTabs = ({
+  selectedCategory,
+  onCategoryChange,
+  stayOnPage = false,
+}: CategoryTabsProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const { data: categories = [{ key: "all", label: "すべて" }] } = useCategories();
+  const { data: dbCategories = [] } = useCategories();
+  const categories = [{ key: "all", label: "すべて" }, ...dbCategories];
 
   const handleCategoryClick = (key: string) => {
     onCategoryChange(key);
-    navigate(`/category/${key}`);
+    if (!stayOnPage) {
+      navigate(`/category/${key}`);
+    }
   };
 
   useEffect(() => {

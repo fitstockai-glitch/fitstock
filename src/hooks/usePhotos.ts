@@ -1,66 +1,141 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Photo } from "@/types/photo";
+import { buildThumbnailPublicUrl, buildPreviewPublicUrl } from "@/lib/supabaseStorage";
 
-const SUPABASE_URL = "https://oytupgguadlpgkzigykz.supabase.co";
-
-function buildImageUrl(previewPath: string | null, storagePath: string): string {
-  const path = previewPath || storagePath;
-  return `${SUPABASE_URL}/storage/v1/object/public/${path}`;
+function isThumbnailInRange01To05(previewPath: string | null): boolean {
+  if (!previewPath) return false;
+  const normalized = previewPath.replace(/^previews\//, "").replace(/^\/+/, "");
+  const match = normalized.match(/^(\d{2})_preview\./);
+  if (!match) return false;
+  const num = Number(match[1]);
+  return num >= 1 && num <= 5;
 }
 
-export function usePhotos(categoryName?: string) {
+function buildTsQuery(rawQuery: string): string {
+  return rawQuery
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((token) => `${token}:*`)
+    .join(" & ");
+}
+
+function mapPhotos(photos: any[]): Photo[] {
+  const filtered = photos.filter((p) => isThumbnailInRange01To05(p.preview_path));
+
+  return filtered.map((p) => {
+    const thumb = buildThumbnailPublicUrl(p.preview_path);
+    return {
+      id: p.id,
+      title: p.title,
+      description: p.description,
+      category_name: p.category_name,
+      width: p.width || 1920,
+      height: p.height || 1280,
+      download_count: p.download_count,
+      favorite_count: p.favorite_count,
+      imageUrl: thumb ?? "",
+      tags: [],
+    };
+  });
+}
+
+export function usePhotos(categoryName?: string, tagName?: string, searchQuery?: string) {
+  const normalizedQuery = searchQuery?.trim() ?? "";
   return useQuery({
-    queryKey: ["photos", categoryName],
+    queryKey: ["photos-v3-filters", categoryName, tagName, normalizedQuery],
+    staleTime: 5 * 60 * 1000,
     queryFn: async (): Promise<Photo[]> => {
-      // Fetch photos
-      let query = supabase
-        .from("photos")
-        .select("*")
-        .order("created_at", { ascending: false });
+      let categoryId: string | null = null;
+      let tagPhotoIds: string[] | null = null;
 
       if (categoryName && categoryName !== "all") {
-        query = query.eq("category_name", categoryName);
+        const { data: category, error: categoryError } = await supabase
+          .from("categories")
+          .select("id")
+          .eq("name", categoryName)
+          .maybeSingle();
+
+        if (categoryError) throw categoryError;
+        if (!category) return [];
+        categoryId = category.id;
       }
 
-      const { data: photosData, error: photosError } = await query;
-      if (photosError) throw photosError;
-      if (!photosData || photosData.length === 0) return [];
+      if (tagName && tagName !== "all") {
+        const { data: tag, error: tagError } = await supabase
+          .from("tags")
+          .select("id")
+          .eq("name", tagName)
+          .maybeSingle();
+        if (tagError) throw tagError;
+        if (!tag) return [];
 
-      // Fetch all tags for these photos
-      const photoIds = photosData.map((p) => p.id);
-      const { data: photoTags, error: tagsError } = await supabase
-        .from("photo_tags")
-        .select("photo_id, tag_id, tags:tag_id(name)")
-        .in("photo_id", photoIds);
+        const { data: photoTags, error: photoTagsError } = await supabase
+          .from("photo_tags")
+          .select("photo_id")
+          .eq("tag_id", tag.id);
+        if (photoTagsError) throw photoTagsError;
 
-      if (tagsError) throw tagsError;
+        tagPhotoIds = (photoTags || []).map((pt) => pt.photo_id);
+        if (tagPhotoIds.length === 0) return [];
+      }
 
-      // Build tag map
-      const tagMap: Record<string, string[]> = {};
-      if (photoTags) {
-        for (const pt of photoTags as any[]) {
-          const photoId = pt.photo_id;
-          const tagName = pt.tags?.name;
-          if (tagName) {
-            if (!tagMap[photoId]) tagMap[photoId] = [];
-            tagMap[photoId].push(tagName);
-          }
+      const baseQuery = () => {
+        let query = supabase
+          .from("photos")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (categoryId) {
+          query = query.eq("category_id", categoryId);
+        }
+
+        if (tagPhotoIds && tagPhotoIds.length > 0) {
+          query = query.in("id", tagPhotoIds);
+        }
+
+        return query;
+      };
+
+      const queryText = normalizedQuery.trim();
+      if (!queryText) {
+        const { data, error } = await baseQuery();
+        if (error) throw error;
+        if (!data || data.length === 0) return [];
+        return mapPhotos(data);
+      }
+
+      const tsQuery = buildTsQuery(queryText);
+      if (tsQuery) {
+        // Prefer full-text index first. If no hit or error, fallback to ILIKE for Japanese matching.
+        const { data: textData, error: textError } = await baseQuery().textSearch(
+          "search_vector",
+          tsQuery,
+          { type: "plain", config: "simple" }
+        );
+        if (!textError && textData && textData.length > 0) {
+          return mapPhotos(textData);
         }
       }
 
-      return photosData.map((p) => ({
-        id: p.id,
-        title: p.title,
-        description: p.description,
-        category_name: p.category_name,
-        width: p.width || 1920,
-        height: p.height || 1280,
-        download_count: p.download_count,
-        favorite_count: p.favorite_count,
-        imageUrl: buildImageUrl(p.preview_path, p.storage_path),
-        tags: tagMap[p.id] || [],
-      }));
+      const [titleResult, descriptionResult] = await Promise.all([
+        baseQuery().ilike("title", `%${queryText}%`),
+        baseQuery().ilike("description", `%${queryText}%`),
+      ]);
+
+      if (titleResult.error) throw titleResult.error;
+      if (descriptionResult.error) throw descriptionResult.error;
+
+      const merged = new Map<string, any>();
+      for (const photo of titleResult.data || []) {
+        merged.set(photo.id, photo);
+      }
+      for (const photo of descriptionResult.data || []) {
+        merged.set(photo.id, photo);
+      }
+
+      return mapPhotos(Array.from(merged.values()));
     },
   });
 }
@@ -91,6 +166,9 @@ export function usePhoto(id: string | undefined) {
         .map((pt) => pt.tags?.name)
         .filter(Boolean);
 
+      const thumb = buildThumbnailPublicUrl(data.preview_path);
+      const preview = buildPreviewPublicUrl(data.preview_path) ?? thumb;
+
       return {
         id: data.id,
         title: data.title,
@@ -100,7 +178,8 @@ export function usePhoto(id: string | undefined) {
         height: data.height || 1280,
         download_count: data.download_count,
         favorite_count: data.favorite_count,
-        imageUrl: buildImageUrl(data.preview_path, data.storage_path),
+        imageUrl: thumb ?? "",
+        previewUrl: preview,
         tags,
       };
     },

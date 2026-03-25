@@ -2,9 +2,26 @@ import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+
+const LEMON_SQUEEZY_CHECKOUT_URL =
+  "https://fitstock.lemonsqueezy.com/checkout/buy/f3fe4e0b-1ef6-4d98-94dc-7a9771e4f081";
 
 const Pricing = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubscribeClick = () => {
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+    const url = new URL(LEMON_SQUEEZY_CHECKOUT_URL);
+    url.searchParams.set("checkout[custom][user_id]", user.id);
+    window.location.href = url.toString();
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <FitStockHeader />
@@ -46,11 +63,12 @@ const Pricing = () => {
             </div>
           </div>
 
-          <Link to="/register">
-            <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-6 text-base rounded-lg">
-              FitStock Plusに参加する
-            </Button>
-          </Link>
+          <Button
+            onClick={handleSubscribeClick}
+            className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-6 text-base rounded-lg"
+          >
+            FitStock Plusに登録する
+          </Button>
         </div>
       </main>
 

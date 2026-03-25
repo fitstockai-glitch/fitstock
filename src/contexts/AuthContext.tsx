@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { clearSupabaseAuthStorage } from "@/lib/clearSupabaseAuthStorage";
 
 interface AuthContextType {
   session: Session | null;
@@ -39,7 +40,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      const { error } = await supabase.auth.signOut({ scope: "local" });
+      if (error) {
+        console.warn("signOut:", error.message);
+      }
+    } catch (e) {
+      console.warn("signOut:", e);
+    } finally {
+      // アカウント削除直後は /logout が失敗しても removeSession が走らないことがあるため必ず掃除する
+      clearSupabaseAuthStorage();
+      setSession(null);
+      setLoading(false);
+    }
   };
 
   return (

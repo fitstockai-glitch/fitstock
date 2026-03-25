@@ -47,12 +47,10 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
     setDisplayedPhotos((current) => [...current, ...batch1, ...batch2]);
   }, [photos, generateBatch]);
 
-  // Load initial photos + preload
   useEffect(() => {
     if (photos.length > 0) {
-      batchRef.current = 2;
-      const batch2 = generateBatch(2);
-      setDisplayedPhotos([...photos, ...batch2]);
+      batchRef.current = 0;
+      setDisplayedPhotos([...photos]);
     }
   }, [photos]);
 

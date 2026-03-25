@@ -6,7 +6,8 @@ interface CategoryFilterProps {
 }
 
 const CategoryFilter = ({ selectedCategory, onCategoryChange }: CategoryFilterProps) => {
-  const { data: categories = [] } = useCategories();
+  const { data: dbCategories = [] } = useCategories();
+  const categories = [{ key: "all", label: "すべて" }, ...dbCategories];
 
   return (
     <div className="flex flex-wrap justify-center gap-2 px-4 md:px-6 py-6">

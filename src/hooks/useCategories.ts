@@ -8,7 +8,8 @@ export interface Category {
 
 export function useCategories() {
   return useQuery({
-    queryKey: ["categories"],
+    queryKey: ["categories", "db"],
+    staleTime: 10 * 60 * 1000,
     queryFn: async (): Promise<Category[]> => {
       const { data, error } = await supabase
         .from("categories")
@@ -17,9 +18,7 @@ export function useCategories() {
 
       if (error) throw error;
 
-      const all: Category = { key: "all", label: "すべて" };
-      const cats = (data || []).map((c) => ({ key: c.name, label: c.label }));
-      return [all, ...cats];
+      return (data || []).map((c) => ({ key: c.name, label: c.label }));
     },
   });
 }

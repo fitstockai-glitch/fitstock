@@ -1,22 +1,39 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { buildThumbnailPublicUrlFlexible } from "@/lib/supabaseStorage";
 import { toast } from "sonner";
 
-const heroImages = [
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80",
-  "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
-  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80",
-  "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&q=80",
-];
-const randomHero = heroImages[Math.floor(Math.random() * heroImages.length)];
-
 const Register = () => {
+  const { data: thumbnailUrls } = useQuery({
+    queryKey: ["register-cover-thumbnails"],
+    staleTime: 10 * 60 * 1000,
+    queryFn: async (): Promise<string[]> => {
+      const { data, error } = await supabase
+        .from("photos")
+        .select("preview_path")
+        .eq("is_published", true)
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return (data ?? [])
+        .map((row) => buildThumbnailPublicUrlFlexible(row.preview_path))
+        .filter((u): u is string => Boolean(u));
+    },
+  });
+
+  const coverUrl = useMemo(() => {
+    if (!thumbnailUrls?.length) return null;
+    return thumbnailUrls[Math.floor(Math.random() * thumbnailUrls.length)];
+  }, [thumbnailUrls]);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,7 +62,7 @@ const Register = () => {
     setIsLoading(false);
   };
 
-  const FormContent = ({ idSuffix = "" }: { idSuffix?: string }) => (
+  const formContent = (idSuffix: string = "") => (
     <>
       <h1 className="text-2xl font-bold text-foreground">アカウント作成</h1>
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -77,26 +94,41 @@ const Register = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <FitStockHeader />
-      <main className="flex-1 flex flex-col md:flex-row">
-        {/* Mobile */}
+      <main className="flex min-h-0 flex-1 flex-col overflow-x-hidden md:flex-row md:items-stretch md:min-h-[calc(100svh-9rem)]">
+        {/* Mobile: 高さはビューポート基準。背景画像はレイアウトに影響しない */}
         <div
-          className="relative flex-1 flex flex-col md:hidden min-h-[80vh]"
-          style={{ backgroundImage: `url(${randomHero})`, backgroundSize: "cover", backgroundPosition: "center" }}
+          className={`relative flex flex-1 flex-col md:hidden min-h-[calc(100svh-9rem)] overflow-hidden ${coverUrl ? "" : "bg-muted"}`}
+          style={
+            coverUrl
+              ? {
+                  backgroundImage: `url(${coverUrl})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }
+              : undefined
+          }
         >
-          <div className="flex-1 flex items-center justify-center px-4 py-10">
+          <div className="flex flex-1 items-center justify-center px-4 py-10 min-h-0">
             <div className="w-full max-w-md bg-background rounded-xl p-6 space-y-6">
-              <FormContent idSuffix="-mobile" />
+              {formContent("-mobile")}
             </div>
           </div>
         </div>
 
-        {/* Desktop */}
-        <div className="hidden md:block w-1/2 h-auto">
-          <img src={randomHero} alt="Sign up hero" className="w-full h-full object-cover" />
+        {/* Desktop: 画像は絶対配置のため、固有サイズで列高が変わらない */}
+        <div className="relative hidden w-1/2 shrink-0 overflow-hidden bg-muted md:block">
+          {coverUrl ? (
+            <img
+              src={coverUrl}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover"
+              decoding="async"
+            />
+          ) : null}
         </div>
-        <div className="hidden md:flex w-1/2 items-center justify-center px-6 py-16">
-          <div className="w-full max-w-md space-y-8">
-            <FormContent />
+        <div className="hidden w-1/2 min-w-0 shrink-0 flex-col items-center justify-center px-6 py-16 md:flex">
+          <div className="w-full max-w-md space-y-6 rounded-xl bg-background p-8">
+            {formContent()}
           </div>
         </div>
       </main>

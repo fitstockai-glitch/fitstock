@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import FitStockHeader from "../components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
 import CategoryTabs from "../components/content/CategoryTabs";
@@ -7,8 +7,11 @@ import { usePhotos } from "@/hooks/usePhotos";
 
 const Category = () => {
   const { category } = useParams();
+  const [searchParams] = useSearchParams();
+  const searchQuery = (searchParams.get("q") ?? "").trim();
+  const isSearchMode = searchQuery.length > 0;
   const activeCategory = category || "all";
-  const { data: photos = [], isLoading } = usePhotos(activeCategory);
+  const { data: photos = [], isLoading } = usePhotos(activeCategory, undefined, searchQuery);
 
   const handleCategoryChange = (_newCategory: string) => {
     // Navigation is handled by CategoryTabs
@@ -17,11 +20,17 @@ const Category = () => {
   return (
     <div className="min-h-screen bg-background">
       <FitStockHeader />
-      
-      <CategoryTabs 
-        selectedCategory={activeCategory} 
-        onCategoryChange={handleCategoryChange} 
-      />
+
+      {isSearchMode ? (
+        <div className="px-4 md:px-8 pt-8 pb-4">
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground">{searchQuery}</h1>
+        </div>
+      ) : (
+        <CategoryTabs
+          selectedCategory={activeCategory}
+          onCategoryChange={handleCategoryChange}
+        />
+      )}
 
       <main>
         {isLoading ? (

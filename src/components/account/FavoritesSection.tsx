@@ -1,15 +1,18 @@
-import { useState } from "react";
 import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
-import { usePhotos } from "@/hooks/usePhotos";
+import { useFavoritePhotos, useToggleFavorite } from "@/hooks/useFavorites";
 
 const FavoritesSection = () => {
-  const { data: photos = [] } = usePhotos();
-  const [favorites, setFavorites] = useState(photos.slice(0, 20));
+  const { data: favorites = [], isLoading } = useFavoritePhotos();
+  const toggleFavorite = useToggleFavorite();
 
-  const handleRemove = (id: string) => {
-    setFavorites((prev) => prev.filter((item) => item.id !== id));
+  const handleRemove = (photoId: string) => {
+    toggleFavorite.mutate({ photoId, isFavorited: true });
   };
+
+  if (isLoading) {
+    return <p className="text-sm text-muted-foreground">読み込み中...</p>;
+  }
 
   return (
     <div>
@@ -26,9 +29,9 @@ const FavoritesSection = () => {
                   src={item.imageUrl}
                   alt={item.title}
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
                 />
               </Link>
-              {/* Remove button on hover */}
               <button
                 className="absolute top-2 right-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-white/90 hover:bg-white text-xs font-medium text-foreground shadow-sm"
                 onClick={() => handleRemove(item.id)}

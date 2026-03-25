@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import FitStockHeader from "../components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
 import MasonryGallery from "../components/photo/MasonryGallery";
@@ -6,13 +6,10 @@ import { usePhotos } from "@/hooks/usePhotos";
 
 const TagPage = () => {
   const { tag } = useParams();
-  const activeTag = tag || "";
-  const { data: photos = [], isLoading } = usePhotos();
-
-  // Filter photos that contain this tag
-  const filteredPhotos = photos.filter((p) =>
-    p.tags.some((t) => t.toLowerCase() === activeTag.toLowerCase())
-  );
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("q") ?? "";
+  const activeTag = tag || "all";
+  const { data: photos = [], isLoading } = usePhotos("all", activeTag, searchQuery);
 
   return (
     <div className="min-h-screen bg-background">
@@ -26,7 +23,7 @@ const TagPage = () => {
         {isLoading ? (
           <div className="flex justify-center py-20 text-muted-foreground">読み込み中...</div>
         ) : (
-          <MasonryGallery photos={filteredPhotos.length > 0 ? filteredPhotos : photos} />
+          <MasonryGallery photos={photos} />
         )}
       </main>
 

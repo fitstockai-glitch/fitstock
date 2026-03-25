@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Check } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,13 +20,37 @@ const heroImages = [
 interface DownloadModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  mode?: "guest" | "upsell_wait" | "limit_reached";
+  onDownload?: () => Promise<void> | void;
+  isDownloading?: boolean;
 }
 
-const DownloadModal = ({ open, onOpenChange }: DownloadModalProps) => {
+const DownloadModal = ({
+  open,
+  onOpenChange,
+  mode = "guest",
+  onDownload,
+  isDownloading = false,
+}: DownloadModalProps) => {
   const randomHero = useMemo(
     () => heroImages[Math.floor(Math.random() * heroImages.length)],
     [open]
   );
+  const [remainingSeconds, setRemainingSeconds] = useState(5);
+
+  useEffect(() => {
+    if (!open || mode !== "upsell_wait") return;
+    setRemainingSeconds(5);
+    const timer = window.setInterval(() => {
+      setRemainingSeconds((current) => (current > 0 ? current - 1 : 0));
+    }, 1000);
+    return () => window.clearInterval(timer);
+  }, [open, mode]);
+
+  const isWaitCompleted = remainingSeconds <= 0;
+  const showAuthCta = mode === "guest";
+  const showDownloadButton = mode === "upsell_wait";
+  const showLimitMessage = mode === "limit_reached";
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -46,9 +71,28 @@ const DownloadModal = ({ open, onOpenChange }: DownloadModalProps) => {
               <DialogTitle className="text-2xl font-bold leading-tight">
                 制限を気にせず、クリエイティブに集中しよう
               </DialogTitle>
-              <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
-                サインアップすると1日10回の無料ダウンロードが可能に。さらに、FitStock Plus（月額¥1,000）に加入すれば無制限のダウンロードが可能になります。
-              </DialogDescription>
+              {showAuthCta ? (
+                <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
+                  サインアップすると1日10回の無料ダウンロードが可能に。さらに、FitStock Plus（月額¥1,000）に加入すれば無制限のダウンロードが可能になります。
+                </DialogDescription>
+              ) : (
+                <div>
+                  <ul className="space-y-2.5">
+                    <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
+                      <span>画像ライブラリのすべての素材がダウンロード可能</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
+                      <span>クリエイティブデジタルおよび印刷物に使用できる加工可能なライセンス</span>
+                    </li>
+                    <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
+                      <span>業界最安値</span>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </DialogHeader>
 
             <div className="flex flex-col gap-3 mt-10">
@@ -57,22 +101,51 @@ const DownloadModal = ({ open, onOpenChange }: DownloadModalProps) => {
                   FitStock Plusに参加する
                 </Button>
               </Link>
-              <Link to="/register">
+
+              {showAuthCta && (
+                <Link to="/register">
+                  <Button
+                    variant="outline"
+                    className="w-full font-medium py-6 text-base rounded-lg"
+                  >
+                    無料登録する
+                  </Button>
+                </Link>
+              )}
+
+              {showDownloadButton && (
+                <Button
+                  onClick={onDownload}
+                  disabled={!isWaitCompleted || isDownloading}
+                  className="w-full bg-foreground hover:bg-foreground/90 text-background font-medium py-6 text-base rounded-lg disabled:opacity-70"
+                >
+                  {isDownloading
+                    ? "ダウンロード中..."
+                    : isWaitCompleted
+                      ? "ダウンロードする"
+                      : `${remainingSeconds}秒後にダウンロード可能`}
+                </Button>
+              )}
+
+              {showLimitMessage && (
                 <Button
                   variant="outline"
                   className="w-full font-medium py-6 text-base rounded-lg"
+                  onClick={() => onOpenChange(false)}
                 >
-                  無料登録する
+                  閉じる
                 </Button>
-              </Link>
+              )}
             </div>
 
-            <p className="text-center text-sm text-muted-foreground mt-4">
-              すでにアカウントをお持ちですか？{" "}
-              <Link to="/login" className="text-red-500 hover:underline font-medium">
-                ログイン
-              </Link>
-            </p>
+            {showAuthCta && (
+              <p className="text-center text-sm text-muted-foreground mt-4">
+                すでにアカウントをお持ちですか？{" "}
+                <Link to="/login" className="text-red-500 hover:underline font-medium">
+                  ログイン
+                </Link>
+              </p>
+            )}
           </div>
         </div>
       </DialogContent>

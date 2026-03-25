@@ -1,8 +1,10 @@
 import { Search, Globe, Check, User, Heart, LogOut } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { useMembershipTier } from "@/hooks/useMembership";
+import { toast } from "sonner";
 
 type Language = "ja" | "en";
 
@@ -15,9 +17,12 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
   const [currentLanguage, setCurrentLanguage] = useState<Language>("ja");
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const { user, signOut } = useAuth();
+  const { data: membershipTier, isLoading: isMembershipLoading } = useMembershipTier();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const languages = [
@@ -35,14 +40,41 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setSearchTerm(params.get("q") ?? "");
+  }, [location.search]);
+
   const handleSignOut = async () => {
-    await signOut();
     setIsUserMenuOpen(false);
-    navigate("/");
+    try {
+      await signOut();
+      navigate("/");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "ログアウトに失敗しました";
+      toast.error(message);
+    }
+  };
+
+  const applySearch = () => {
+    const trimmed = searchTerm.trim();
+
+    if (trimmed) {
+      // 検索結果はトップ（Index）で表示する。/category/... のままだと CategoryTabs が残るため常に /?q= へ寄せる
+      const params = new URLSearchParams();
+      params.set("q", trimmed);
+      navigate(`/?${params.toString()}`);
+      return;
+    }
+
+    const params = new URLSearchParams(location.search);
+    params.delete("q");
+    const search = params.toString();
+    navigate(`${location.pathname}${search ? `?${search}` : ""}`);
   };
 
   return (
@@ -59,18 +91,39 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
 
         {/* Center search bar */}
         <div className="hidden md:flex flex-1 max-w-xl mx-8">
-          <div className={`flex items-center w-full bg-secondary rounded-full px-4 py-2.5 transition-all duration-200 ${
-            isSearchFocused ? "ring-2 ring-primary/20" : ""
-          }`}>
-            <Search size={18} className="text-muted-foreground mr-3" />
+          <form
+            className={`flex items-center w-full bg-secondary rounded-full px-4 py-2.5 transition-all duration-200 ${
+              isSearchFocused ? "ring-2 ring-border" : ""
+            }`}
+            onSubmit={(e) => {
+              e.preventDefault();
+              applySearch();
+            }}
+          >
+            <button
+              type="submit"
+              className="mr-3 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="検索"
+            >
+              <Search size={18} />
+            </button>
             <input
               type="text"
               placeholder="画像を検索する"
               className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.nativeEvent.isComposing) return;
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  applySearch();
+                }
+              }}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
             />
-          </div>
+          </form>
         </div>
 
         {/* Right side */}
@@ -109,17 +162,15 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
           </div>
 
           {/* Favorites */}
-          <Link to="/account?section=favorites">
-            <button
-              className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Favorites"
-            >
-              <Heart size={20} />
-            </button>
-          </Link>
+          <button
+            onClick={() => navigate(user ? "/account?section=favorites" : "/login")}
+            className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Favorites"
+          >
+            <Heart size={20} />
+          </button>
 
           {user ? (
-            /* Logged in: user avatar with dropdown */
             <div className="relative" ref={userMenuRef}>
               <button
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -153,25 +204,24 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
               )}
             </div>
           ) : (
-            /* Not logged in: login/signup buttons */
-            <>
-              <Link to="/login">
-                <button
-                  className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Account"
-                >
-                  <User size={20} />
-                </button>
-              </Link>
+            <Link to="/login">
+              <button
+                className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Account"
+              >
+                <User size={20} />
+              </button>
+            </Link>
+          )}
 
-              <Link to="/pricing" className="ml-2 hidden md:block">
-                <Button 
-                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90 font-medium text-sm px-4"
-                >
-                  Upgrade to Plus
-                </Button>
-              </Link>
-            </>
+          {(!user || (!isMembershipLoading && membershipTier !== "plus")) && (
+            <Link to="/pricing" className="ml-2 hidden md:block">
+              <Button
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90 font-medium text-sm px-4"
+              >
+                Upgrade to Plus
+              </Button>
+            </Link>
           )}
         </div>
       </div>
@@ -179,14 +229,39 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
       {/* Mobile search */}
       {!hideSearch && (
         <div className="md:hidden px-4 pb-3">
-          <div className="flex items-center w-full bg-secondary rounded-full px-4 py-2.5">
-            <Search size={18} className="text-muted-foreground mr-3" />
+          <form
+            className={`flex items-center w-full bg-secondary rounded-full px-4 py-2.5 transition-all duration-200 ${
+              isSearchFocused ? "ring-2 ring-border" : ""
+            }`}
+            onSubmit={(e) => {
+              e.preventDefault();
+              applySearch();
+            }}
+          >
+            <button
+              type="submit"
+              className="mr-3 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="検索"
+            >
+              <Search size={18} />
+            </button>
             <input
               type="text"
               placeholder="画像を検索する"
               className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.nativeEvent.isComposing) return;
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  applySearch();
+                }
+              }}
+              onFocus={() => setIsSearchFocused(true)}
+              onBlur={() => setIsSearchFocused(false)}
             />
-          </div>
+          </form>
         </div>
       )}
     </nav>

@@ -6,6 +6,7 @@ export type AccountSection = "profile" | "plan" | "favorites" | "downloads" | "b
 interface AccountSidebarProps {
   activeSection: AccountSection;
   onSectionChange: (section: AccountSection) => void;
+  onLogout: () => void;
 }
 
 const navItems: { id: AccountSection; label: string; icon: React.ReactNode }[] = [
@@ -16,7 +17,7 @@ const navItems: { id: AccountSection; label: string; icon: React.ReactNode }[] =
   { id: "billing", label: "領収書発行", icon: <FileText size={16} /> },
 ];
 
-const AccountSidebar = ({ activeSection, onSectionChange }: AccountSidebarProps) => {
+const AccountSidebar = ({ activeSection, onSectionChange, onLogout }: AccountSidebarProps) => {
   return (
     <aside className="w-full md:w-52 flex-shrink-0 border-r border-border min-h-full">
       <nav className="pt-[36px] pb-2 px-2">
@@ -38,7 +39,7 @@ const AccountSidebar = ({ activeSection, onSectionChange }: AccountSidebarProps)
         {/* Logout */}
         <div className="border-t border-border mt-1 pt-1">
         <button
-          onClick={() => {}}
+          onClick={onLogout}
           className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:rounded-md transition-colors text-left"
         >
           <LogOut size={16} />
