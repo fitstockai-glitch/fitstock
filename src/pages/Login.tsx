@@ -111,5 +111,11 @@ const Login = () => {
               <span className="bg-background px-2 text-muted-foreground">または</span>
             </div>
           </div>
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+};
 
 export default Login;
