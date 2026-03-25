@@ -12,6 +12,7 @@ import ReceiptInfoSection from "@/components/account/ReceiptInfoSection";
 import { ChevronUp, ChevronDown, ChevronLeft } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
+import { useMembershipTier } from "@/hooks/useMembership";
 import { toast } from "sonner";
 
 const LEMON_SQUEEZY_CHECKOUT_URL =
