@@ -69,7 +69,7 @@ const PlanInfoSection = ({
             <Button 
               onClick={onUpgrade}
               size="lg"
-              className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium py-6 text-base rounded-lg"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-6 text-base rounded-lg"
             >
               FitStock Plusに入会する
             </Button>
