@@ -81,40 +81,44 @@ const PlanInfoSection = ({
   if (planStatus === "plus") {
     return (
       <>
-        <Card className="border border-border">
-          <CardContent className="p-8">
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-2xl font-semibold text-foreground">FitStock Plus</h3>
-                <p className="text-muted-foreground mt-1">現在ご利用中</p>
-              </div>
+        <div className="border border-border rounded-lg p-8">
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-2xl font-semibold text-foreground">FitStock Plus</h3>
+              <p className="text-muted-foreground mt-1">無制限ダウンロード定額プラン</p>
+            </div>
 
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between py-2 border-b border-border">
-                  <span className="text-muted-foreground">ダウンロード</span>
-                  <span className="font-medium text-foreground">無制限</span>
-                </div>
-                <div className="flex justify-between py-2 border-b border-border">
-                  <span className="text-muted-foreground">次回請求日</span>
-                  <span className="font-medium text-foreground">2024年2月1日</span>
-                </div>
-                <div className="flex justify-between py-2">
-                  <span className="text-muted-foreground">請求金額</span>
-                  <span className="font-medium text-foreground">¥1,000</span>
-                </div>
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <Check size={18} className="text-muted-foreground mt-0.5 shrink-0" />
+                <span className="text-sm text-muted-foreground">画像ライブラリのすべての素材がダウンロード可能</span>
               </div>
-
-              <div className="flex justify-end pt-2">
-                <button
-                  onClick={() => setShowCancelDialog(true)}
-                  className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground transition-colors"
-                >
-                  プランをキャンセルする
-                </button>
+              <div className="flex items-start gap-3">
+                <Check size={18} className="text-muted-foreground mt-0.5 shrink-0" />
+                <span className="text-sm text-muted-foreground">クリエイティブデジタルおよび印刷物に使用できる加工可能なライセンス</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <Check size={18} className="text-muted-foreground mt-0.5 shrink-0" />
+                <span className="text-sm text-muted-foreground">業界最安値</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+
+            <div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-3xl font-bold text-foreground">¥1,000</span>
+                <span className="text-base text-foreground">/ 月</span>
+              </div>
+              <p className="text-sm text-muted-foreground mt-1">¥12,000、年払い</p>
+            </div>
+
+            <button
+              onClick={() => setShowCancelDialog(true)}
+              className="text-sm text-destructive hover:text-destructive/80 transition-colors"
+            >
+              プランをキャンセル
+            </button>
+          </div>
+        </div>
 
         <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
           <AlertDialogContent>
