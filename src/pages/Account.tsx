@@ -48,12 +48,13 @@ const getSectionFromSearch = (search: string): AccountSection => {
 
 const Account = () => {
   const { user, signOut } = useAuth();
+  const { data: membershipTier } = useMembershipTier();
   const navigate = useNavigate();
   const location = useLocation();
   const [activeSection, setActiveSection] = useState<AccountSection>(() =>
     getSectionFromSearch(location.search)
   );
-  const [planStatus, setPlanStatus] = useState<PlanStatus>("free");
+  const planStatus: PlanStatus = membershipTier === "plus" ? "plus" : "free";
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const isMobile = useIsMobile();
   const dropdownRef = useRef<HTMLDivElement>(null);
