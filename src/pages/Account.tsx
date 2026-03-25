@@ -173,7 +173,7 @@ const Account = () => {
             <PlanInfoSection
               planStatus={planStatus}
               onUpgrade={handleUpgradeToPlus}
-              onCancel={() => setPlanStatus("cancelled")}
+              onCancel={() => toast.info("キャンセルリクエストを受け付けました")}
               onReactivate={handleUpgradeToPlus}
             />
           </div>
