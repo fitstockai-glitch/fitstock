@@ -12,6 +12,7 @@ import ReceiptInfoSection from "@/components/account/ReceiptInfoSection";
 import { ChevronUp, ChevronDown, ChevronLeft } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
+import { useMembershipTier } from "@/hooks/useMembership";
 import { toast } from "sonner";
 
 const LEMON_SQUEEZY_CHECKOUT_URL =
@@ -47,12 +48,13 @@ const getSectionFromSearch = (search: string): AccountSection => {
 
 const Account = () => {
   const { user, signOut } = useAuth();
+  const { data: membershipTier } = useMembershipTier();
   const navigate = useNavigate();
   const location = useLocation();
   const [activeSection, setActiveSection] = useState<AccountSection>(() =>
     getSectionFromSearch(location.search)
   );
-  const [planStatus, setPlanStatus] = useState<PlanStatus>("free");
+  const planStatus: PlanStatus = membershipTier === "plus" ? "plus" : "free";
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const isMobile = useIsMobile();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -126,7 +128,7 @@ const Account = () => {
             <PlanInfoSection
               planStatus={planStatus}
               onUpgrade={handleUpgradeToPlus}
-              onCancel={() => setPlanStatus("cancelled")}
+              onCancel={() => toast.info("キャンセルリクエストを受け付けました")}
               onReactivate={handleUpgradeToPlus}
             />
           </div>
@@ -171,7 +173,7 @@ const Account = () => {
             <PlanInfoSection
               planStatus={planStatus}
               onUpgrade={handleUpgradeToPlus}
-              onCancel={() => setPlanStatus("cancelled")}
+              onCancel={() => toast.info("キャンセルリクエストを受け付けました")}
               onReactivate={handleUpgradeToPlus}
             />
           </div>
