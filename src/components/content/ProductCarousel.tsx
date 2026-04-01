@@ -22,6 +22,11 @@ interface Product {
   image: string;
 }
 
+interface ProductCarouselProps {
+  excludeProductId?: number;
+  category?: string;
+}
+
 const products: Product[] = [
   {
     id: 1,
@@ -67,7 +72,13 @@ const products: Product[] = [
   },
 ];
 
-const ProductCarousel = () => {
+const ProductCarousel = ({ excludeProductId, category }: ProductCarouselProps) => {
+  const filteredProducts = products.filter((product) => {
+    if (excludeProductId != null && product.id === excludeProductId) return false;
+    if (category && product.category !== category) return false;
+    return true;
+  });
+
   return (
     <section className="w-full mb-16 px-6">
       <Carousel
@@ -78,7 +89,7 @@ const ProductCarousel = () => {
           className="w-full"
         >
           <CarouselContent className="">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
                <CarouselItem
                  key={product.id}
                  className="basis-1/2 md:basis-1/3 lg:basis-1/4 pr-2 md:pr-4"

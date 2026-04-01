@@ -1,6 +1,9 @@
 /** Supabase Storage の public URL を組み立てる（バケット名は URL パスに含める） */
 
 const SUPABASE_URL = "https://oytupgguadlpgkzigykz.supabase.co";
+/** UUID ファイル名（thumbnails / previews と同名キー想定）。拡張子はよくある画像形式を許容 */
+const UUID_IMAGE_FILE_REGEX =
+  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}\.(jpe?g|png|webp)$/i;
 
 /** DB の storage_path から originals バケット内のオブジェクトキーへ（先頭の originals/ を除去） */
 export function normalizeOriginalStoragePath(storagePath: string): string {
@@ -34,6 +37,12 @@ export function buildThumbnailPublicUrl(previewPath: string | null | undefined):
   const key = String(previewPath)
     .replace(/^previews\//, "")
     .replace(/^\/+/, "");
+
+  // UUID ファイル名（{uuid}.jpg）は同名で thumbnails バケットを参照する
+  if (UUID_IMAGE_FILE_REGEX.test(key)) {
+    return `${SUPABASE_URL}/storage/v1/object/public/thumbnails/${key}`;
+  }
+
   const match = key.match(/^(\d{2})_preview\.[a-zA-Z0-9]+$/);
   if (!match) return null;
   const num = Number(match[1]);
@@ -50,5 +59,10 @@ export function buildThumbnailPublicUrl(previewPath: string | null | undefined):
 export function buildPreviewPublicUrl(previewPath: string | null | undefined): string | null {
   if (previewPath == null || String(previewPath).trim() === "") return null;
   const key = String(previewPath).replace(/^previews\//, "").replace(/^\/+/, "");
+
+  if (UUID_IMAGE_FILE_REGEX.test(key)) {
+    return `${SUPABASE_URL}/storage/v1/object/public/thumbnails/${key}`;
+  }
+
   return `${SUPABASE_URL}/storage/v1/object/public/previews/${key}`;
 }

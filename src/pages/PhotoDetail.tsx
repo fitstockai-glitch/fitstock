@@ -5,7 +5,7 @@ import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { usePhoto, usePhotos } from "@/hooks/usePhotos";
+import { usePhoto, useRelatedPhotos } from "@/hooks/usePhotos";
 import MasonryGallery from "@/components/photo/MasonryGallery";
 import DownloadModal from "@/components/photo/DownloadModal";
 import { useAuth } from "@/contexts/AuthContext";
@@ -32,10 +32,17 @@ const PhotoDetail = () => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [zoomIconPosition, setZoomIconPosition] = useState({ top: 16, left: 16 });
 
-  const baseId = id?.includes("-b") ? id.split("-b")[0] : id;
+  // MasonryGallery が付与する末尾サフィックス（-b{batch}-{index}）のみ除去する
+  const baseId = id?.replace(/-b\d+-\d+$/, "");
   const { data: photo, isLoading } = usePhoto(baseId);
-  const { data: allPhotos = [] } = usePhotos();
-  const relatedPhotos = allPhotos.filter((p) => p.id !== baseId);
+  const { data: relatedPhotos = [] } = useRelatedPhotos(baseId, 24);
+
+  useEffect(() => {
+    // 旧URL（...-b1-0 など）から来た場合は正規URLに寄せる
+    if (id && baseId && id !== baseId) {
+      navigate(`/photo/${baseId}`, { replace: true });
+    }
+  }, [id, baseId, navigate]);
 
   const isLiked = useMemo(() => favoriteIds?.has(baseId ?? "") ?? false, [favoriteIds, baseId]);
 
@@ -293,7 +300,13 @@ const PhotoDetail = () => {
         <h2 className="text-xl font-semibold text-foreground mb-1 px-4 md:px-8">
           関連するイメージ
         </h2>
-        <MasonryGallery photos={relatedPhotos} />
+        {relatedPhotos.length > 0 ? (
+          <MasonryGallery photos={relatedPhotos} infinite={false} />
+        ) : (
+          <div className="px-4 md:px-8 py-6 text-sm text-muted-foreground">
+            関連するイメージはまだありません
+          </div>
+        )}
       </section>
 
       <Footer />

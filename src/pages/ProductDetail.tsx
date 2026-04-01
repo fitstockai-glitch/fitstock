@@ -14,9 +14,17 @@ import {
   BreadcrumbPage, 
   BreadcrumbSeparator 
 } from "@/components/ui/breadcrumb";
+import {
+  resolveJewelryProduct,
+  carouselExcludeNumericId,
+} from "@/data/jewelryProductMeta";
 
 const ProductDetail = () => {
   const { productId } = useParams();
+  const meta = resolveJewelryProduct(productId);
+  const excludeProductId = carouselExcludeNumericId(productId);
+  const categoryPath =
+    meta?.category.toLowerCase() === "bracelets" ? "bracelets" : "earrings";
 
   return (
     <div className="min-h-screen bg-background">
@@ -36,12 +44,14 @@ const ProductDetail = () => {
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link to="/category/earrings">Earrings</Link>
+                    <Link to={`/category/${categoryPath}`}>
+                      {meta?.category ?? "Earrings"}
+                    </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Pantheon</BreadcrumbPage>
+                  <BreadcrumbPage>{meta?.name ?? "Pantheon"}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -51,7 +61,13 @@ const ProductDetail = () => {
             <ProductImageGallery />
             
             <div className="lg:pl-12 mt-8 lg:mt-0 lg:sticky lg:top-6 lg:h-fit">
-              <ProductInfo />
+              <ProductInfo
+                categoryLabel={meta?.category}
+                productTitle={meta?.name}
+                priceLabel={meta?.price}
+                breadcrumbPageLabel={meta?.name}
+                tags={meta?.tags}
+              />
               <ProductDescription />
             </div>
           </div>
@@ -61,14 +77,14 @@ const ProductDetail = () => {
           <div className="mb-4 px-6">
             <h2 className="text-sm font-light text-foreground">You might also like</h2>
           </div>
-          <ProductCarousel />
+          <ProductCarousel excludeProductId={excludeProductId} />
         </section>
         
         <section className="w-full">
           <div className="mb-4 px-6">
             <h2 className="text-sm font-light text-foreground">Our other Earrings</h2>
           </div>
-          <ProductCarousel />
+          <ProductCarousel excludeProductId={excludeProductId} category="Earrings" />
         </section>
       </main>
       

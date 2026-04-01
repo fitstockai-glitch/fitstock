@@ -21,7 +21,8 @@ const PhotoCard = memo(({ photo }: PhotoCardProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { requestDownload, modalState, closeModal, downloadAfterWait, isDownloading } = useDownload();
 
-  const baseId = photo.id.includes("-b") ? photo.id.split("-b")[0] : photo.id;
+  // MasonryGallery が付与する末尾サフィックス（-b{batch}-{index}）のみ除去する
+  const baseId = photo.id.replace(/-b\d+-\d+$/, "");
   const isLiked = useMemo(() => favoriteIds?.has(baseId) ?? false, [favoriteIds, baseId]);
 
   const handleLike = (e: React.MouseEvent) => {
@@ -46,7 +47,7 @@ const PhotoCard = memo(({ photo }: PhotoCardProps) => {
   return (
     <>
     <div className="break-inside-avoid mb-4">
-      <Link to={`/photo/${photo.id}`}>
+      <Link to={`/photo/${baseId}`}>
         <div 
           className="group relative overflow-hidden rounded-xl bg-muted cursor-pointer"
           onMouseEnter={() => setIsHovered(true)}
@@ -74,31 +75,27 @@ const PhotoCard = memo(({ photo }: PhotoCardProps) => {
           <div className={`absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent transition-opacity duration-300 ${
             isHovered ? "opacity-100" : "opacity-100 lg:opacity-0"
           }`}>
-            {user && (
-              <div className="absolute top-3 right-3 lg:flex gap-2 hidden">
+            <div className="absolute top-3 right-3 lg:flex gap-2 hidden">
+              <Button
+                variant="secondary"
+                size="icon"
+                className="h-9 w-9 rounded-full bg-white/90 hover:bg-white text-foreground shadow-md"
+                onClick={handleLike}
+              >
+                <Heart size={16} className={isLiked ? "fill-red-500 text-red-500" : ""} />
+              </Button>
+            </div>
+
+            <div className="absolute bottom-0 left-0 right-0 p-4">
+              <div className="flex items-end justify-between">
                 <Button
                   variant="secondary"
                   size="icon"
-                  className="h-9 w-9 rounded-full bg-white/90 hover:bg-white text-foreground shadow-md"
+                  className="h-9 w-9 rounded-full bg-white/90 hover:bg-white text-foreground shadow-md lg:hidden"
                   onClick={handleLike}
                 >
                   <Heart size={16} className={isLiked ? "fill-red-500 text-red-500" : ""} />
                 </Button>
-              </div>
-            )}
-
-            <div className="absolute bottom-0 left-0 right-0 p-4">
-              <div className="flex items-end justify-between">
-                {user && (
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    className="h-9 w-9 rounded-full bg-white/90 hover:bg-white text-foreground shadow-md lg:hidden"
-                    onClick={handleLike}
-                  >
-                    <Heart size={16} className={isLiked ? "fill-red-500 text-red-500" : ""} />
-                  </Button>
-                )}
                 <Button
                   size="sm"
                   className="rounded-full bg-white hover:bg-white/90 text-foreground font-medium shadow-md ml-auto"

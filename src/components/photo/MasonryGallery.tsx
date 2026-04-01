@@ -5,6 +5,7 @@ import Masonry from "react-masonry-css";
 
 interface MasonryGalleryProps {
   photos: Photo[];
+  infinite?: boolean;
 }
 
 const breakpointColumns = {
@@ -15,7 +16,7 @@ const breakpointColumns = {
   640: 1,
 };
 
-const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
+const MasonryGallery = ({ photos, infinite = true }: MasonryGalleryProps) => {
   const [displayedPhotos, setDisplayedPhotos] = useState<Photo[]>([]);
   const batchRef = useRef(0);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -31,6 +32,7 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
   }, [photos]);
 
   const loadMore = useCallback(() => {
+    if (!infinite) return;
     if (photos.length === 0) return;
 
     const now = Date.now();
@@ -45,17 +47,16 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
     const batch2 = generateBatch(next2);
 
     setDisplayedPhotos((current) => [...current, ...batch1, ...batch2]);
-  }, [photos, generateBatch]);
+  }, [photos, generateBatch, infinite]);
 
   useEffect(() => {
-    if (photos.length > 0) {
-      batchRef.current = 0;
-      setDisplayedPhotos([...photos]);
-    }
+    batchRef.current = 0;
+    setDisplayedPhotos([...photos]);
   }, [photos]);
 
   // Intersection Observer
   useEffect(() => {
+    if (!infinite) return;
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
 
@@ -70,10 +71,11 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
 
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, [loadMore]);
+  }, [loadMore, infinite]);
 
   // Backup: scroll listener
   useEffect(() => {
+    if (!infinite) return;
     const handleScroll = () => {
       const sentinel = sentinelRef.current;
       if (!sentinel) return;
@@ -85,7 +87,7 @@ const MasonryGallery = ({ photos }: MasonryGalleryProps) => {
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [loadMore]);
+  }, [loadMore, infinite]);
 
   return (
     <div className="px-4 md:px-8 pt-4 pb-0">

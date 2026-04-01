@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { 
   Breadcrumb, 
   BreadcrumbItem, 
@@ -11,8 +12,27 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Minus, Plus } from "lucide-react";
 
-const ProductInfo = () => {
+const DEFAULT_TAGS = ["Architectural", "Gold plated", "Statement"];
+
+export interface ProductInfoProps {
+  categoryLabel?: string;
+  productTitle?: string;
+  priceLabel?: string;
+  breadcrumbPageLabel?: string;
+  /** 商品タグ（デモ用。未指定時はフォールバック） */
+  tags?: string[];
+}
+
+const ProductInfo = ({
+  categoryLabel = "Earrings",
+  productTitle = "Pantheon",
+  priceLabel = "€2,850",
+  breadcrumbPageLabel = "Pantheon",
+  tags = DEFAULT_TAGS,
+}: ProductInfoProps) => {
   const [quantity, setQuantity] = useState(1);
+  const categoryPath =
+    categoryLabel.toLowerCase() === "bracelets" ? "bracelets" : "earrings";
 
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => Math.max(1, prev - 1));
@@ -31,12 +51,12 @@ const ProductInfo = () => {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link to="/category/earrings">Earrings</Link>
+                <Link to={`/category/${categoryPath}`}>{categoryLabel}</Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Pantheon</BreadcrumbPage>
+              <BreadcrumbPage>{breadcrumbPageLabel}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -46,13 +66,26 @@ const ProductInfo = () => {
       <div className="space-y-2">
         <div className="flex justify-between items-start">
           <div>
-            <p className="text-sm font-light text-muted-foreground mb-1">Earrings</p>
-            <h1 className="text-2xl md:text-3xl font-light text-foreground">Pantheon</h1>
+            <p className="text-sm font-light text-muted-foreground mb-1">{categoryLabel}</p>
+            <h1 className="text-2xl md:text-3xl font-light text-foreground">{productTitle}</h1>
           </div>
           <div className="text-right">
-            <p className="text-xl font-light text-foreground">€2,850</p>
+            <p className="text-xl font-light text-foreground">{priceLabel}</p>
           </div>
         </div>
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 pt-2">
+            {tags.map((tag) => (
+              <Badge
+                key={tag}
+                variant="outline"
+                className="rounded-sm font-light text-muted-foreground border-border bg-muted/40 px-2.5 py-0.5"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Product details */}

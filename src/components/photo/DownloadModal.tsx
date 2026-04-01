@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Check } from "lucide-react";
 import {
   Dialog,
@@ -9,13 +10,9 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-
-const heroImages = [
-  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80",
-  "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80",
-  "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80",
-  "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&q=80",
-];
+import { supabase } from "@/integrations/supabase/client";
+import { buildThumbnailPublicUrl } from "@/lib/supabaseStorage";
+import { isThumbnailInRange01To05 } from "@/hooks/usePhotos";
 
 interface DownloadModalProps {
   open: boolean;
@@ -32,10 +29,29 @@ const DownloadModal = ({
   onDownload,
   isDownloading = false,
 }: DownloadModalProps) => {
-  const randomHero = useMemo(
-    () => heroImages[Math.floor(Math.random() * heroImages.length)],
-    [open]
-  );
+  const { data: galleryThumbUrls = [] } = useQuery({
+    queryKey: ["download-modal-gallery-thumbnails"],
+    staleTime: 10 * 60 * 1000,
+    queryFn: async (): Promise<string[]> => {
+      const { data, error } = await supabase
+        .from("photos")
+        .select("preview_path")
+        .eq("is_published", true)
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return (data ?? [])
+        .filter((row) => isThumbnailInRange01To05(row.preview_path))
+        .map((row) => buildThumbnailPublicUrl(row.preview_path))
+        .filter((u): u is string => Boolean(u));
+    },
+  });
+
+  const randomHero = useMemo(() => {
+    if (!galleryThumbUrls.length) return null;
+    return galleryThumbUrls[Math.floor(Math.random() * galleryThumbUrls.length)];
+  }, [open, galleryThumbUrls]);
   const [remainingSeconds, setRemainingSeconds] = useState(5);
 
   useEffect(() => {
@@ -56,17 +72,21 @@ const DownloadModal = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-3xl p-0 overflow-hidden border-none">
         <div className="flex flex-col sm:flex-row sm:min-h-[480px]">
-          {/* Left: Hero Image */}
-          <div className="hidden sm:block sm:w-1/2">
-            <img
-              src={randomHero}
-              alt="Hero"
-              className="w-full h-full object-cover"
-            />
-          </div>
+          {randomHero ? (
+            <div className="hidden sm:block sm:w-1/2 bg-muted">
+              <img
+                src={randomHero}
+                alt=""
+                className="w-full h-full min-h-[480px] object-cover"
+              />
+            </div>
+          ) : null}
 
-          {/* Right: Content */}
-          <div className="sm:w-1/2 p-6 sm:p-8 flex flex-col justify-center">
+          <div
+            className={
+              randomHero ? "sm:w-1/2 p-6 sm:p-8 flex flex-col justify-center" : "w-full p-6 sm:p-8 flex flex-col justify-center"
+            }
+          >
             <DialogHeader className="space-y-3 mt-6 sm:mt-0 text-left">
               <DialogTitle className="text-2xl font-bold leading-tight">
                 制限を気にせず、クリエイティブに集中しよう

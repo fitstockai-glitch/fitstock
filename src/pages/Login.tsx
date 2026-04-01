@@ -34,39 +34,39 @@ const Login = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <FitStockHeader />
-      <main className="flex-1 flex items-center justify-center px-4 py-16">
-        <div className="w-full max-w-md space-y-8">
-          <h1 className="text-2xl font-bold text-center text-foreground">
+      <main className="flex-1 px-4 py-14 md:py-16">
+        <div className="mx-auto w-full max-w-[420px]">
+          <h1 className="mb-8 text-2xl font-bold text-center text-foreground">
             ログイン
           </h1>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">メールアドレス</Label>
+              <Label htmlFor="email" className="text-sm text-foreground/80">メールアドレス</Label>
               <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-12"
+                className="h-12 rounded-md"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">パスワード</Label>
+              <Label htmlFor="password" className="text-sm text-foreground/80">パスワード</Label>
               <Input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="h-12"
+                className="h-12 rounded-md"
               />
               <div>
                 <Link
                   to="/forgot-password"
-                  className="text-sm text-muted-foreground hover:text-foreground underline"
+                  className="text-sm text-muted-foreground hover:text-foreground underline transition-colors"
                 >
                   パスワードをお忘れですか？
                 </Link>
@@ -76,7 +76,7 @@ const Login = () => {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-md text-base"
+              className="mt-2 w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-md text-base"
             >
               {isLoading ? "ログイン中..." : "ログイン"}
             </Button>
@@ -85,7 +85,7 @@ const Login = () => {
           <Button
             type="button"
             variant="outline"
-            className="w-full h-12 rounded-md text-base gap-3"
+            className="mt-6 w-full h-12 rounded-md text-base gap-3 border-border"
             onClick={async () => {
               const { error } = await supabase.auth.signInWithOAuth({
                 provider: "google",
@@ -107,9 +107,19 @@ const Login = () => {
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-border" />
             </div>
-            <div className="relative flex justify-center text-xs uppercase">
+            <div className="relative flex justify-center text-xs">
               <span className="bg-background px-2 text-muted-foreground">または</span>
             </div>
+          </div>
+
+          <div className="border border-border rounded-md p-7 text-center">
+            <p className="text-sm text-muted-foreground">アカウントをお持ちではありませんか？</p>
+            <Link
+              to="/register"
+              className="mt-1 inline-block text-[15px] font-semibold text-foreground underline underline-offset-4 hover:text-foreground/80"
+            >
+              登録する
+            </Link>
           </div>
         </div>
       </main>

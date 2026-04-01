@@ -1,9 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Photo } from "@/types/photo";
-import { buildThumbnailPublicUrl, buildPreviewPublicUrl } from "@/lib/supabaseStorage";
+import {
+  buildThumbnailPublicUrl,
+  buildThumbnailPublicUrlFlexible,
+  buildPreviewPublicUrl,
+} from "@/lib/supabaseStorage";
 
-function isThumbnailInRange01To05(previewPath: string | null): boolean {
+/** トップギャラリー（01〜05）と同じ preview_path だけ true */
+export function isThumbnailInRange01To05(previewPath: string | null): boolean {
   if (!previewPath) return false;
   const normalized = previewPath.replace(/^previews\//, "").replace(/^\/+/, "");
   const match = normalized.match(/^(\d{2})_preview\./);
@@ -22,10 +27,8 @@ function buildTsQuery(rawQuery: string): string {
 }
 
 function mapPhotos(photos: any[]): Photo[] {
-  const filtered = photos.filter((p) => isThumbnailInRange01To05(p.preview_path));
-
-  return filtered.map((p) => {
-    const thumb = buildThumbnailPublicUrl(p.preview_path);
+  return photos.map((p) => {
+    const thumb = buildThumbnailPublicUrlFlexible(p.preview_path);
     return {
       id: p.id,
       title: p.title,
@@ -85,6 +88,8 @@ export function usePhotos(categoryName?: string, tagName?: string, searchQuery?:
         let query = supabase
           .from("photos")
           .select("*")
+          .eq("is_published", true)
+          .is("deleted_at", null)
           .order("created_at", { ascending: false });
 
         if (categoryId) {
@@ -182,6 +187,31 @@ export function usePhoto(id: string | undefined) {
         previewUrl: preview,
         tags,
       };
+    },
+  });
+}
+
+export function useRelatedPhotos(excludeId: string | undefined, limit = 24) {
+  return useQuery({
+    queryKey: ["related-photos", excludeId, limit],
+    enabled: !!excludeId,
+    staleTime: 5 * 60 * 1000,
+    queryFn: async (): Promise<Photo[]> => {
+      if (!excludeId) return [];
+
+      const { data, error } = await supabase
+        .from("photos")
+        .select("*")
+        .eq("is_published", true)
+        .is("deleted_at", null)
+        .neq("id", excludeId)
+        .order("created_at", { ascending: false })
+        .limit(limit);
+
+      if (error) throw error;
+      if (!data || data.length === 0) return [];
+
+      return mapPhotos(data);
     },
   });
 }
