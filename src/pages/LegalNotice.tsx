@@ -8,33 +8,44 @@ const LegalNotice = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background">
       <FitStockHeader />
       
-      <main className="pt-6 flex-1">
+      <main className="pt-6">
         <div className="max-w-4xl mx-auto px-6 py-12">
-          <h1 className="text-2xl font-bold text-foreground mb-8">特定商取引法に基づく表記</h1>
+          <header className="mb-12 text-center">
+            <h1 className="text-4xl font-light text-foreground mb-4">特定商取引法に基づく表記</h1>
+            <p className="text-muted-foreground">最終更新日: 2026年4月2日</p>
+          </header>
 
-          <div className="space-y-8 text-sm text-muted-foreground leading-relaxed">
+          <div className="prose prose-lg max-w-none space-y-8">
             <section>
-              <h2 className="text-base font-semibold text-foreground mb-3">事業者名</h2>
-              <p>FitStock 運営チーム</p>
+              <h2 className="text-2xl font-light text-foreground mb-4">販売事業者</h2>
+              <p className="text-muted-foreground leading-relaxed">株式会社FLUID</p>
             </section>
 
             <section>
-              <h2 className="text-base font-semibold text-foreground mb-3">代表者</h2>
-              <p>お問い合わせください</p>
+              <h2 className="text-2xl font-light text-foreground mb-4">代表者名</h2>
+              <p className="text-muted-foreground leading-relaxed">森田 敏之</p>
             </section>
 
             <section>
-              <h2 className="text-base font-semibold text-foreground mb-3">所在地</h2>
-              <p>請求があった場合は遅滞なく開示いたします。</p>
+              <h2 className="text-2xl font-light text-foreground mb-4">所在地</h2>
+              <p className="text-muted-foreground leading-relaxed">
+                東京都渋谷区本町3-51-17 402
+              </p>
+              <p className="text-muted-foreground leading-relaxed text-sm">
+                ※ お問い合わせがあった場合、遅滞なく開示いたします。
+              </p>
             </section>
 
             <section>
-              <h2 className="text-base font-semibold text-foreground mb-3">連絡先</h2>
-              <p>
-                お問い合わせフォーム：
+              <h2 className="text-2xl font-light text-foreground mb-4">連絡先</h2>
+              <p className="text-muted-foreground leading-relaxed">
+                メール: support@fitstock.com（ドメイン取得後に更新）
+              </p>
+              <p className="text-muted-foreground leading-relaxed">
+                お問い合わせフォーム:{" "}
                 <a
                   href="https://docs.google.com/forms/d/e/1FAIpQLScuM8dFtyjbjKnHvbU8iD7ywx3ud1zPWJNurheoaGItccCAKw/viewform?usp=header"
                   target="_blank"
@@ -47,33 +58,66 @@ const LegalNotice = () => {
             </section>
 
             <section>
-              <h2 className="text-base font-semibold text-foreground mb-3">販売価格</h2>
-              <p>各プランの料金ページに表示された価格に準じます（税込）。</p>
+              <h2 className="text-2xl font-light text-foreground mb-4">サービス名</h2>
+              <p className="text-muted-foreground leading-relaxed">FitStock</p>
             </section>
 
             <section>
-              <h2 className="text-base font-semibold text-foreground mb-3">支払方法</h2>
-              <p>クレジットカード決済（Stripe経由）</p>
+              <h2 className="text-2xl font-light text-foreground mb-4">販売価格</h2>
+              <p className="text-muted-foreground leading-relaxed">FitStock Plus: ¥1,000 / 月（税込）</p>
             </section>
 
             <section>
-              <h2 className="text-base font-semibold text-foreground mb-3">支払時期</h2>
-              <p>サブスクリプション登録時に即時決済。以降は契約期間ごとに自動更新・決済されます。</p>
+              <h2 className="text-2xl font-light text-foreground mb-4">支払方法</h2>
+              <p className="text-muted-foreground leading-relaxed">
+                クレジットカード（Visa / Mastercard / American Express / その他）
+              </p>
+              <p className="text-muted-foreground leading-relaxed text-sm">
+                ※ 決済代行サービス Lemon Squeezy を通じて処理されます。
+              </p>
             </section>
 
             <section>
-              <h2 className="text-base font-semibold text-foreground mb-3">サービス提供時期</h2>
-              <p>決済完了後、直ちにサービスをご利用いただけます。</p>
+              <h2 className="text-2xl font-light text-foreground mb-4">支払時期</h2>
+              <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                <li>初回: ご登録時に即時決済</li>
+                <li>2回目以降: 毎月同日に自動更新・自動決済</li>
+              </ul>
             </section>
 
             <section>
-              <h2 className="text-base font-semibold text-foreground mb-3">返品・キャンセルについて</h2>
-              <p>デジタルコンテンツの性質上、購入後の返金は原則として行っておりません。サブスクリプションは次回更新日前にキャンセルすることで、次回以降の課金を停止できます。</p>
+              <h2 className="text-2xl font-light text-foreground mb-4">サービス提供時期</h2>
+              <p className="text-muted-foreground leading-relaxed">決済完了後、即時ご利用いただけます。</p>
             </section>
 
             <section>
-              <h2 className="text-base font-semibold text-foreground mb-3">動作環境</h2>
-              <p>最新のウェブブラウザ（Google Chrome、Safari、Firefox、Microsoft Edge）を推奨します。</p>
+              <h2 className="text-2xl font-light text-foreground mb-4">キャンセル・返金について</h2>
+              <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                <li>マイページよりいつでもキャンセル可能です。</li>
+                <li>キャンセル後も次回請求日まで引き続きご利用いただけます。</li>
+                <li>日割り返金は行いません。</li>
+                <li>次回請求日以降は Free Member プランに自動移行されます。</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-light text-foreground mb-4">動作環境</h2>
+              <ul className="list-disc list-inside text-muted-foreground space-y-1">
+                <li>対応ブラウザ: Google Chrome / Safari / Firefox / Edge（最新版推奨）</li>
+                <li>インターネット接続環境が必要です。</li>
+              </ul>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-light text-foreground mb-4">販売数量</h2>
+              <p className="text-muted-foreground leading-relaxed">制限なし</p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-light text-foreground mb-4">商品の性質</h2>
+              <p className="text-muted-foreground leading-relaxed">
+                デジタルコンテンツ（写真素材のダウンロードサービス）のため、購入後の返品・交換はお受けできません。
+              </p>
             </section>
           </div>
         </div>
