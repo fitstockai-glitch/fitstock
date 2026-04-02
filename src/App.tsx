@@ -22,6 +22,7 @@ import Pricing from "./pages/Pricing";
 import TagPage from "./pages/TagPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import LegalNotice from "./pages/LegalNotice";
 
 const queryClient = new QueryClient();
 
