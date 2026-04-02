@@ -57,6 +57,9 @@ const Footer = () => {
               <Link to="/terms-of-service" className="hover:text-foreground transition-colors">
                 Terms
               </Link>
+              <Link to="/legal-notice" className="hover:text-foreground transition-colors">
+                Legal Notice
+              </Link>
               <a
                 href="https://docs.google.com/forms/d/e/1FAIpQLScuM8dFtyjbjKnHvbU8iD7ywx3ud1zPWJNurheoaGItccCAKw/viewform?usp=header"
                 target="_blank"
