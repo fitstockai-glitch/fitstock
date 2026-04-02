@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Check } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -11,8 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { buildThumbnailPublicUrl } from "@/lib/supabaseStorage";
-import { isThumbnailInRange01To05 } from "@/hooks/usePhotos";
+import { buildThumbnailPublicUrlFlexible } from "@/lib/supabaseStorage";
+import PlanBenefitsList from "@/components/photo/PlanBenefitsList";
 
 interface DownloadModalProps {
   open: boolean;
@@ -42,8 +41,7 @@ const DownloadModal = ({
         .limit(100);
       if (error) throw error;
       return (data ?? [])
-        .filter((row) => isThumbnailInRange01To05(row.preview_path))
-        .map((row) => buildThumbnailPublicUrl(row.preview_path))
+        .map((row) => buildThumbnailPublicUrlFlexible(row.preview_path))
         .filter((u): u is string => Boolean(u));
     },
   });
@@ -97,20 +95,7 @@ const DownloadModal = ({
                 </DialogDescription>
               ) : (
                 <div>
-                  <ul className="space-y-2.5">
-                    <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
-                      <span>画像ライブラリのすべての素材がダウンロード可能</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
-                      <span>クリエイティブデジタルおよび印刷物に使用できる加工可能なライセンス</span>
-                    </li>
-                    <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                      <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
-                      <span>業界最安値</span>
-                    </li>
-                  </ul>
+                  <PlanBenefitsList />
                 </div>
               )}
             </DialogHeader>

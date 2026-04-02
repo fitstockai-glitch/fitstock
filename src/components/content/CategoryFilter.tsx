@@ -1,4 +1,4 @@
-import { useCategories } from "@/hooks/useCategories";
+import { CATEGORY_DISPLAY_MAX, useCategoriesByPhotoCount } from "@/hooks/useCategories";
 
 interface CategoryFilterProps {
   selectedCategory: string;
@@ -6,7 +6,7 @@ interface CategoryFilterProps {
 }
 
 const CategoryFilter = ({ selectedCategory, onCategoryChange }: CategoryFilterProps) => {
-  const { data: dbCategories = [] } = useCategories();
+  const { data: dbCategories = [] } = useCategoriesByPhotoCount(CATEGORY_DISPLAY_MAX);
   const categories = [{ key: "all", label: "すべて" }, ...dbCategories];
 
   return (

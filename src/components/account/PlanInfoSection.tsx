@@ -4,7 +4,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -13,25 +12,39 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { PlanStatus } from "@/pages/Account";
+import { formatPeriodEndJa, useCancelSubscription, useMembershipPlan } from "@/hooks/useMembership";
+import { toast } from "sonner";
 
 interface PlanInfoSectionProps {
   planStatus: PlanStatus;
   onUpgrade: () => void;
-  onCancel: () => void;
   onReactivate: () => void;
 }
 
-const PlanInfoSection = ({ 
-  planStatus, 
-  onUpgrade, 
-  onCancel, 
-  onReactivate 
+const PlanInfoSection = ({
+  planStatus,
+  onUpgrade,
+  onReactivate,
 }: PlanInfoSectionProps) => {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const { data: membershipPlan } = useMembershipPlan();
+  const cancelSubscription = useCancelSubscription();
+  const periodEndLabel = formatPeriodEndJa(membershipPlan?.current_period_end);
 
   const handleCancelConfirm = () => {
-    onCancel();
-    setShowCancelDialog(false);
+    cancelSubscription.mutate(undefined, {
+      onSuccess: (res) => {
+        setShowCancelDialog(false);
+        if (res?.already_cancelled) {
+          toast.info("すでにキャンセル済みです");
+        } else {
+          toast.success("プランをキャンセルしました。請求期間の終了までご利用いただけます。");
+        }
+      },
+      onError: (err: Error) => {
+        toast.error(err.message || "キャンセルに失敗しました");
+      },
+    });
   };
 
   if (planStatus === "free") {
@@ -125,13 +138,29 @@ const PlanInfoSection = ({
             <AlertDialogHeader>
               <AlertDialogTitle>本当にキャンセルしますか？</AlertDialogTitle>
               <AlertDialogDescription className="space-y-2">
-                <p>キャンセルしても、現在の請求期間の終了（2024年2月1日）まではFitStock Plusをご利用いただけます。</p>
+                <p>
+                  {periodEndLabel
+                    ? `キャンセルしても、現在の請求期間の終了（${periodEndLabel}）まではFitStock Plusをご利用いただけます。`
+                    : "キャンセルしても、現在の請求期間が終了するまではFitStock Plusをご利用いただけます。"}
+                </p>
                 <p>その後、アカウントはFree Memberに戻ります。</p>
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel className="bg-secondary text-foreground hover:bg-secondary/80">戻る</AlertDialogCancel>
-              <AlertDialogAction onClick={handleCancelConfirm} className="bg-foreground text-background hover:bg-foreground/90">キャンセルを続ける</AlertDialogAction>
+              <AlertDialogCancel
+                disabled={cancelSubscription.isPending}
+                className="bg-secondary text-foreground hover:bg-secondary/80"
+              >
+                戻る
+              </AlertDialogCancel>
+              <Button
+                type="button"
+                disabled={cancelSubscription.isPending}
+                onClick={handleCancelConfirm}
+                className="bg-foreground text-background hover:bg-foreground/90"
+              >
+                {cancelSubscription.isPending ? "処理中…" : "キャンセルを続ける"}
+              </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -146,19 +175,20 @@ const PlanInfoSection = ({
         <div className="space-y-6">
           <div>
             <h3 className="text-2xl font-semibold text-foreground">FitStock Plus（キャンセル済み）</h3>
-            <p className="text-muted-foreground mt-1">利用可能期限: 2024年2月1日まで</p>
+            <p className="text-muted-foreground mt-1">
+              {periodEndLabel
+                ? `利用可能期限: ${periodEndLabel}まで`
+                : "利用可能期限: 現在の請求期間が終了するまで"}
+            </p>
+            <p className="text-muted-foreground mt-1">
+              その後、Free Memberに戻ります。
+            </p>
           </div>
 
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between py-2">
-              <span className="text-muted-foreground">その後</span>
-              <span className="font-medium text-foreground">Free Memberに戻ります</span>
-            </div>
-          </div>
-
-          <Button 
+          <Button
             onClick={onReactivate}
-            className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-medium rounded-lg"
+            size="lg"
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-6 text-base rounded-lg"
           >
             再アップグレード
           </Button>

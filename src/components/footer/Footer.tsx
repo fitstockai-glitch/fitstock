@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { useCategories } from "@/hooks/useCategories";
+import { useFooterCategories } from "@/hooks/useCategories";
 
 const Footer = () => {
-  const { data: categories = [] } = useCategories();
+  const { data: categories = [] } = useFooterCategories();
 
   return (
     <footer className="w-full bg-background text-foreground">

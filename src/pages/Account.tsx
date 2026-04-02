@@ -12,7 +12,12 @@ import ReceiptInfoSection from "@/components/account/ReceiptInfoSection";
 import { ChevronUp, ChevronDown, ChevronLeft } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAuth } from "@/contexts/AuthContext";
-import { useMembershipTier } from "@/hooks/useMembership";
+import {
+  derivePlanStatus,
+  formatPeriodEndJa,
+  useMembershipPlan,
+  useMembershipTier,
+} from "@/hooks/useMembership";
 import { toast } from "sonner";
 
 const LEMON_SQUEEZY_CHECKOUT_URL =
@@ -49,12 +54,14 @@ const getSectionFromSearch = (search: string): AccountSection => {
 const Account = () => {
   const { user, signOut } = useAuth();
   const { data: membershipTier } = useMembershipTier();
+  const { data: membershipPlan } = useMembershipPlan();
+  const planPeriodEndLabel = formatPeriodEndJa(membershipPlan?.current_period_end);
   const navigate = useNavigate();
   const location = useLocation();
   const [activeSection, setActiveSection] = useState<AccountSection>(() =>
     getSectionFromSearch(location.search)
   );
-  const planStatus: PlanStatus = membershipTier === "plus" ? "plus" : "free";
+  const planStatus: PlanStatus = derivePlanStatus(membershipTier, membershipPlan);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const isMobile = useIsMobile();
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -117,10 +124,23 @@ const Account = () => {
       case "plan":
         return (
           <div className="max-w-xl space-y-6">
-            {planStatus === "plus" ? (
+            {planStatus === "cancelled" ? (
+              <div>
+                <p className="text-sm text-muted-foreground">FitStock Plus はキャンセル済みです</p>
+                <p className="text-sm text-muted-foreground">
+                  {planPeriodEndLabel
+                    ? `${planPeriodEndLabel}までは引き続き Plus のままご利用いただけます`
+                    : "請求期間が終了するまで引き続き Plus のままご利用いただけます"}
+                </p>
+              </div>
+            ) : planStatus === "plus" ? (
               <div>
                 <p className="text-sm text-muted-foreground">FitStock PLusに入会中</p>
-                <p className="text-sm text-muted-foreground">2026年4月1日</p>
+                <p className="text-sm text-muted-foreground">
+                  {planPeriodEndLabel
+                    ? `次回更新日（請求期間の終了）: ${planPeriodEndLabel}`
+                    : "請求期間の終了日はアカウント情報を読み込み中です"}
+                </p>
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">最高品質の素材を無制限にダウンロードできるプランに入会しませんか。</p>
@@ -128,7 +148,6 @@ const Account = () => {
             <PlanInfoSection
               planStatus={planStatus}
               onUpgrade={handleUpgradeToPlus}
-              onCancel={() => toast.info("キャンセルリクエストを受け付けました")}
               onReactivate={handleUpgradeToPlus}
             />
           </div>
@@ -162,10 +181,23 @@ const Account = () => {
         return (
           <div className="max-w-xl space-y-6">
             <h1 className="text-2xl font-semibold text-foreground">プラン</h1>
-            {planStatus === "plus" ? (
+            {planStatus === "cancelled" ? (
+              <div>
+                <p className="text-sm text-muted-foreground">FitStock Plus はキャンセル済みです</p>
+                <p className="text-sm text-muted-foreground">
+                  {planPeriodEndLabel
+                    ? `${planPeriodEndLabel}までは引き続き Plus のままご利用いただけます`
+                    : "請求期間が終了するまで引き続き Plus のままご利用いただけます"}
+                </p>
+              </div>
+            ) : planStatus === "plus" ? (
               <div>
                 <p className="text-sm text-muted-foreground">FitStock PLusに入会中</p>
-                <p className="text-sm text-muted-foreground">2026年4月1日</p>
+                <p className="text-sm text-muted-foreground">
+                  {planPeriodEndLabel
+                    ? `次回更新日（請求期間の終了）: ${planPeriodEndLabel}`
+                    : "請求期間の終了日はアカウント情報を読み込み中です"}
+                </p>
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">最高品質の素材を無制限にダウンロードできるプランに入会しませんか。</p>
@@ -173,7 +205,6 @@ const Account = () => {
             <PlanInfoSection
               planStatus={planStatus}
               onUpgrade={handleUpgradeToPlus}
-              onCancel={() => toast.info("キャンセルリクエストを受け付けました")}
               onReactivate={handleUpgradeToPlus}
             />
           </div>

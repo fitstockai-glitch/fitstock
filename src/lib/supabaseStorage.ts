@@ -59,10 +59,6 @@ export function buildThumbnailPublicUrl(previewPath: string | null | undefined):
 export function buildPreviewPublicUrl(previewPath: string | null | undefined): string | null {
   if (previewPath == null || String(previewPath).trim() === "") return null;
   const key = String(previewPath).replace(/^previews\//, "").replace(/^\/+/, "");
-
-  if (UUID_IMAGE_FILE_REGEX.test(key)) {
-    return `${SUPABASE_URL}/storage/v1/object/public/thumbnails/${key}`;
-  }
-
+  // UUID 含む全キーは previews バケット（一覧のサムネは buildThumbnailPublicUrl → thumbnails）
   return `${SUPABASE_URL}/storage/v1/object/public/previews/${key}`;
 }

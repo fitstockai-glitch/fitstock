@@ -6,6 +6,51 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useMembershipTier } from "@/hooks/useMembership";
 import { toast } from "sonner";
 
+interface SearchFormProps {
+  searchTerm: string;
+  onSearchTermChange: (value: string) => void;
+  onSubmit: () => void;
+}
+
+const SearchForm = ({ searchTerm, onSearchTermChange, onSubmit }: SearchFormProps) => {
+  const [isFocused, setIsFocused] = useState(false);
+  return (
+    <form
+      className={`flex items-center w-full bg-secondary rounded-full px-4 py-2.5 transition-all duration-200 ${
+        isFocused ? "ring-2 ring-border" : ""
+      }`}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit();
+      }}
+    >
+      <button
+        type="submit"
+        className="mr-3 text-muted-foreground hover:text-foreground transition-colors"
+        aria-label="検索"
+      >
+        <Search size={18} />
+      </button>
+      <input
+        type="text"
+        placeholder="画像を検索する"
+        className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
+        value={searchTerm}
+        onChange={(e) => onSearchTermChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.nativeEvent.isComposing) return;
+          if (e.key === "Enter") {
+            e.preventDefault();
+            onSubmit();
+          }
+        }}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+      />
+    </form>
+  );
+};
+
 type Language = "ja" | "en";
 
 interface FitStockNavigationProps {
@@ -13,7 +58,6 @@ interface FitStockNavigationProps {
 }
 
 const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => {
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState<Language>("ja");
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -91,39 +135,11 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
 
         {/* Center search bar */}
         <div className="hidden md:flex flex-1 max-w-xl mx-8">
-          <form
-            className={`flex items-center w-full bg-secondary rounded-full px-4 py-2.5 transition-all duration-200 ${
-              isSearchFocused ? "ring-2 ring-border" : ""
-            }`}
-            onSubmit={(e) => {
-              e.preventDefault();
-              applySearch();
-            }}
-          >
-            <button
-              type="submit"
-              className="mr-3 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="検索"
-            >
-              <Search size={18} />
-            </button>
-            <input
-              type="text"
-              placeholder="画像を検索する"
-              className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.nativeEvent.isComposing) return;
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  applySearch();
-                }
-              }}
-              onFocus={() => setIsSearchFocused(true)}
-              onBlur={() => setIsSearchFocused(false)}
-            />
-          </form>
+          <SearchForm
+            searchTerm={searchTerm}
+            onSearchTermChange={setSearchTerm}
+            onSubmit={applySearch}
+          />
         </div>
 
         {/* Right side */}
@@ -229,39 +245,11 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
       {/* Mobile search */}
       {!hideSearch && (
         <div className="md:hidden px-4 pb-3">
-          <form
-            className={`flex items-center w-full bg-secondary rounded-full px-4 py-2.5 transition-all duration-200 ${
-              isSearchFocused ? "ring-2 ring-border" : ""
-            }`}
-            onSubmit={(e) => {
-              e.preventDefault();
-              applySearch();
-            }}
-          >
-            <button
-              type="submit"
-              className="mr-3 text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="検索"
-            >
-              <Search size={18} />
-            </button>
-            <input
-              type="text"
-              placeholder="画像を検索する"
-              className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.nativeEvent.isComposing) return;
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  applySearch();
-                }
-              }}
-              onFocus={() => setIsSearchFocused(true)}
-              onBlur={() => setIsSearchFocused(false)}
-            />
-          </form>
+          <SearchForm
+            searchTerm={searchTerm}
+            onSearchTermChange={setSearchTerm}
+            onSubmit={applySearch}
+          />
         </div>
       )}
     </nav>

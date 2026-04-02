@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { usePhoto, useRelatedPhotos } from "@/hooks/usePhotos";
 import MasonryGallery from "@/components/photo/MasonryGallery";
 import DownloadModal from "@/components/photo/DownloadModal";
+import PlanBenefitsList from "@/components/photo/PlanBenefitsList";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFavoriteIds, useToggleFavorite } from "@/hooks/useFavorites";
 import { useDownload } from "@/hooks/useDownload";
@@ -16,6 +17,7 @@ import {
   Dialog,
   DialogContent,
 } from "@/components/ui/dialog";
+import { extractBasePhotoId } from "@/lib/utils";
 
 const PhotoDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -32,8 +34,7 @@ const PhotoDetail = () => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [zoomIconPosition, setZoomIconPosition] = useState({ top: 16, left: 16 });
 
-  // MasonryGallery が付与する末尾サフィックス（-b{batch}-{index}）のみ除去する
-  const baseId = id?.replace(/-b\d+-\d+$/, "");
+  const baseId = id ? extractBasePhotoId(id) : undefined;
   const { data: photo, isLoading } = usePhoto(baseId);
   const { data: relatedPhotos = [] } = useRelatedPhotos(baseId, 24);
 
@@ -133,6 +134,11 @@ const PhotoDetail = () => {
   }
 
   const detailImageSrc = photo.previewUrl ?? photo.imageUrl;
+  /** SEO 説明文の先頭（table editor の description を優先、なければ title） */
+  const seoLeadPhrase =
+    photo.description != null && String(photo.description).trim() !== ""
+      ? String(photo.description).trim()
+      : photo.title;
 
   return (
     <div className="min-h-screen bg-background">
@@ -154,7 +160,8 @@ const PhotoDetail = () => {
                 ref={imageRef}
                 src={detailImageSrc}
                 alt={photo.title}
-                className="max-w-full max-h-full object-contain"
+                className="pointer-events-none select-none max-w-full max-h-full object-contain"
+                onContextMenu={(e) => e.preventDefault()}
               />
               <div
                 className="absolute p-2 bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200"
@@ -181,20 +188,7 @@ const PhotoDetail = () => {
             {(!user || (!isMembershipLoading && membershipTier !== "plus")) && (
               <div className="border border-border rounded-lg p-5 space-y-4">
                 <h3 className="font-semibold text-foreground">無制限ダウンロード定額プラン</h3>
-                <ul className="space-y-2.5">
-                  <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
-                    <span>画像ライブラリのすべての素材がダウンロード可能</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
-                    <span>クリエイティブデジタルおよび印刷物に使用できる加工可能なライセンス</span>
-                  </li>
-                  <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Check size={16} className="text-foreground mt-0.5 flex-shrink-0" />
-                    <span>業界最安値</span>
-                  </li>
-                </ul>
+                <PlanBenefitsList />
                 <Link to="/pricing">
                   <Button
                     className="w-full bg-primary hover:bg-primary/80 text-primary-foreground font-medium mt-2"
@@ -206,7 +200,17 @@ const PhotoDetail = () => {
             )}
 
             <p className="text-xs text-muted-foreground/70 leading-relaxed">
-              「{photo.title}」は{photo.tags.map(t => `「${t}」`).join('、')}に関連するフリー素材です。商用利用可能な高品質写真をFitStockで無料ダウンロード。Webデザインや広告、SNS投稿にご活用ください。
+              {photo.tags.length > 0 ? (
+                <>
+                  「{seoLeadPhrase}」は
+                  {photo.tags.map((t) => `「${t}」`).join("、")}
+                  に関連するフリー素材です。商用利用可能な高品質写真をFitStockで無料ダウンロード。Webデザインや広告、SNS投稿にご活用ください。
+                </>
+              ) : (
+                <>
+                  「{seoLeadPhrase}」のフリー素材です。商用利用可能な高品質写真をFitStockで無料ダウンロード。Webデザインや広告、SNS投稿にご活用ください。
+                </>
+              )}
             </p>
 
             <div className="flex items-center gap-3">
@@ -284,7 +288,7 @@ const PhotoDetail = () => {
 
         <div className="flex flex-wrap gap-2 mt-8">
           {photo.tags.map((tag) => (
-            <Link key={tag} to={`/tag/${tag}`}>
+            <Link key={tag} to={`/tag/${encodeURIComponent(tag)}`}>
               <Badge
                 variant="outline"
                 className="cursor-pointer hover:bg-accent transition-colors px-3 py-1.5 text-sm font-normal rounded-sm bg-muted border-transparent text-muted-foreground"
@@ -322,11 +326,12 @@ const PhotoDetail = () => {
       />
 
       <Dialog open={isZoomOpen} onOpenChange={setIsZoomOpen}>
-        <DialogContent className="max-w-[90vw] max-h-[90vh] p-0 bg-transparent border-none shadow-none [&>button]:text-white [&>button]:opacity-100 [&>button]:hover:text-white/70 [&>button>svg]:h-6 [&>button>svg]:w-6 [&>button]:ring-0 [&>button]:ring-offset-0 [&>button]:focus:ring-0 [&>button]:focus:ring-offset-0">
+        <DialogContent className="pointer-events-none max-w-[90vw] max-h-[90vh] p-0 bg-transparent border-none shadow-none [&>button]:pointer-events-auto [&>button]:text-white [&>button]:opacity-100 [&>button]:hover:text-white/70 [&>button>svg]:h-6 [&>button>svg]:w-6 [&>button]:ring-0 [&>button]:ring-offset-0 [&>button]:focus:ring-0 [&>button]:focus:ring-offset-0">
           <img
             src={detailImageSrc}
             alt={photo.title}
-            className="w-full h-full object-contain max-h-[90vh]"
+            className="pointer-events-none select-none w-full h-full object-contain max-h-[90vh]"
+            onContextMenu={(e) => e.preventDefault()}
           />
         </DialogContent>
       </Dialog>

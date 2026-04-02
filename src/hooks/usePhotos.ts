@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Photo } from "@/types/photo";
+import { Tables } from "@/integrations/supabase/types";
 import {
   buildThumbnailPublicUrl,
   buildThumbnailPublicUrlFlexible,
@@ -26,7 +27,14 @@ function buildTsQuery(rawQuery: string): string {
     .join(" & ");
 }
 
-function mapPhotos(photos: any[]): Photo[] {
+/** DB / API の tags を string[] に正規化 */
+export function normalizePhotoTags(value: unknown): string[] {
+  if (value == null) return [];
+  if (!Array.isArray(value)) return [];
+  return value.filter((t): t is string => typeof t === "string" && t.trim().length > 0);
+}
+
+function mapPhotos(photos: Tables<"photos">[]): Photo[] {
   return photos.map((p) => {
     const thumb = buildThumbnailPublicUrlFlexible(p.preview_path);
     return {
@@ -39,7 +47,7 @@ function mapPhotos(photos: any[]): Photo[] {
       download_count: p.download_count,
       favorite_count: p.favorite_count,
       imageUrl: thumb ?? "",
-      tags: [],
+      tags: normalizePhotoTags(p.tags),
     };
   });
 }
@@ -47,43 +55,9 @@ function mapPhotos(photos: any[]): Photo[] {
 export function usePhotos(categoryName?: string, tagName?: string, searchQuery?: string) {
   const normalizedQuery = searchQuery?.trim() ?? "";
   return useQuery({
-    queryKey: ["photos-v3-filters", categoryName, tagName, normalizedQuery],
+    queryKey: ["photos-v4-tags-array", categoryName, tagName, normalizedQuery],
     staleTime: 5 * 60 * 1000,
     queryFn: async (): Promise<Photo[]> => {
-      let categoryId: string | null = null;
-      let tagPhotoIds: string[] | null = null;
-
-      if (categoryName && categoryName !== "all") {
-        const { data: category, error: categoryError } = await supabase
-          .from("categories")
-          .select("id")
-          .eq("name", categoryName)
-          .maybeSingle();
-
-        if (categoryError) throw categoryError;
-        if (!category) return [];
-        categoryId = category.id;
-      }
-
-      if (tagName && tagName !== "all") {
-        const { data: tag, error: tagError } = await supabase
-          .from("tags")
-          .select("id")
-          .eq("name", tagName)
-          .maybeSingle();
-        if (tagError) throw tagError;
-        if (!tag) return [];
-
-        const { data: photoTags, error: photoTagsError } = await supabase
-          .from("photo_tags")
-          .select("photo_id")
-          .eq("tag_id", tag.id);
-        if (photoTagsError) throw photoTagsError;
-
-        tagPhotoIds = (photoTags || []).map((pt) => pt.photo_id);
-        if (tagPhotoIds.length === 0) return [];
-      }
-
       const baseQuery = () => {
         let query = supabase
           .from("photos")
@@ -92,12 +66,12 @@ export function usePhotos(categoryName?: string, tagName?: string, searchQuery?:
           .is("deleted_at", null)
           .order("created_at", { ascending: false });
 
-        if (categoryId) {
-          query = query.eq("category_id", categoryId);
+        if (categoryName && categoryName !== "all") {
+          query = query.eq("category_name", categoryName);
         }
 
-        if (tagPhotoIds && tagPhotoIds.length > 0) {
-          query = query.in("id", tagPhotoIds);
+        if (tagName && tagName !== "all") {
+          query = query.contains("tags", [tagName]);
         }
 
         return query;
@@ -161,15 +135,7 @@ export function usePhoto(id: string | undefined) {
       if (error) throw error;
       if (!data) return null;
 
-      // Fetch tags
-      const { data: photoTags } = await supabase
-        .from("photo_tags")
-        .select("tag_id, tags:tag_id(name)")
-        .eq("photo_id", id);
-
-      const tags = (photoTags as any[] || [])
-        .map((pt) => pt.tags?.name)
-        .filter(Boolean);
+      const tags = normalizePhotoTags((data as { tags?: unknown }).tags);
 
       const thumb = buildThumbnailPublicUrl(data.preview_path);
       const preview = buildPreviewPublicUrl(data.preview_path) ?? thumb;

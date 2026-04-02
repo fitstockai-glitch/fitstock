@@ -7,6 +7,7 @@ import DownloadModal from "@/components/photo/DownloadModal";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFavoriteIds, useToggleFavorite } from "@/hooks/useFavorites";
 import { useDownload } from "@/hooks/useDownload";
+import { extractBasePhotoId } from "@/lib/utils";
 
 interface PhotoCardProps {
   photo: Photo;
@@ -21,8 +22,7 @@ const PhotoCard = memo(({ photo }: PhotoCardProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { requestDownload, modalState, closeModal, downloadAfterWait, isDownloading } = useDownload();
 
-  // MasonryGallery が付与する末尾サフィックス（-b{batch}-{index}）のみ除去する
-  const baseId = photo.id.replace(/-b\d+-\d+$/, "");
+  const baseId = extractBasePhotoId(photo.id);
   const isLiked = useMemo(() => favoriteIds?.has(baseId) ?? false, [favoriteIds, baseId]);
 
   const handleLike = (e: React.MouseEvent) => {
@@ -63,12 +63,13 @@ const PhotoCard = memo(({ photo }: PhotoCardProps) => {
           <img
             src={photo.imageUrl}
             alt={photo.title}
-            className={`w-full h-auto object-cover transition-all duration-500 group-hover:scale-105 ${
+            className={`pointer-events-none select-none w-full h-auto object-cover transition-all duration-500 group-hover:scale-105 ${
               isLoaded ? "opacity-100" : "opacity-0 absolute inset-0"
             }`}
             loading="lazy"
             decoding="async"
             onLoad={() => setIsLoaded(true)}
+            onContextMenu={(e) => e.preventDefault()}
           />
           
           {/* Overlay */}
