@@ -147,6 +147,39 @@ export type Database = {
         }
         Relationships: []
       }
+      photo_tags: {
+        Row: {
+          created_at: string
+          photo_id: string
+          tag_id: string
+        }
+        Insert: {
+          created_at?: string
+          photo_id: string
+          tag_id: string
+        }
+        Update: {
+          created_at?: string
+          photo_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "photo_tags_photo_id_fkey"
+            columns: ["photo_id"]
+            isOneToOne: false
+            referencedRelation: "photos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "photo_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       photos: {
         Row: {
           category_id: string | null
@@ -164,7 +197,7 @@ export type Database = {
           preview_path: string | null
           published_at: string | null
           storage_path: string
-          tags: string[]
+          tags: string[] | null
           title: string
           updated_at: string
           uploaded_by: string | null
@@ -186,7 +219,7 @@ export type Database = {
           preview_path?: string | null
           published_at?: string | null
           storage_path: string
-          tags?: string[]
+          tags?: string[] | null
           title: string
           updated_at?: string
           uploaded_by?: string | null
@@ -208,7 +241,7 @@ export type Database = {
           preview_path?: string | null
           published_at?: string | null
           storage_path?: string
-          tags?: string[]
+          tags?: string[] | null
           title?: string
           updated_at?: string
           uploaded_by?: string | null
@@ -247,6 +280,27 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tags: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
           updated_at?: string
         }
         Relationships: []
