@@ -3,7 +3,7 @@ import FitStockHeader from "../components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
 import CategoryTabs from "../components/content/CategoryTabs";
 import MasonryGallery from "../components/photo/MasonryGallery";
-import { usePhotos } from "@/hooks/usePhotos";
+import { normalizeGallerySort, usePhotos } from "@/hooks/usePhotos";
 import { useTranslation } from "react-i18next";
 
 const Category = () => {
@@ -13,7 +13,8 @@ const Category = () => {
   const searchQuery = (searchParams.get("q") ?? "").trim();
   const isSearchMode = searchQuery.length > 0;
   const activeCategory = category || "all";
-  const { data: photos = [], isLoading } = usePhotos(activeCategory, undefined, searchQuery);
+  const gallerySort = normalizeGallerySort(searchParams.get("sort"));
+  const { data: photos = [], isLoading } = usePhotos(activeCategory, undefined, searchQuery, gallerySort);
 
   const handleCategoryChange = (_newCategory: string) => {
     // Navigation is handled by CategoryTabs

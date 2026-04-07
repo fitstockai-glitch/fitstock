@@ -1,8 +1,9 @@
 import { ChevronDown } from "lucide-react";
-import { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo, useRef, useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { CATEGORY_DISPLAY_MAX, useCategoriesByPhotoCount } from "@/hooks/useCategories";
 import { useTranslation } from "react-i18next";
+import { normalizeGallerySort, type GallerySortMode } from "@/hooks/usePhotos";
 
 interface CategoryTabsProps {
   selectedCategory: string;
@@ -16,21 +17,25 @@ const CategoryTabs = ({
   onCategoryChange,
   stayOnPage = false,
 }: CategoryTabsProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
-  const sortOptions = [
-    { key: "daily-picks", label: t("sort.dailyPicks") },
-    { key: "popular", label: t("sort.popular") },
-    { key: "newest", label: t("sort.newest") },
-    { key: "trending", label: t("sort.trending") },
-  ];
+  const sortOptions = useMemo(
+    () => [
+      { key: "trending" as const, label: t("sort.trending") },
+      { key: "newest" as const, label: t("sort.newest") },
+      { key: "popular" as const, label: t("sort.popular") },
+    ],
+    [t],
+  );
+
+  const sortKey = normalizeGallerySort(searchParams.get("sort"));
+  const selectedSort = sortOptions.find((o) => o.key === sortKey) ?? sortOptions[0];
 
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
-  const { i18n } = useTranslation();
   const isEn = i18n.language.startsWith("en");
   const { data: dbCategories = [] } = useCategoriesByPhotoCount(CATEGORY_DISPLAY_MAX);
   const categories = [
@@ -38,10 +43,31 @@ const CategoryTabs = ({
     ...dbCategories,
   ];
 
+  const applySortToParams = (key: GallerySortMode) => {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (key === "trending") {
+          next.delete("sort");
+        } else {
+          next.set("sort", key);
+        }
+        return next;
+      },
+      { replace: true },
+    );
+  };
+
+  const buildCategoryPath = (key: string) => {
+    const next = new URLSearchParams(searchParams);
+    const qs = next.toString();
+    return qs ? `/category/${key}?${qs}` : `/category/${key}`;
+  };
+
   const handleCategoryClick = (key: string) => {
     onCategoryChange(key);
     if (!stayOnPage) {
-      navigate(`/category/${key}`);
+      navigate(buildCategoryPath(key));
     }
   };
 
@@ -61,7 +87,7 @@ const CategoryTabs = ({
         <div
           ref={scrollRef}
           className="flex items-center gap-1 overflow-x-auto scrollbar-hide py-3 flex-1"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {categories.map((cat) => (
             <button
@@ -92,7 +118,7 @@ const CategoryTabs = ({
                 <button
                   key={option.key}
                   onClick={() => {
-                    setSelectedSort(option);
+                    applySortToParams(option.key);
                     setIsSortOpen(false);
                   }}
                   className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${

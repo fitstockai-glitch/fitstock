@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import FitStockHeader from "../components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
 import CategoryTabs from "../components/content/CategoryTabs";
 import MasonryGallery from "../components/photo/MasonryGallery";
-import { usePhotos } from "@/hooks/usePhotos";
+import { normalizeGallerySort, usePhotos } from "@/hooks/usePhotos";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { Seo } from "@/components/seo/Seo";
@@ -13,12 +13,15 @@ import { SITE_ORIGIN } from "@/config/site";
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const searchQuery = (new URLSearchParams(location.search).get("q") ?? "").trim();
   const isSearchMode = searchQuery.length > 0;
+  const gallerySort = normalizeGallerySort(searchParams.get("sort"));
   const { data: photos = [], isLoading } = usePhotos(
     isSearchMode ? "all" : selectedCategory,
     undefined,
-    searchQuery
+    searchQuery,
+    gallerySort,
   );
   const visiblePhotos = photos.filter((p) => Boolean(p.imageUrl));
   const { t } = useTranslation();

@@ -8,6 +8,14 @@ import {
   buildPreviewPublicUrl,
 } from "@/lib/supabaseStorage";
 
+/** ギャラリー一覧のソート（URL ?sort= と同期） */
+export type GallerySortMode = "trending" | "newest" | "popular";
+
+export function normalizeGallerySort(raw: string | null | undefined): GallerySortMode {
+  if (raw === "newest" || raw === "popular") return raw;
+  return "trending";
+}
+
 /** トップギャラリー（01〜05）と同じ preview_path だけ true */
 export function isThumbnailInRange01To05(previewPath: string | null): boolean {
   if (!previewPath) return false;
@@ -56,19 +64,62 @@ function mapPhotos(photos: Tables<"photos">[]): Photo[] {
   });
 }
 
-export function usePhotos(categoryName?: string, tagName?: string, searchQuery?: string) {
+function sortPhotoRows(
+  rows: Tables<"photos">[],
+  sort: GallerySortMode,
+  trendMap: Map<string, number>,
+): Tables<"photos">[] {
+  const out = [...rows];
+  const byCreatedDesc = (a: Tables<"photos">, b: Tables<"photos">) =>
+    new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+
+  if (sort === "newest") {
+    out.sort(byCreatedDesc);
+  } else if (sort === "popular") {
+    out.sort((a, b) => b.download_count - a.download_count || byCreatedDesc(a, b));
+  } else {
+    out.sort((a, b) => {
+      const ca = trendMap.get(a.id) ?? 0;
+      const cb = trendMap.get(b.id) ?? 0;
+      if (cb !== ca) return cb - ca;
+      return byCreatedDesc(a, b);
+    });
+  }
+  return out;
+}
+
+async function fetchTrendMap(): Promise<Map<string, number>> {
+  const map = new Map<string, number>();
+  const { data, error } = await supabase.rpc("gallery_photo_download_counts_7d");
+  if (error) {
+    console.warn("[usePhotos] gallery_photo_download_counts_7d failed; trending falls back to newest", error);
+    return map;
+  }
+  for (const row of data ?? []) {
+    map.set(row.photo_id, Number(row.download_count_7d));
+  }
+  return map;
+}
+
+export function usePhotos(
+  categoryName?: string,
+  tagName?: string,
+  searchQuery?: string,
+  gallerySort: GallerySortMode = "trending",
+) {
   const normalizedQuery = searchQuery?.trim() ?? "";
   return useQuery({
-    queryKey: ["photos-v4-tags-array", categoryName, tagName, normalizedQuery],
+    queryKey: ["photos-v5-gallery-sort", categoryName, tagName, normalizedQuery, gallerySort],
     staleTime: 5 * 60 * 1000,
     queryFn: async (): Promise<Photo[]> => {
+      const trendMap = gallerySort === "trending" ? await fetchTrendMap() : new Map<string, number>();
+
       const baseQuery = () => {
         let query = supabase
           .from("photos")
           .select("*")
           .eq("is_published", true)
-          .is("deleted_at", null)
-          .order("created_at", { ascending: false });
+          .is("deleted_at", null);
 
         if (categoryName && categoryName !== "all") {
           query = query.eq("category_name", categoryName);
@@ -76,6 +127,14 @@ export function usePhotos(categoryName?: string, tagName?: string, searchQuery?:
 
         if (tagName && tagName !== "all") {
           query = query.contains("tags", [tagName]);
+        }
+
+        if (gallerySort === "newest") {
+          query = query.order("created_at", { ascending: false });
+        } else if (gallerySort === "popular") {
+          query = query.order("download_count", { ascending: false }).order("created_at", { ascending: false });
+        } else {
+          query = query.order("created_at", { ascending: false });
         }
 
         return query;
@@ -86,39 +145,43 @@ export function usePhotos(categoryName?: string, tagName?: string, searchQuery?:
         const { data, error } = await baseQuery();
         if (error) throw error;
         if (!data || data.length === 0) return [];
-        return mapPhotos(data);
+        return mapPhotos(sortPhotoRows(data, gallerySort, trendMap));
       }
 
       const tsQuery = buildTsQuery(queryText);
+      let rows: Tables<"photos">[] = [];
+
       if (tsQuery) {
-        // Prefer full-text index first. If no hit or error, fallback to ILIKE for Japanese matching.
         const { data: textData, error: textError } = await baseQuery().textSearch(
           "search_vector",
           tsQuery,
-          { type: "plain", config: "simple" }
+          { type: "plain", config: "simple" },
         );
         if (!textError && textData && textData.length > 0) {
-          return mapPhotos(textData);
+          rows = textData;
         }
       }
 
-      const [titleResult, descriptionResult] = await Promise.all([
-        baseQuery().ilike("title", `%${queryText}%`),
-        baseQuery().ilike("description", `%${queryText}%`),
-      ]);
+      if (rows.length === 0) {
+        const [titleResult, descriptionResult] = await Promise.all([
+          baseQuery().ilike("title", `%${queryText}%`),
+          baseQuery().ilike("description", `%${queryText}%`),
+        ]);
 
-      if (titleResult.error) throw titleResult.error;
-      if (descriptionResult.error) throw descriptionResult.error;
+        if (titleResult.error) throw titleResult.error;
+        if (descriptionResult.error) throw descriptionResult.error;
 
-      const merged = new Map<string, any>();
-      for (const photo of titleResult.data || []) {
-        merged.set(photo.id, photo);
+        const merged = new Map<string, Tables<"photos">>();
+        for (const photo of titleResult.data || []) {
+          merged.set(photo.id, photo);
+        }
+        for (const photo of descriptionResult.data || []) {
+          merged.set(photo.id, photo);
+        }
+        rows = Array.from(merged.values());
       }
-      for (const photo of descriptionResult.data || []) {
-        merged.set(photo.id, photo);
-      }
 
-      return mapPhotos(Array.from(merged.values()));
+      return mapPhotos(sortPhotoRows(rows, gallerySort, trendMap));
     },
   });
 }

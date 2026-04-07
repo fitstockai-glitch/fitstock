@@ -322,6 +322,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      gallery_photo_download_counts_7d: {
+        Args: Record<PropertyKey, never>
+        Returns: { photo_id: string; download_count_7d: number }[]
+      }
       get_today_download_count: {
         Args: { target_user_id: string }
         Returns: number
