@@ -1,15 +1,32 @@
 /**
  * Vercel Edge Middleware (project root)
  * 全ページを Basic 認証で保護し、localhost はスキップする
+ * x-vercel-ip-country を Cookie に載せ、クライアントの i18n 初期化で参照する
  */
-export default function middleware(request: Request): Response | void {
+import { COUNTRY_HEADER_NAME, next } from "@vercel/edge";
+
+function passthroughWithCountryCookie(request: Request): Response {
+  const country = request.headers.get(COUNTRY_HEADER_NAME) ?? "";
+  if (!country) {
+    return next();
+  }
+  const url = new URL(request.url);
+  const secure = url.protocol === "https:" ? "; Secure" : "";
+  return next({
+    headers: {
+      "Set-Cookie": `fitstock-vercel-country=${encodeURIComponent(country)}; Path=/; Max-Age=2592000; SameSite=Lax${secure}`,
+    },
+  });
+}
+
+export default function middleware(request: Request): Response {
   const url = new URL(request.url);
   const host = request.headers.get("x-forwarded-host") ?? url.hostname;
   const hostname = host.split(":")[0].toLowerCase();
 
   // ローカル環境は認証をスキップ
   if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1") {
-    return;
+    return passthroughWithCountryCookie(request);
   }
 
   const expectedUser = process.env.BASIC_AUTH_USER ?? "";
@@ -17,7 +34,7 @@ export default function middleware(request: Request): Response | void {
 
   // 本番で未設定の場合は誤ロックを避けるためスキップ
   if (!expectedUser || !expectedPassword) {
-    return;
+    return passthroughWithCountryCookie(request);
   }
 
   const authHeader = request.headers.get("authorization");
@@ -45,6 +62,8 @@ export default function middleware(request: Request): Response | void {
   if (user !== expectedUser || password !== expectedPassword) {
     return unauthorized();
   }
+
+  return passthroughWithCountryCookie(request);
 }
 
 function unauthorized(): Response {
@@ -60,4 +79,3 @@ function unauthorized(): Response {
 export const config = {
   matcher: "/(.*)",
 };
-
