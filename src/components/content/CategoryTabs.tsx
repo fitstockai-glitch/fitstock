@@ -2,6 +2,7 @@ import { ChevronDown } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CATEGORY_DISPLAY_MAX, useCategoriesByPhotoCount } from "@/hooks/useCategories";
+import { useTranslation } from "react-i18next";
 
 interface CategoryTabsProps {
   selectedCategory: string;
@@ -10,25 +11,32 @@ interface CategoryTabsProps {
   stayOnPage?: boolean;
 }
 
-const sortOptions = [
-  { key: "daily-picks", label: "今日のおすすめ" },
-  { key: "popular", label: "人気順" },
-  { key: "newest", label: "新着順" },
-  { key: "trending", label: "トレンド" },
-];
-
 const CategoryTabs = ({
   selectedCategory,
   onCategoryChange,
   stayOnPage = false,
 }: CategoryTabsProps) => {
+  const { t } = useTranslation();
+
+  const sortOptions = [
+    { key: "daily-picks", label: t("sort.dailyPicks") },
+    { key: "popular", label: t("sort.popular") },
+    { key: "newest", label: t("sort.newest") },
+    { key: "trending", label: t("sort.trending") },
+  ];
+
   const scrollRef = useRef<HTMLDivElement>(null);
   const [selectedSort, setSelectedSort] = useState(sortOptions[0]);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
+  const isEn = i18n.language.startsWith("en");
   const { data: dbCategories = [] } = useCategoriesByPhotoCount(CATEGORY_DISPLAY_MAX);
-  const categories = [{ key: "all", label: "すべて" }, ...dbCategories];
+  const categories = [
+    { key: "all", label: t("categories.all"), name_en: null },
+    ...dbCategories,
+  ];
 
   const handleCategoryClick = (key: string) => {
     onCategoryChange(key);
@@ -50,7 +58,7 @@ const CategoryTabs = ({
   return (
     <div className="border-b border-border bg-background sticky top-[156px] md:top-16 z-40">
       <div className="flex items-center justify-between px-4 md:px-8">
-        <div 
+        <div
           ref={scrollRef}
           className="flex items-center gap-1 overflow-x-auto scrollbar-hide py-3 flex-1"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -65,7 +73,7 @@ const CategoryTabs = ({
                   : "text-foreground hover:bg-secondary"
               }`}
             >
-              {cat.label}
+              {isEn ? (cat.name_en ?? cat.label) : cat.label}
             </button>
           ))}
         </div>

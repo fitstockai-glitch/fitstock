@@ -41,20 +41,7 @@ const LegalNotice = () => {
 
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">連絡先</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                メール: support@fitstock.com（ドメイン取得後に更新）
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                お問い合わせフォーム:{" "}
-                <a
-                  href="https://docs.google.com/forms/d/e/1FAIpQLScuM8dFtyjbjKnHvbU8iD7ywx3ud1zPWJNurheoaGItccCAKw/viewform?usp=header"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-foreground underline hover:opacity-70 transition-opacity"
-                >
-                  こちら
-                </a>
-              </p>
+              <p className="text-muted-foreground leading-relaxed">メール: info@fitstock.ai</p>
             </section>
 
             <section>

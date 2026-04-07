@@ -3,6 +3,7 @@ import FitStockHeader from "../components/header/FitStockHeader";
 import Footer from "../components/footer/Footer";
 import MasonryGallery from "../components/photo/MasonryGallery";
 import { usePhotos } from "@/hooks/usePhotos";
+import { useTranslation } from "react-i18next";
 
 const TagPage = () => {
   const { tag } = useParams();
@@ -10,6 +11,7 @@ const TagPage = () => {
   const searchQuery = searchParams.get("q") ?? "";
   const activeTag = tag || "all";
   const { data: photos = [], isLoading } = usePhotos("all", activeTag, searchQuery);
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-background">
@@ -21,7 +23,7 @@ const TagPage = () => {
 
       <main>
         {isLoading ? (
-          <div className="flex justify-center py-20 text-muted-foreground">読み込み中...</div>
+          <div className="flex justify-center py-20 text-muted-foreground">{t("common.loading")}</div>
         ) : (
           <MasonryGallery photos={photos} />
         )}

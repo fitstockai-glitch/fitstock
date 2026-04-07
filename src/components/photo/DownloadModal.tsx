@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { buildThumbnailPublicUrlFlexible } from "@/lib/supabaseStorage";
 import PlanBenefitsList from "@/components/photo/PlanBenefitsList";
+import { useTranslation } from "react-i18next";
 
 interface DownloadModalProps {
   open: boolean;
@@ -28,6 +29,7 @@ const DownloadModal = ({
   onDownload,
   isDownloading = false,
 }: DownloadModalProps) => {
+  const { t } = useTranslation();
   const { data: galleryThumbUrls = [] } = useQuery({
     queryKey: ["download-modal-gallery-thumbnails"],
     staleTime: 10 * 60 * 1000,
@@ -87,11 +89,11 @@ const DownloadModal = ({
           >
             <DialogHeader className="space-y-3 mt-6 sm:mt-0 text-left">
               <DialogTitle className="text-2xl font-bold leading-tight">
-                制限を気にせず、クリエイティブに集中しよう
+                {t("modal.title")}
               </DialogTitle>
               {showAuthCta ? (
                 <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
-                  サインアップすると1日10回の無料ダウンロードが可能に。さらに、FitStock Plus（月額¥1,000）に加入すれば無制限のダウンロードが可能になります。
+                  {t("modal.guestDescription")}
                 </DialogDescription>
               ) : (
                 <div>
@@ -103,7 +105,7 @@ const DownloadModal = ({
             <div className="flex flex-col gap-3 mt-10">
               <Link to="/pricing">
                 <Button className="w-full bg-red-500 hover:bg-red-500/80 text-white font-medium py-6 text-base rounded-lg">
-                  FitStock Plusに参加する
+                  {t("modal.joinPlus")}
                 </Button>
               </Link>
 
@@ -113,7 +115,7 @@ const DownloadModal = ({
                     variant="outline"
                     className="w-full font-medium py-6 text-base rounded-lg"
                   >
-                    無料登録する
+                    {t("modal.freeRegister")}
                   </Button>
                 </Link>
               )}
@@ -125,10 +127,10 @@ const DownloadModal = ({
                   className="w-full bg-foreground hover:bg-foreground/90 text-background font-medium py-6 text-base rounded-lg disabled:opacity-70"
                 >
                   {isDownloading
-                    ? "ダウンロード中..."
+                    ? t("modal.downloading")
                     : isWaitCompleted
-                      ? "ダウンロードする"
-                      : `${remainingSeconds}秒後にダウンロード可能`}
+                      ? t("modal.download")
+                      : t("modal.waitDownload", { count: remainingSeconds })}
                 </Button>
               )}
 
@@ -138,16 +140,16 @@ const DownloadModal = ({
                   className="w-full font-medium py-6 text-base rounded-lg"
                   onClick={() => onOpenChange(false)}
                 >
-                  閉じる
+                  {t("common.close")}
                 </Button>
               )}
             </div>
 
             {showAuthCta && (
               <p className="text-center text-sm text-muted-foreground mt-4">
-                すでにアカウントをお持ちですか？{" "}
+                {t("modal.haveAccount")}{" "}
                 <Link to="/login" className="text-red-500 hover:underline font-medium">
-                  ログイン
+                  {t("common.login")}
                 </Link>
               </p>
             )}

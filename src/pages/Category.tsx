@@ -4,10 +4,12 @@ import Footer from "../components/footer/Footer";
 import CategoryTabs from "../components/content/CategoryTabs";
 import MasonryGallery from "../components/photo/MasonryGallery";
 import { usePhotos } from "@/hooks/usePhotos";
+import { useTranslation } from "react-i18next";
 
 const Category = () => {
   const { category } = useParams();
   const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
   const searchQuery = (searchParams.get("q") ?? "").trim();
   const isSearchMode = searchQuery.length > 0;
   const activeCategory = category || "all";
@@ -34,7 +36,7 @@ const Category = () => {
 
       <main>
         {isLoading ? (
-          <div className="flex justify-center py-20 text-muted-foreground">読み込み中...</div>
+          <div className="flex justify-center py-20 text-muted-foreground">{t("common.loading")}</div>
         ) : (
           <MasonryGallery photos={photos} />
         )}

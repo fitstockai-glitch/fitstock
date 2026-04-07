@@ -1,4 +1,5 @@
 import { CATEGORY_DISPLAY_MAX, useCategoriesByPhotoCount } from "@/hooks/useCategories";
+import { useTranslation } from "react-i18next";
 
 interface CategoryFilterProps {
   selectedCategory: string;
@@ -6,8 +7,10 @@ interface CategoryFilterProps {
 }
 
 const CategoryFilter = ({ selectedCategory, onCategoryChange }: CategoryFilterProps) => {
+  const { t, i18n } = useTranslation();
+  const isEn = i18n.language.startsWith("en");
   const { data: dbCategories = [] } = useCategoriesByPhotoCount(CATEGORY_DISPLAY_MAX);
-  const categories = [{ key: "all", label: "すべて" }, ...dbCategories];
+  const categories = [{ key: "all", label: t("categories.all"), name_en: null as string | null }, ...dbCategories];
 
   return (
     <div className="flex flex-wrap justify-center gap-2 px-4 md:px-6 py-6">
@@ -21,7 +24,7 @@ const CategoryFilter = ({ selectedCategory, onCategoryChange }: CategoryFilterPr
               : "bg-secondary text-foreground hover:bg-accent hover:text-accent-foreground"
           }`}
         >
-          {cat.label}
+          {isEn ? (cat.name_en ?? cat.label) : cat.label}
         </button>
       ))}
     </div>

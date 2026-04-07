@@ -21,6 +21,7 @@ export type Database = {
           id: string
           label: string
           name: string
+          name_en: string | null
           sort_order: number
           updated_at: string
         }
@@ -30,6 +31,7 @@ export type Database = {
           id?: string
           label: string
           name: string
+          name_en?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -39,6 +41,7 @@ export type Database = {
           id?: string
           label?: string
           name?: string
+          name_en?: string | null
           sort_order?: number
           updated_at?: string
         }
@@ -198,7 +201,10 @@ export type Database = {
           published_at: string | null
           storage_path: string
           tags: string[] | null
+          tags_en: string[] | null
           title: string
+          title_en: string | null
+          description_en: string | null
           updated_at: string
           uploaded_by: string | null
           width: number | null
@@ -209,6 +215,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           description?: string | null
+          description_en?: string | null
           download_count?: number
           favorite_count?: number
           file_size?: number | null
@@ -220,7 +227,9 @@ export type Database = {
           published_at?: string | null
           storage_path: string
           tags?: string[] | null
+          tags_en?: string[] | null
           title: string
+          title_en?: string | null
           updated_at?: string
           uploaded_by?: string | null
           width?: number | null
@@ -231,6 +240,7 @@ export type Database = {
           created_at?: string
           deleted_at?: string | null
           description?: string | null
+          description_en?: string | null
           download_count?: number
           favorite_count?: number
           file_size?: number | null
@@ -242,7 +252,9 @@ export type Database = {
           published_at?: string | null
           storage_path?: string
           tags?: string[] | null
+          tags_en?: string[] | null
           title?: string
+          title_en?: string | null
           updated_at?: string
           uploaded_by?: string | null
           width?: number | null

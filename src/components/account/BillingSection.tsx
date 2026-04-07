@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useTranslation } from "react-i18next";
 
 const mockBilling = Array.from({ length: 10 }, (_, i) => ({
   id: String(i + 1),
@@ -16,6 +17,8 @@ const mockBilling = Array.from({ length: 10 }, (_, i) => ({
 }));
 
 const BillingSection = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="border-b border-border">
       {/* Desktop/Tablet: original 4-column table */}
@@ -23,10 +26,10 @@ const BillingSection = () => {
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent border-t-0">
-              <TableHead className="text-muted-foreground font-normal pl-0">ご注文番号</TableHead>
-              <TableHead className="text-muted-foreground font-normal">ご購入日</TableHead>
-              <TableHead className="text-muted-foreground font-normal">金額</TableHead>
-              <TableHead className="text-muted-foreground font-normal pr-0">ドキュメント</TableHead>
+              <TableHead className="text-muted-foreground font-normal pl-0">{t("billing.orderNumber")}</TableHead>
+              <TableHead className="text-muted-foreground font-normal">{t("billing.purchaseDate")}</TableHead>
+              <TableHead className="text-muted-foreground font-normal">{t("billing.amount")}</TableHead>
+              <TableHead className="text-muted-foreground font-normal pr-0">{t("billing.document")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -41,7 +44,7 @@ const BillingSection = () => {
                     onClick={() => console.log("Download receipt:", item.id)}
                   >
                     <Download size={14} />
-                    ダウンロード
+                    {t("billing.download")}
                   </button>
                 </TableCell>
               </TableRow>
@@ -55,9 +58,9 @@ const BillingSection = () => {
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent border-t-0">
-              <TableHead className="text-muted-foreground font-normal pl-0">ご注文番号</TableHead>
-              <TableHead className="text-muted-foreground font-normal">ご購入日</TableHead>
-              <TableHead className="text-muted-foreground font-normal pr-0">金額</TableHead>
+              <TableHead className="text-muted-foreground font-normal pl-0">{t("billing.orderNumber")}</TableHead>
+              <TableHead className="text-muted-foreground font-normal">{t("billing.purchaseDate")}</TableHead>
+              <TableHead className="text-muted-foreground font-normal pr-0">{t("billing.amount")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -75,7 +78,7 @@ const BillingSection = () => {
                       onClick={() => console.log("Download receipt:", item.id)}
                     >
                       <Download size={14} />
-                      ダウンロード
+                      {t("billing.download")}
                     </button>
                   </TableCell>
                 </TableRow>

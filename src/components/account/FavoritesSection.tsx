@@ -1,24 +1,26 @@
 import { Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useFavoritePhotos, useToggleFavorite } from "@/hooks/useFavorites";
+import { useTranslation } from "react-i18next";
 
 const FavoritesSection = () => {
   const { data: favorites = [], isLoading } = useFavoritePhotos();
   const toggleFavorite = useToggleFavorite();
+  const { t } = useTranslation();
 
   const handleRemove = (photoId: string) => {
     toggleFavorite.mutate({ photoId, isFavorited: true });
   };
 
   if (isLoading) {
-    return <p className="text-sm text-muted-foreground">読み込み中...</p>;
+    return <p className="text-sm text-muted-foreground">{t("common.loading")}</p>;
   }
 
   return (
     <div>
       {favorites.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          まだお気に入り登録した写真がありません。
+          {t("favorites.empty")}
         </p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -37,7 +39,7 @@ const FavoritesSection = () => {
                 onClick={() => handleRemove(item.id)}
               >
                 <Heart size={12} className="fill-red-500 text-red-500" />
-                お気に入り削除
+                {t("favorites.remove")}
               </button>
             </div>
           ))}

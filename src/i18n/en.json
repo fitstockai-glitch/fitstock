@@ -1,0 +1,215 @@
+{
+  "nav": {
+    "search": "Search",
+    "searchPlaceholder": "Search images",
+    "account": "Account",
+    "logout": "Log out",
+    "logoutError": "Failed to log out",
+    "upgradePlus": "Upgrade to Plus"
+  },
+  "header": {
+    "promoBanner": "Join the unlimited download plan"
+  },
+  "footer": {
+    "categories": "Categories",
+    "followUs": "Follow us",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "legalNotice": "Legal Notice",
+    "contact": "Contact"
+  },
+  "common": {
+    "email": "Email",
+    "password": "Password",
+    "or": "or",
+    "login": "Log in",
+    "close": "Close",
+    "back": "Back",
+    "processing": "Processing…",
+    "loading": "Loading...",
+    "saveChanges": "Save changes"
+  },
+  "login": {
+    "title": "Log in",
+    "forgotPassword": "Forgot your password?",
+    "loggingIn": "Logging in...",
+    "submit": "Log in",
+    "googleLogin": "Sign in with Google",
+    "noAccount": "Don't have an account?",
+    "register": "Sign up",
+    "invalidCredentials": "Invalid email or password",
+    "success": "Logged in"
+  },
+  "register": {
+    "title": "Create account",
+    "name": "Name",
+    "registering": "Signing up...",
+    "submit": "Sign up",
+    "googleSignup": "Sign up with Google",
+    "connecting": "Connecting...",
+    "haveAccount": "Already have an account?",
+    "success": "Account created. Please check your confirmation email."
+  },
+  "pricing": {
+    "headlineLine1": "Access the photos you need without limits.",
+    "headlineLine2": "No waiting, just creativity.",
+    "monthlyPrice": "/mo",
+    "yearlyPrice": "¥12,000 / year",
+    "feature1": "All assets in the image library available for download",
+    "feature2": "Editable license for creative digital and print use",
+    "feature3": "Industry-lowest pricing",
+    "subscribe": "Subscribe to FitStock Plus"
+  },
+  "categories": {
+    "all": "All"
+  },
+  "sort": {
+    "dailyPicks": "Daily Picks",
+    "popular": "Popular",
+    "newest": "Newest",
+    "trending": "Trending"
+  },
+  "modal": {
+    "title": "Create without limits",
+    "guestDescription": "Sign up for 10 free downloads per day. Or subscribe to FitStock Plus (¥1,000/mo) for unlimited downloads.",
+    "joinPlus": "Join FitStock Plus",
+    "freeRegister": "Sign up for free",
+    "downloading": "Downloading...",
+    "waitDownload": "Available in {{count}}s",
+    "download": "Download",
+    "haveAccount": "Already have an account?"
+  },
+  "account": {
+    "profile": "Profile",
+    "plan": "Plan",
+    "favorites": "Favorites",
+    "downloads": "Download History",
+    "billing": "Billing",
+    "logout": "Log out"
+  },
+  "plan": {
+    "subtitle": "Unlimited downloads, flat rate",
+    "feature3": "Industry-lowest pricing",
+    "perMonth": "/mo",
+    "yearlyPrice": "¥12,000/year",
+    "joinPlus": "Join FitStock Plus",
+    "cancel": "Cancel plan",
+    "cancelConfirmTitle": "Are you sure you want to cancel?",
+    "cancelWithDate": "You'll still have access to FitStock Plus until the end of your current billing period ({{date}}).",
+    "cancelWithoutDate": "You'll still have access to FitStock Plus until the end of your current billing period.",
+    "cancelAfter": "After that, your account will revert to Free Member.",
+    "continueCancelling": "Continue cancellation",
+    "cancelledTitle": "FitStock Plus (Cancelled)",
+    "availableUntilDate": "Available until: {{date}}",
+    "availableUntilEnd": "Available until end of billing period",
+    "reactivate": "Reactivate",
+    "alreadyCancelled": "Already cancelled",
+    "cancelSuccess": "Plan cancelled. You can continue using it until the end of the billing period.",
+    "cancelError": "Failed to cancel",
+    "cancelledStatus": "FitStock Plus is cancelled",
+    "cancelledUntilDate": "You can continue using Plus until {{date}}",
+    "cancelledUntilEnd": "You can continue using Plus until the end of the billing period",
+    "activeStatus": "Active FitStock Plus member",
+    "nextRenewalDate": "Next renewal date: {{date}}",
+    "loadingRenewal": "Loading billing period end date...",
+    "upgradePrompt": "Get unlimited access to the highest quality assets."
+  },
+  "notFound": {
+    "message": "The page you were looking for could not be found.",
+    "backHome": "Back to home"
+  },
+  "forgotPassword": {
+    "title": "Reset password",
+    "description": "Enter your registered email address and we'll send you a password reset link.",
+    "submit": "Send link",
+    "backToLogin": "Back to login",
+    "sending": "Sending...",
+    "sentMessage": "A reset link has been sent to {{email}}. Please check your email."
+  },
+  "index": {
+    "noResultsLine1": "No photos found for \"{{query}}\".",
+    "noResultsLine2": "Try different keywords or browse from the home page.",
+    "backHome": "Back to home",
+    "noPhotos": "No photos to display."
+  },
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "notSet": "Not set",
+    "saving": "Saving...",
+    "saveChanges": "Save changes",
+    "saveSuccess": "Profile saved",
+    "saveError": "Failed to save",
+    "changePassword": "Change password",
+    "passwordNote": "Only available for accounts registered with email and password.",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmPassword": "Confirm new password",
+    "updatePassword": "Update password",
+    "userDetails": "User details",
+    "deleteWarning": "This will permanently delete all your personal data.",
+    "deleteAccount": "Delete account",
+    "passwordChangeSuccess": "Password changed",
+    "loadError": "Failed to load profile. Please try again.",
+    "passwordErrors": {
+      "allFields": "Please fill in all fields to change your password",
+      "newPassword": "Please enter a new password",
+      "minLength": "New password must be at least 6 characters",
+      "mismatch": "New passwords do not match",
+      "currentRequired": "Please enter your current password",
+      "emailError": "Could not retrieve email address",
+      "currentWrong": "Current password is incorrect",
+      "updateError": "Failed to update password"
+    }
+  },
+  "favorites": {
+    "empty": "No favorites yet.",
+    "remove": "Remove"
+  },
+  "downloads": {
+    "error": "Failed to load download history. Please try again later.",
+    "empty": "No downloads yet.",
+    "unavailable": "Image unavailable",
+    "redownload": "Re-download"
+  },
+  "billing": {
+    "orderNumber": "Order number",
+    "purchaseDate": "Purchase date",
+    "amount": "Amount",
+    "document": "Document",
+    "download": "Download",
+    "description": "View your payment history and download receipts.",
+    "receiptAddress": "Receipt address"
+  },
+  "photoDetail": {
+    "notFound": "Photo not found",
+    "download": "Download",
+    "addToFavorites": "Add to favorites",
+    "share": "Share",
+    "shareOnX": "Share on X",
+    "shareOnFacebook": "Share on Facebook",
+    "shareOnPinterest": "Share on Pinterest",
+    "copyLink": "Copy link",
+    "copied": "Copied!",
+    "relatedImages": "Related Images",
+    "noRelatedImages": "No related images yet",
+    "seoWithTags": "\"{{phrase}}\" is a free stock photo related to {{tags}}. Download high-quality commercial-use photos for free on FitStock. Perfect for web design, advertising, and social media.",
+    "seoNoTags": "\"{{phrase}}\" is a free stock photo. Download high-quality commercial-use photos for free on FitStock. Perfect for web design, advertising, and social media."
+  },
+  "seo": {
+    "home": {
+      "title": "FitStock — Free stock photos & royalty-free images",
+      "description": "High-quality stock photos free to use. Commercial use OK, edit freely, no credit required. Unlimited downloads for ¥1,000/month."
+    },
+    "defaultDescription": "Free fitness and sports stock photos for commercial use. No credit required. FitStock.",
+    "photoOgFallback": "Download high-quality stock photos for free on FitStock."
+  },
+  "receipt": {
+    "title": "Receipt information",
+    "companyName": "Company / Business name (Receipt recipient)",
+    "optional": "※ Leave blank if not needed",
+    "contactName": "Contact name",
+    "address": "Address (only if to be printed on receipt)",
+    "save": "Save changes"
+  }
+}

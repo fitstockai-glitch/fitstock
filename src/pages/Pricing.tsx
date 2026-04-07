@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const LEMON_SQUEEZY_CHECKOUT_URL =
   "https://fitstock.lemonsqueezy.com/checkout/buy/f3fe4e0b-1ef6-4d98-94dc-7a9771e4f081";
@@ -11,6 +12,7 @@ const LEMON_SQUEEZY_CHECKOUT_URL =
 const Pricing = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSubscribeClick = () => {
     if (!user) {
@@ -30,9 +32,9 @@ const Pricing = () => {
         {/* Headline */}
         <div className="text-center mb-12">
           <h1 className="text-2xl md:text-3xl font-bold text-foreground leading-relaxed">
-            制限を気にせず、必要な写真をすぐに選べる。
+            {t("pricing.headlineLine1")}
             <br />
-            待ち時間もなく、クリエイティブに集中できる環境を。
+            {t("pricing.headlineLine2")}
           </h1>
         </div>
 
@@ -40,26 +42,24 @@ const Pricing = () => {
         <div className="w-full max-w-lg border border-border rounded-xl p-8 md:p-10">
           <div className="mb-1">
             <span className="text-4xl font-bold text-foreground">¥1,000</span>
-            <span className="text-base text-foreground ml-1">月額</span>
+            <span className="text-base text-foreground ml-1">{t("pricing.monthlyPrice")}</span>
           </div>
-          <p className="text-sm text-muted-foreground mb-8">¥12,000 / 年払い</p>
+          <p className="text-sm text-muted-foreground mb-8">{t("pricing.yearlyPrice")}</p>
 
           <div className="space-y-5 mb-10">
             <div className="flex items-start gap-3">
               <Check size={18} className="text-muted-foreground mt-0.5 shrink-0" />
-              <span className="text-sm text-muted-foreground">画像ライブラリのすべての素材がダウンロード可能</span>
+              <span className="text-sm text-muted-foreground">{t("pricing.feature1")}</span>
             </div>
             <div className="flex items-start gap-3">
               <Check size={18} className="text-muted-foreground mt-0.5 shrink-0" />
               <span className="text-sm text-muted-foreground">
-                クリエイティブデジタルおよび印刷物に
-                <br className="hidden sm:block" />
-                使用できる加工可能なライセンス
+                {t("pricing.feature2")}
               </span>
             </div>
             <div className="flex items-start gap-3">
               <Check size={18} className="text-muted-foreground mt-0.5 shrink-0" />
-              <span className="text-sm text-muted-foreground">業界最安値の金額</span>
+              <span className="text-sm text-muted-foreground">{t("pricing.feature3")}</span>
             </div>
           </div>
 
@@ -67,7 +67,7 @@ const Pricing = () => {
             onClick={handleSubscribeClick}
             className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-6 text-base rounded-lg"
           >
-            FitStock Plusに登録する
+            {t("pricing.subscribe")}
           </Button>
         </div>
       </main>

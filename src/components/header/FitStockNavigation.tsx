@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMembershipTier } from "@/hooks/useMembership";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface SearchFormProps {
   searchTerm: string;
@@ -14,6 +15,7 @@ interface SearchFormProps {
 
 const SearchForm = ({ searchTerm, onSearchTermChange, onSubmit }: SearchFormProps) => {
   const [isFocused, setIsFocused] = useState(false);
+  const { t } = useTranslation();
   return (
     <form
       className={`flex items-center w-full bg-secondary rounded-full px-4 py-2.5 transition-all duration-200 ${
@@ -27,13 +29,13 @@ const SearchForm = ({ searchTerm, onSearchTermChange, onSubmit }: SearchFormProp
       <button
         type="submit"
         className="mr-3 text-muted-foreground hover:text-foreground transition-colors"
-        aria-label="検索"
+        aria-label={t("nav.search")}
       >
         <Search size={18} />
       </button>
       <input
         type="text"
-        placeholder="画像を検索する"
+        placeholder={t("nav.searchPlaceholder")}
         className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground outline-none text-sm"
         value={searchTerm}
         onChange={(e) => onSearchTermChange(e.target.value)}
@@ -58,7 +60,7 @@ interface FitStockNavigationProps {
 }
 
 const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => {
-  const [currentLanguage, setCurrentLanguage] = useState<Language>("ja");
+  const { t, i18n } = useTranslation();
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -69,9 +71,11 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
   const location = useLocation();
   const navigate = useNavigate();
 
-  const languages = [
-    { code: "ja" as Language, label: "日本語" },
-    { code: "en" as Language, label: "English" },
+  const currentLanguage = (i18n.language?.startsWith("en") ? "en" : "ja") as Language;
+
+  const languages: { code: Language; label: string }[] = [
+    { code: "ja", label: "日本語" },
+    { code: "en", label: "English" },
   ];
 
   useEffect(() => {
@@ -99,7 +103,7 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
       await signOut();
       navigate("/");
     } catch (error) {
-      const message = error instanceof Error ? error.message : "ログアウトに失敗しました";
+      const message = error instanceof Error ? error.message : t("nav.logoutError");
       toast.error(message);
     }
   };
@@ -108,7 +112,6 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
     const trimmed = searchTerm.trim();
 
     if (trimmed) {
-      // 検索結果はトップ（Index）で表示する。/category/... のままだと CategoryTabs が残るため常に /?q= へ寄せる
       const params = new URLSearchParams();
       params.set("q", trimmed);
       navigate(`/?${params.toString()}`);
@@ -153,14 +156,14 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
             >
               <Globe size={20} />
             </button>
-            
+
             {isLanguageDropdownOpen && (
               <div className="absolute right-0 top-full mt-2 w-36 bg-background border border-border rounded-lg shadow-lg z-50 py-1">
                 {languages.map((lang) => (
                   <button
                     key={lang.code}
                     onClick={() => {
-                      setCurrentLanguage(lang.code);
+                      i18n.changeLanguage(lang.code);
                       setIsLanguageDropdownOpen(false);
                     }}
                     className="w-full px-4 py-2 text-sm text-left hover:bg-secondary transition-colors flex items-center justify-between"
@@ -207,14 +210,14 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
                     className="w-full px-4 py-2.5 text-sm text-left hover:bg-secondary transition-colors flex items-center gap-2"
                   >
                     <User size={16} />
-                    アカウント
+                    {t("nav.account")}
                   </Link>
                   <button
                     onClick={handleSignOut}
                     className="w-full px-4 py-2.5 text-sm text-left hover:bg-secondary transition-colors flex items-center gap-2 text-destructive"
                   >
                     <LogOut size={16} />
-                    ログアウト
+                    {t("nav.logout")}
                   </button>
                 </div>
               )}
@@ -235,7 +238,7 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
               <Button
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90 font-medium text-sm px-4"
               >
-                Upgrade to Plus
+                {t("nav.upgradePlus")}
               </Button>
             </Link>
           )}

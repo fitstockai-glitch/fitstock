@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import DownloadModal from "@/components/photo/DownloadModal";
 import { useDownloadHistory } from "@/hooks/useDownloadHistory";
+import { useTranslation } from "react-i18next";
 
 const DownloadHistorySection = () => {
   const {
@@ -14,6 +15,7 @@ const DownloadHistorySection = () => {
     downloadAfterUpsellWait,
     isRedownloading,
   } = useDownloadHistory();
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -27,16 +29,16 @@ const DownloadHistorySection = () => {
         isDownloading={isRedownloading}
       />
       {isLoading && (
-        <p className="text-sm text-muted-foreground">読み込み中...</p>
+        <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
       )}
       {isError && (
         <p className="text-sm text-destructive">
-          ダウンロード履歴の取得に失敗しました。時間をおいて再度お試しください。
+          {t("downloads.error")}
         </p>
       )}
       {!isLoading && !isError && items.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          まだダウンロードした写真がありません。
+          {t("downloads.empty")}
         </p>
       ) : !isLoading && !isError ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
@@ -45,7 +47,7 @@ const DownloadHistorySection = () => {
               {item.photoUnavailable ? (
                 <div className="block aspect-[4/3] overflow-hidden bg-muted rounded-sm mb-2 flex items-center justify-center px-2">
                   <span className="text-xs text-center text-muted-foreground">
-                    画像を表示できません
+                    {t("downloads.unavailable")}
                   </span>
                 </div>
               ) : (
@@ -77,7 +79,7 @@ const DownloadHistorySection = () => {
                 }
                 onClick={() => requestRedownload(item)}
               >
-                再ダウンロード
+                {t("downloads.redownload")}
               </Button>
             </div>
           ))}

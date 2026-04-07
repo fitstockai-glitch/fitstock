@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import { useFooterCategories } from "@/hooks/useCategories";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
   const { data: categories = [] } = useFooterCategories();
+  const { t, i18n } = useTranslation();
+  const isEn = i18n.language.startsWith("en");
 
   return (
     <footer className="w-full bg-background text-foreground">
@@ -11,7 +14,7 @@ const Footer = () => {
       <div className="flex flex-col md:flex-row gap-8 mb-8">
         {/* Browse */}
         <div className="flex-1">
-          <h4 className="text-sm font-semibold text-foreground mb-4">カテゴリ</h4>
+          <h4 className="text-sm font-semibold text-foreground mb-4">{t("footer.categories")}</h4>
           <ul className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-2">
             {categories.map((cat) => (
                 <li key={cat.key}>
@@ -19,7 +22,7 @@ const Footer = () => {
                     to={`/category/${cat.key}`}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {cat.label}
+                    {isEn ? (cat.name_en ?? cat.label) : cat.label}
                   </Link>
                 </li>
               ))}
@@ -30,7 +33,7 @@ const Footer = () => {
 
         {/* Social */}
         <div className="md:ml-auto md:mr-16 lg:mr-32">
-          <h4 className="text-sm font-semibold text-foreground mb-4">Follow us</h4>
+          <h4 className="text-sm font-semibold text-foreground mb-4">{t("footer.followUs")}</h4>
           <ul className="space-y-2">
             <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Twitter</a></li>
             <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Instagram</a></li>
@@ -51,14 +54,20 @@ const Footer = () => {
           </Link>
           <div className="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-6 text-sm text-muted-foreground">
             <div className="flex items-center gap-6">
-              <Link to="/privacy-policy" className="hover:text-foreground transition-colors">
-                Privacy
+              <Link
+                to={isEn ? "/en/privacy-policy" : "/privacy-policy"}
+                className="hover:text-foreground transition-colors"
+              >
+                {t("footer.privacy")}
               </Link>
-              <Link to="/terms-of-service" className="hover:text-foreground transition-colors">
-                Terms
+              <Link to={isEn ? "/en/terms" : "/terms-of-service"} className="hover:text-foreground transition-colors">
+                {t("footer.terms")}
               </Link>
-              <Link to="/legal-notice" className="hover:text-foreground transition-colors">
-                Legal Notice
+              <Link
+                to={isEn ? "/en/legal-notice" : "/legal-notice"}
+                className="hover:text-foreground transition-colors"
+              >
+                {t("footer.legalNotice")}
               </Link>
               <a
                 href="https://docs.google.com/forms/d/e/1FAIpQLScuM8dFtyjbjKnHvbU8iD7ywx3ud1zPWJNurheoaGItccCAKw/viewform?usp=header"
@@ -66,7 +75,7 @@ const Footer = () => {
                 rel="noopener noreferrer"
                 className="hover:text-foreground transition-colors"
               >
-                Contact
+                {t("footer.contact")}
               </a>
             </div>
             <span>© 2026 FitStock</span>

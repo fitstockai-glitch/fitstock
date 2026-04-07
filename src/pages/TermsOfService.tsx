@@ -271,7 +271,7 @@ const TermsOfService = () => {
               <p className="text-muted-foreground leading-relaxed">
                 ユーザーの個人情報は、別途定める「プライバシーポリシー」に従って取り扱います。
               </p>
-              <p className="text-muted-foreground leading-relaxed mt-2">プライバシーポリシー: https://fitstock.example.com/privacy</p>
+              <p className="text-muted-foreground leading-relaxed mt-2">プライバシーポリシー: https://fitstock.ai/privacy</p>
             </section>
 
             <section>
@@ -295,16 +295,13 @@ const TermsOfService = () => {
               <p className="text-muted-foreground leading-relaxed mb-4">本規約は、日本法に準拠し、解釈されるものとします。</p>
 
               <h3 className="text-xl font-light text-foreground mb-2">13.2 管轄裁判所</h3>
-              <p className="text-muted-foreground leading-relaxed">本規約に関する紛争については、[運営者所在地]を管轄する裁判所を専属的合意管轄裁判所とします。</p>
+              <p className="text-muted-foreground leading-relaxed">本規約に関する紛争については、東京都渋谷区本町3-51-17 402を管轄する裁判所を専属的合意管轄裁判所とします。</p>
             </section>
 
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">第14条（お問い合わせ）</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">本規約に関するご質問は、以下までお問い合わせください。</p>
-              <div className="text-muted-foreground space-y-1">
-                <p>メール: support@fitstock.example.com</p>
-                <p>お問い合わせフォーム: https://fitstock.example.com/contact</p>
-              </div>
+              <p className="text-muted-foreground">メール: info@fitstock.ai</p>
             </section>
 
             <section>

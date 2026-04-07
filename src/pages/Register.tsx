@@ -9,8 +9,10 @@ import Footer from "@/components/footer/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { buildThumbnailPublicUrlFlexible } from "@/lib/supabaseStorage";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
+  const { t } = useTranslation();
   const { data: thumbnailUrls } = useQuery({
     queryKey: ["register-cover-thumbnails"],
     staleTime: 10 * 60 * 1000,
@@ -69,7 +71,7 @@ const Register = () => {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("アカウントが作成されました。確認メールをご確認ください。");
+      toast.success(t("register.success"));
       navigate("/");
     }
     setIsLoading(false);
@@ -77,22 +79,22 @@ const Register = () => {
 
   const formContent = (idSuffix: string = "") => (
     <>
-      <h1 className="text-2xl font-bold text-foreground">アカウント作成</h1>
+      <h1 className="text-2xl font-bold text-foreground">{t("register.title")}</h1>
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="space-y-2">
-          <Label htmlFor={`name${idSuffix}`} className="text-sm font-medium text-foreground">お名前</Label>
+          <Label htmlFor={`name${idSuffix}`} className="text-sm font-medium text-foreground">{t("register.name")}</Label>
           <Input id={`name${idSuffix}`} type="text" value={name} onChange={(e) => setName(e.target.value)} required className="h-12" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor={`email${idSuffix}`} className="text-sm font-medium text-foreground">メールアドレス</Label>
+          <Label htmlFor={`email${idSuffix}`} className="text-sm font-medium text-foreground">{t("common.email")}</Label>
           <Input id={`email${idSuffix}`} type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="h-12" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor={`password${idSuffix}`} className="text-sm font-medium text-foreground">パスワード</Label>
+          <Label htmlFor={`password${idSuffix}`} className="text-sm font-medium text-foreground">{t("common.password")}</Label>
           <Input id={`password${idSuffix}`} type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} className="h-12" />
         </div>
         <Button type="submit" disabled={isLoading} className="w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-md text-base">
-          {isLoading ? "登録中..." : "登録する"}
+          {isLoading ? t("register.registering") : t("register.submit")}
         </Button>
       </form>
 
@@ -101,7 +103,7 @@ const Register = () => {
           <span className="w-full border-t border-border" />
         </div>
         <div className="relative flex justify-center text-xs">
-          <span className="bg-background px-2 text-muted-foreground">または</span>
+          <span className="bg-background px-2 text-muted-foreground">{t("common.or")}</span>
         </div>
       </div>
 
@@ -118,13 +120,13 @@ const Register = () => {
           <path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.07 24.07 0 0 0 0 21.56l7.98-6.19z"/>
           <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
         </svg>
-        {isGoogleLoading ? "接続中..." : "Googleでサインアップ"}
+        {isGoogleLoading ? t("register.connecting") : t("register.googleSignup")}
       </Button>
 
       <div className="text-center pt-2">
         <p className="text-sm text-muted-foreground">
-          すでにアカウントをお持ちですか？{" "}
-          <Link to="/login" className="font-semibold text-foreground underline underline-offset-4 hover:text-foreground/80">ログイン</Link>
+          {t("register.haveAccount")}{" "}
+          <Link to="/login" className="font-semibold text-foreground underline underline-offset-4 hover:text-foreground/80">{t("common.login")}</Link>
         </p>
       </div>
     </>

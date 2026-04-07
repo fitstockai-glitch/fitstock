@@ -1,0 +1,215 @@
+{
+  "nav": {
+    "search": "検索",
+    "searchPlaceholder": "画像を検索する",
+    "account": "アカウント",
+    "logout": "ログアウト",
+    "logoutError": "ログアウトに失敗しました",
+    "upgradePlus": "Upgrade to Plus"
+  },
+  "header": {
+    "promoBanner": "無制限ダウンロードプランに参加する"
+  },
+  "footer": {
+    "categories": "カテゴリ",
+    "followUs": "Follow us",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "legalNotice": "Legal Notice",
+    "contact": "Contact"
+  },
+  "common": {
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "or": "または",
+    "login": "ログイン",
+    "close": "閉じる",
+    "back": "戻る",
+    "processing": "処理中…",
+    "loading": "読み込み中...",
+    "saveChanges": "変更を保存"
+  },
+  "login": {
+    "title": "ログイン",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "loggingIn": "ログイン中...",
+    "submit": "ログイン",
+    "googleLogin": "Googleでログイン",
+    "noAccount": "アカウントをお持ちではありませんか？",
+    "register": "登録する",
+    "invalidCredentials": "メールアドレスまたはパスワードが正しくありません",
+    "success": "ログインしました"
+  },
+  "register": {
+    "title": "アカウント作成",
+    "name": "お名前",
+    "registering": "登録中...",
+    "submit": "登録する",
+    "googleSignup": "Googleでサインアップ",
+    "connecting": "接続中...",
+    "haveAccount": "すでにアカウントをお持ちですか？",
+    "success": "アカウントが作成されました。確認メールをご確認ください。"
+  },
+  "pricing": {
+    "headlineLine1": "制限を気にせず、必要な写真をすぐに選べる。",
+    "headlineLine2": "待ち時間もなく、クリエイティブに集中できる環境を。",
+    "monthlyPrice": "月額",
+    "yearlyPrice": "¥12,000 / 年払い",
+    "feature1": "画像ライブラリのすべての素材がダウンロード可能",
+    "feature2": "クリエイティブデジタルおよび印刷物に使用できる加工可能なライセンス",
+    "feature3": "業界最安値の金額",
+    "subscribe": "FitStock Plusに登録する"
+  },
+  "categories": {
+    "all": "すべて"
+  },
+  "sort": {
+    "dailyPicks": "今日のおすすめ",
+    "popular": "人気順",
+    "newest": "新着順",
+    "trending": "トレンド"
+  },
+  "modal": {
+    "title": "制限を気にせず、クリエイティブに集中しよう",
+    "guestDescription": "サインアップすると1日10回の無料ダウンロードが可能に。さらに、FitStock Plus（月額¥1,000）に加入すれば無制限のダウンロードが可能になります。",
+    "joinPlus": "FitStock Plusに参加する",
+    "freeRegister": "無料登録する",
+    "downloading": "ダウンロード中...",
+    "waitDownload": "{{count}}秒後にダウンロード可能",
+    "download": "ダウンロードする",
+    "haveAccount": "すでにアカウントをお持ちですか？"
+  },
+  "account": {
+    "profile": "プロフィール",
+    "plan": "プラン",
+    "favorites": "お気に入り",
+    "downloads": "ダウンロード履歴",
+    "billing": "領収書発行",
+    "logout": "ログアウト"
+  },
+  "plan": {
+    "subtitle": "無制限ダウンロード定額プラン",
+    "feature3": "業界最安値",
+    "perMonth": "/ 月",
+    "yearlyPrice": "¥12,000、年払い",
+    "joinPlus": "FitStock Plusに入会する",
+    "cancel": "プランをキャンセル",
+    "cancelConfirmTitle": "本当にキャンセルしますか？",
+    "cancelWithDate": "キャンセルしても、現在の請求期間の終了（{{date}}）まではFitStock Plusをご利用いただけます。",
+    "cancelWithoutDate": "キャンセルしても、現在の請求期間が終了するまではFitStock Plusをご利用いただけます。",
+    "cancelAfter": "その後、アカウントはFree Memberに戻ります。",
+    "continueCancelling": "キャンセルを続ける",
+    "cancelledTitle": "FitStock Plus（キャンセル済み）",
+    "availableUntilDate": "利用可能期限: {{date}}まで",
+    "availableUntilEnd": "利用可能期限: 現在の請求期間が終了するまで",
+    "reactivate": "再アップグレード",
+    "alreadyCancelled": "すでにキャンセル済みです",
+    "cancelSuccess": "プランをキャンセルしました。請求期間の終了までご利用いただけます。",
+    "cancelError": "キャンセルに失敗しました",
+    "cancelledStatus": "FitStock Plus はキャンセル済みです",
+    "cancelledUntilDate": "{{date}}までは引き続き Plus のままご利用いただけます",
+    "cancelledUntilEnd": "請求期間が終了するまで引き続き Plus のままご利用いただけます",
+    "activeStatus": "FitStock PLusに入会中",
+    "nextRenewalDate": "次回更新日（請求期間の終了）: {{date}}",
+    "loadingRenewal": "請求期間の終了日はアカウント情報を読み込み中です",
+    "upgradePrompt": "最高品質の素材を無制限にダウンロードできるプランに入会しませんか。"
+  },
+  "notFound": {
+    "message": "お探しのページは見つかりませんでした。",
+    "backHome": "ホームへ戻る"
+  },
+  "forgotPassword": {
+    "title": "パスワードをリセット",
+    "description": "登録済みのメールアドレスを入力してください。パスワードリセット用のリンクをお送りします。",
+    "submit": "リンクを送信",
+    "backToLogin": "ログインに戻る",
+    "sending": "送信中...",
+    "sentMessage": "{{email}} にリセットリンクを送信しました。メールをご確認ください。"
+  },
+  "index": {
+    "noResultsLine1": "「{{query}}」に一致する写真は見つかりませんでした。",
+    "noResultsLine2": "キーワードを変えるか、ホームから新しい写真を探してみてください。",
+    "backHome": "ホームに戻る",
+    "noPhotos": "表示できる写真がありません。"
+  },
+  "profile": {
+    "title": "プロフィール",
+    "name": "お名前",
+    "notSet": "未設定",
+    "saving": "保存中...",
+    "saveChanges": "変更を保存",
+    "saveSuccess": "プロフィールを保存しました",
+    "saveError": "保存に失敗しました",
+    "changePassword": "パスワードの変更",
+    "passwordNote": "メール／パスワードで登録したアカウントのみ変更できます。",
+    "currentPassword": "現在のパスワード",
+    "newPassword": "新しいパスワード",
+    "confirmPassword": "新しいパスワードを確認",
+    "updatePassword": "パスワードを更新",
+    "userDetails": "ユーザー詳細",
+    "deleteWarning": "これにより、個人データはすべて完全に削除されます。",
+    "deleteAccount": "アカウントを削除",
+    "passwordChangeSuccess": "パスワードを変更しました",
+    "loadError": "プロフィールの読み込みに失敗しました。再度お試しください。",
+    "passwordErrors": {
+      "allFields": "パスワードを変更する場合は各項目を入力してください",
+      "newPassword": "新しいパスワードを入力してください",
+      "minLength": "新しいパスワードは6文字以上で入力してください",
+      "mismatch": "新しいパスワードが一致しません",
+      "currentRequired": "現在のパスワードを入力してください",
+      "emailError": "メールアドレスを取得できませんでした",
+      "currentWrong": "現在のパスワードが正しくありません",
+      "updateError": "パスワードの変更に失敗しました"
+    }
+  },
+  "favorites": {
+    "empty": "まだお気に入り登録した写真がありません。",
+    "remove": "お気に入り削除"
+  },
+  "downloads": {
+    "error": "ダウンロード履歴の取得に失敗しました。時間をおいて再度お試しください。",
+    "empty": "まだダウンロードした写真がありません。",
+    "unavailable": "画像を表示できません",
+    "redownload": "再ダウンロード"
+  },
+  "billing": {
+    "orderNumber": "ご注文番号",
+    "purchaseDate": "ご購入日",
+    "amount": "金額",
+    "document": "ドキュメント",
+    "download": "ダウンロード",
+    "description": "過去の支払い履歴と領収書のダウンロードが可能です。",
+    "receiptAddress": "領収書の宛名・住所"
+  },
+  "photoDetail": {
+    "notFound": "写真が見つかりませんでした",
+    "download": "ダウンロード",
+    "addToFavorites": "お気に入りに追加",
+    "share": "シェア",
+    "shareOnX": "X でシェア",
+    "shareOnFacebook": "Facebook でシェア",
+    "shareOnPinterest": "Pinterest でシェア",
+    "copyLink": "リンクをコピー",
+    "copied": "コピーしました!",
+    "relatedImages": "関連するイメージ",
+    "noRelatedImages": "関連するイメージはまだありません",
+    "seoWithTags": "「{{phrase}}」は{{tags}}に関連するフリー素材です。商用利用可能な高品質写真をFitStockで無料ダウンロード。Webデザインや広告、SNS投稿にご活用ください。",
+    "seoNoTags": "「{{phrase}}」のフリー素材です。商用利用可能な高品質写真をFitStockで無料ダウンロード。Webデザインや広告、SNS投稿にご活用ください。"
+  },
+  "seo": {
+    "home": {
+      "title": "FitStock — フリーの写真素材・ストックフォト",
+      "description": "無料で使える高品質ストックフォト。商用利用・加工自由、クレジット不要。業界最安値の月額¥1,000で無制限ダウンロード。"
+    },
+    "defaultDescription": "フィットネス・スポーツ向けのフリーストックフォト。商用利用OK、クレジット不要。FitStock。",
+    "photoOgFallback": "FitStockの高品質ストックフォトを無料でダウンロード。"
+  },
+  "receipt": {
+    "title": "領収書情報",
+    "companyName": "会社名 / 屋号 (領収書の宛名)",
+    "optional": "※ 必要なければ空欄",
+    "contactName": "担当者名",
+    "address": "住所 (領収書に記載する場合のみ)",
+    "save": "変更を保存"
+  }
+}

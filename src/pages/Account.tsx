@@ -19,19 +19,12 @@ import {
   useMembershipTier,
 } from "@/hooks/useMembership";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const LEMON_SQUEEZY_CHECKOUT_URL =
   "https://fitstock.lemonsqueezy.com/checkout/buy/f3fe4e0b-1ef6-4d98-94dc-7a9771e4f081";
 
 export type PlanStatus = "free" | "plus" | "cancelled";
-
-const mobileNavItems: { id: AccountSection; label: string }[] = [
-  { id: "profile", label: "プロフィール" },
-  { id: "plan", label: "プラン" },
-  { id: "favorites", label: "お気に入り" },
-  { id: "downloads", label: "ダウンロード履歴" },
-  { id: "billing", label: "領収書発行" },
-];
 
 const allowedSections: AccountSection[] = [
   "profile",
@@ -65,6 +58,15 @@ const Account = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const isMobile = useIsMobile();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation();
+
+  const mobileNavItems: { id: AccountSection; label: string }[] = [
+    { id: "profile", label: t("account.profile") },
+    { id: "plan", label: t("account.plan") },
+    { id: "favorites", label: t("account.favorites") },
+    { id: "downloads", label: t("account.downloads") },
+    { id: "billing", label: t("account.billing") },
+  ];
 
   const handleUpgradeToPlus = () => {
     if (!user) {
@@ -82,7 +84,7 @@ const Account = () => {
       await signOut();
       navigate("/");
     } catch (error) {
-      const message = error instanceof Error ? error.message : "ログアウトに失敗しました";
+      const message = error instanceof Error ? error.message : t("nav.logoutError");
       toast.error(message);
     }
   };
@@ -126,24 +128,24 @@ const Account = () => {
           <div className="max-w-xl space-y-6">
             {planStatus === "cancelled" ? (
               <div>
-                <p className="text-sm text-muted-foreground">FitStock Plus はキャンセル済みです</p>
+                <p className="text-sm text-muted-foreground">{t("plan.cancelledStatus")}</p>
                 <p className="text-sm text-muted-foreground">
                   {planPeriodEndLabel
-                    ? `${planPeriodEndLabel}までは引き続き Plus のままご利用いただけます`
-                    : "請求期間が終了するまで引き続き Plus のままご利用いただけます"}
+                    ? t("plan.cancelledUntilDate", { date: planPeriodEndLabel })
+                    : t("plan.cancelledUntilEnd")}
                 </p>
               </div>
             ) : planStatus === "plus" ? (
               <div>
-                <p className="text-sm text-muted-foreground">FitStock PLusに入会中</p>
+                <p className="text-sm text-muted-foreground">{t("plan.activeStatus")}</p>
                 <p className="text-sm text-muted-foreground">
                   {planPeriodEndLabel
-                    ? `次回更新日（請求期間の終了）: ${planPeriodEndLabel}`
-                    : "請求期間の終了日はアカウント情報を読み込み中です"}
+                    ? t("plan.nextRenewalDate", { date: planPeriodEndLabel })
+                    : t("plan.loadingRenewal")}
                 </p>
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">最高品質の素材を無制限にダウンロードできるプランに入会しませんか。</p>
+              <p className="text-sm text-muted-foreground">{t("plan.upgradePrompt")}</p>
             )}
             <PlanInfoSection
               planStatus={planStatus}
@@ -160,8 +162,8 @@ const Account = () => {
         return (
           <div className="space-y-6">
             <div>
-              <p className="text-sm text-muted-foreground">過去の支払い履歴と領収書のダウンロードが可能です。</p>
-              <button onClick={() => handleSectionChange("receipt-info")} className="text-sm text-destructive hover:text-destructive/80 transition-colors mt-1 inline-block">領収書の宛名・住所</button>
+              <p className="text-sm text-muted-foreground">{t("billing.description")}</p>
+              <button onClick={() => handleSectionChange("receipt-info")} className="text-sm text-destructive hover:text-destructive/80 transition-colors mt-1 inline-block">{t("billing.receiptAddress")}</button>
             </div>
             <BillingSection />
           </div>
@@ -180,27 +182,27 @@ const Account = () => {
       case "plan":
         return (
           <div className="max-w-xl space-y-6">
-            <h1 className="text-2xl font-semibold text-foreground">プラン</h1>
+            <h1 className="text-2xl font-semibold text-foreground">{t("account.plan")}</h1>
             {planStatus === "cancelled" ? (
               <div>
-                <p className="text-sm text-muted-foreground">FitStock Plus はキャンセル済みです</p>
+                <p className="text-sm text-muted-foreground">{t("plan.cancelledStatus")}</p>
                 <p className="text-sm text-muted-foreground">
                   {planPeriodEndLabel
-                    ? `${planPeriodEndLabel}までは引き続き Plus のままご利用いただけます`
-                    : "請求期間が終了するまで引き続き Plus のままご利用いただけます"}
+                    ? t("plan.cancelledUntilDate", { date: planPeriodEndLabel })
+                    : t("plan.cancelledUntilEnd")}
                 </p>
               </div>
             ) : planStatus === "plus" ? (
               <div>
-                <p className="text-sm text-muted-foreground">FitStock PLusに入会中</p>
+                <p className="text-sm text-muted-foreground">{t("plan.activeStatus")}</p>
                 <p className="text-sm text-muted-foreground">
                   {planPeriodEndLabel
-                    ? `次回更新日（請求期間の終了）: ${planPeriodEndLabel}`
-                    : "請求期間の終了日はアカウント情報を読み込み中です"}
+                    ? t("plan.nextRenewalDate", { date: planPeriodEndLabel })
+                    : t("plan.loadingRenewal")}
                 </p>
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">最高品質の素材を無制限にダウンロードできるプランに入会しませんか。</p>
+              <p className="text-sm text-muted-foreground">{t("plan.upgradePrompt")}</p>
             )}
             <PlanInfoSection
               planStatus={planStatus}
@@ -212,14 +214,14 @@ const Account = () => {
       case "favorites":
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl font-semibold text-foreground">お気に入り</h1>
+            <h1 className="text-2xl font-semibold text-foreground">{t("account.favorites")}</h1>
             <FavoritesSection />
           </div>
         );
       case "downloads":
         return (
           <div className="space-y-6">
-            <h1 className="text-2xl font-semibold text-foreground">ダウンロード履歴</h1>
+            <h1 className="text-2xl font-semibold text-foreground">{t("account.downloads")}</h1>
             <DownloadHistorySection />
           </div>
         );
@@ -227,11 +229,11 @@ const Account = () => {
         return (
           <div className="space-y-6">
             <div>
-              <h1 className="text-2xl font-semibold text-foreground">領収書発行</h1>
+              <h1 className="text-2xl font-semibold text-foreground">{t("account.billing")}</h1>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">過去の支払い履歴と領収書のダウンロードが可能です。</p>
-              <button onClick={() => handleSectionChange("receipt-info")} className="text-sm text-destructive hover:text-destructive/80 transition-colors mt-1 inline-block">領収書の宛名・住所</button>
+              <p className="text-sm text-muted-foreground">{t("billing.description")}</p>
+              <button onClick={() => handleSectionChange("receipt-info")} className="text-sm text-destructive hover:text-destructive/80 transition-colors mt-1 inline-block">{t("billing.receiptAddress")}</button>
             </div>
             <BillingSection />
           </div>
@@ -256,7 +258,7 @@ const Account = () => {
                 className="flex items-center gap-1 px-4 py-3.5 text-sm text-foreground"
               >
                 <ChevronLeft size={18} className="text-muted-foreground" />
-                <span>領収書発行</span>
+                <span>{t("account.billing")}</span>
               </button>
             </div>
           ) : (
@@ -296,7 +298,7 @@ const Account = () => {
                       onClick={handleLogout}
                       className="w-full bg-foreground text-background text-sm font-medium py-2.5 rounded-md hover:bg-foreground/90 transition-colors"
                     >
-                      ログアウト
+                      {t("account.logout")}
                     </button>
                   </div>
                 </div>

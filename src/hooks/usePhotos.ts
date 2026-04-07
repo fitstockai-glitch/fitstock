@@ -37,10 +37,13 @@ export function normalizePhotoTags(value: unknown): string[] {
 function mapPhotos(photos: Tables<"photos">[]): Photo[] {
   return photos.map((p) => {
     const thumb = buildThumbnailPublicUrlFlexible(p.preview_path);
+    const tagsEn = normalizePhotoTags(p.tags_en);
     return {
       id: p.id,
       title: p.title,
+      title_en: p.title_en ?? null,
       description: p.description,
+      description_en: p.description_en ?? null,
       category_name: p.category_name,
       width: p.width || 1920,
       height: p.height || 1280,
@@ -48,6 +51,7 @@ function mapPhotos(photos: Tables<"photos">[]): Photo[] {
       favorite_count: p.favorite_count,
       imageUrl: thumb ?? "",
       tags: normalizePhotoTags(p.tags),
+      tags_en: tagsEn.length > 0 ? tagsEn : null,
     };
   });
 }
@@ -136,6 +140,7 @@ export function usePhoto(id: string | undefined) {
       if (!data) return null;
 
       const tags = normalizePhotoTags((data as { tags?: unknown }).tags);
+      const tagsEnRaw = normalizePhotoTags((data as { tags_en?: unknown }).tags_en);
 
       const thumb = buildThumbnailPublicUrl(data.preview_path);
       const preview = buildPreviewPublicUrl(data.preview_path) ?? thumb;
@@ -143,7 +148,9 @@ export function usePhoto(id: string | undefined) {
       return {
         id: data.id,
         title: data.title,
+        title_en: data.title_en ?? null,
         description: data.description,
+        description_en: data.description_en ?? null,
         category_name: data.category_name,
         width: data.width || 1920,
         height: data.height || 1280,
@@ -152,6 +159,7 @@ export function usePhoto(id: string | undefined) {
         imageUrl: thumb ?? "",
         previewUrl: preview,
         tags,
+        tags_en: tagsEnRaw.length > 0 ? tagsEnRaw : null,
       };
     },
   });

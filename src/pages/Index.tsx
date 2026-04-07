@@ -6,22 +6,31 @@ import CategoryTabs from "../components/content/CategoryTabs";
 import MasonryGallery from "../components/photo/MasonryGallery";
 import { usePhotos } from "@/hooks/usePhotos";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { Seo } from "@/components/seo/Seo";
+import { SITE_ORIGIN } from "@/config/site";
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const location = useLocation();
   const searchQuery = (new URLSearchParams(location.search).get("q") ?? "").trim();
   const isSearchMode = searchQuery.length > 0;
-  // 検索中は URL が /?q= のみになるため、タブの selectedCategory が残っても全体検索する
   const { data: photos = [], isLoading } = usePhotos(
     isSearchMode ? "all" : selectedCategory,
     undefined,
     searchQuery
   );
   const visiblePhotos = photos.filter((p) => Boolean(p.imageUrl));
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-background">
+      <Seo
+        title={t("seo.home.title")}
+        description={t("seo.home.description")}
+        canonicalUrl={SITE_ORIGIN}
+        ogUrl={SITE_ORIGIN}
+      />
       <FitStockHeader />
       {isSearchMode ? (
         <div className="px-4 md:px-8 pt-8 pb-4">
@@ -36,20 +45,20 @@ const Index = () => {
           stayOnPage
         />
       )}
-      
+
       <main>
         {isLoading ? (
-          <div className="flex justify-center py-20 text-muted-foreground">読み込み中...</div>
+          <div className="flex justify-center py-20 text-muted-foreground">{t("common.loading")}</div>
         ) : isSearchMode && visiblePhotos.length === 0 ? (
           <div className="px-4 md:px-8 py-20">
             <div className="mx-auto max-w-2xl text-center space-y-6">
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                「{searchQuery}」に一致する写真は見つかりませんでした。
+                {t("index.noResultsLine1", { query: searchQuery })}
                 <br />
-                キーワードを変えるか、ホームから新しい写真を探してみてください。
+                {t("index.noResultsLine2")}
               </p>
               <Button asChild size="lg" className="rounded-full px-8">
-                <Link to="/">ホームに戻る</Link>
+                <Link to="/">{t("index.backHome")}</Link>
               </Button>
             </div>
           </div>
@@ -57,7 +66,7 @@ const Index = () => {
           <div className="px-4 md:px-8 py-20">
             <div className="mx-auto max-w-2xl text-center space-y-4 text-muted-foreground">
               <p className="text-base md:text-lg leading-relaxed">
-                表示できる写真がありません。
+                {t("index.noPhotos")}
               </p>
               <p className="text-sm leading-relaxed">
                 Supabase の{" "}
@@ -77,7 +86,7 @@ const Index = () => {
           <MasonryGallery photos={visiblePhotos} />
         )}
       </main>
-      
+
       <Footer />
     </div>
   );

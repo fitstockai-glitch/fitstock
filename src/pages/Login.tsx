@@ -7,12 +7,14 @@ import FitStockHeader from "@/components/header/FitStockHeader";
 import Footer from "@/components/footer/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,10 +24,10 @@ const Login = () => {
 
     if (error) {
       toast.error(error.message === "Invalid login credentials"
-        ? "メールアドレスまたはパスワードが正しくありません"
+        ? t("login.invalidCredentials")
         : error.message);
     } else {
-      toast.success("ログインしました");
+      toast.success(t("login.success"));
       navigate("/");
     }
     setIsLoading(false);
@@ -37,12 +39,12 @@ const Login = () => {
       <main className="flex-1 px-4 py-14 md:py-16">
         <div className="mx-auto w-full max-w-[420px]">
           <h1 className="mb-8 text-2xl font-bold text-center text-foreground">
-            ログイン
+            {t("login.title")}
           </h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm text-foreground/80">メールアドレス</Label>
+              <Label htmlFor="email" className="text-sm text-foreground/80">{t("common.email")}</Label>
               <Input
                 id="email"
                 type="email"
@@ -54,7 +56,7 @@ const Login = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm text-foreground/80">パスワード</Label>
+              <Label htmlFor="password" className="text-sm text-foreground/80">{t("common.password")}</Label>
               <Input
                 id="password"
                 type="password"
@@ -68,7 +70,7 @@ const Login = () => {
                   to="/forgot-password"
                   className="text-sm text-muted-foreground hover:text-foreground underline transition-colors"
                 >
-                  パスワードをお忘れですか？
+                  {t("login.forgotPassword")}
                 </Link>
               </div>
             </div>
@@ -78,7 +80,7 @@ const Login = () => {
               disabled={isLoading}
               className="mt-2 w-full h-12 bg-foreground text-background hover:bg-foreground/90 rounded-md text-base"
             >
-              {isLoading ? "ログイン中..." : "ログイン"}
+              {isLoading ? t("login.loggingIn") : t("login.submit")}
             </Button>
           </form>
 
@@ -100,7 +102,7 @@ const Login = () => {
               <path fill="#FBBC05" d="M10.53 28.59a14.5 14.5 0 0 1 0-9.18l-7.98-6.19a24.07 24.07 0 0 0 0 21.56l7.98-6.19z"/>
               <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
             </svg>
-            Googleでログイン
+            {t("login.googleLogin")}
           </Button>
 
           <div className="relative my-6">
@@ -108,17 +110,17 @@ const Login = () => {
               <span className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-background px-2 text-muted-foreground">または</span>
+              <span className="bg-background px-2 text-muted-foreground">{t("common.or")}</span>
             </div>
           </div>
 
           <div className="border border-border rounded-md p-7 text-center">
-            <p className="text-sm text-muted-foreground">アカウントをお持ちではありませんか？</p>
+            <p className="text-sm text-muted-foreground">{t("login.noAccount")}</p>
             <Link
               to="/register"
               className="mt-1 inline-block text-[15px] font-semibold text-foreground underline underline-offset-4 hover:text-foreground/80"
             >
-              登録する
+              {t("login.register")}
             </Link>
           </div>
         </div>

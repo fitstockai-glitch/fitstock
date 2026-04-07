@@ -6,10 +6,12 @@ import { Label } from "@/components/ui/label";
 import { useProfileData, useUpdateProfileDisplayName } from "@/hooks/useProfile";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const ProfilePage = () => {
   const { data: profile, isLoading, isError } = useProfileData();
   const updateDisplayName = useUpdateProfileDisplayName();
+  const { t } = useTranslation();
 
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
@@ -27,33 +29,33 @@ const ProfilePage = () => {
   const handleSaveProfile = async () => {
     try {
       await updateDisplayName.mutateAsync(displayName);
-      toast.success("プロフィールを保存しました");
+      toast.success(t("profile.saveSuccess"));
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "保存に失敗しました";
+        error instanceof Error ? error.message : t("profile.saveError");
       toast.error(message);
     }
   };
 
   const handleChangePassword = async () => {
     if (!newPassword && !currentPassword && !confirmPassword) {
-      toast.error("パスワードを変更する場合は各項目を入力してください");
+      toast.error(t("profile.passwordErrors.allFields"));
       return;
     }
     if (!newPassword) {
-      toast.error("新しいパスワードを入力してください");
+      toast.error(t("profile.passwordErrors.newPassword"));
       return;
     }
     if (newPassword.length < 6) {
-      toast.error("新しいパスワードは6文字以上で入力してください");
+      toast.error(t("profile.passwordErrors.minLength"));
       return;
     }
     if (newPassword !== confirmPassword) {
-      toast.error("新しいパスワードが一致しません");
+      toast.error(t("profile.passwordErrors.mismatch"));
       return;
     }
     if (!currentPassword) {
-      toast.error("現在のパスワードを入力してください");
+      toast.error(t("profile.passwordErrors.currentRequired"));
       return;
     }
 
@@ -61,14 +63,14 @@ const ProfilePage = () => {
       const { data: userResult, error: userError } = await supabase.auth.getUser();
       if (userError) throw userError;
       const authUser = userResult.user;
-      if (!authUser?.email) throw new Error("メールアドレスを取得できませんでした");
+      if (!authUser?.email) throw new Error(t("profile.passwordErrors.emailError"));
 
       const { error: signError } = await supabase.auth.signInWithPassword({
         email: authUser.email,
         password: currentPassword,
       });
       if (signError) {
-        throw new Error("現在のパスワードが正しくありません");
+        throw new Error(t("profile.passwordErrors.currentWrong"));
       }
 
       const { error: updateError } = await supabase.auth.updateUser({
@@ -79,10 +81,10 @@ const ProfilePage = () => {
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
-      toast.success("パスワードを変更しました");
+      toast.success(t("profile.passwordChangeSuccess"));
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "パスワードの変更に失敗しました";
+        error instanceof Error ? error.message : t("profile.passwordErrors.updateError");
       toast.error(message);
     }
   };
@@ -91,9 +93,9 @@ const ProfilePage = () => {
     return (
       <div className="max-w-xl">
         <h1 className="text-2xl font-semibold text-foreground hidden md:block mb-8">
-          プロフィール
+          {t("profile.title")}
         </h1>
-        <p className="text-sm text-muted-foreground">読み込み中...</p>
+        <p className="text-sm text-muted-foreground">{t("common.loading")}</p>
       </div>
     );
   }
@@ -102,10 +104,10 @@ const ProfilePage = () => {
     return (
       <div className="max-w-xl">
         <h1 className="text-2xl font-semibold text-foreground hidden md:block mb-8">
-          プロフィール
+          {t("profile.title")}
         </h1>
         <p className="text-sm text-destructive">
-          プロフィールの読み込みに失敗しました。再度お試しください。
+          {t("profile.loadError")}
         </p>
       </div>
     );
@@ -114,22 +116,22 @@ const ProfilePage = () => {
   return (
     <div className="max-w-xl">
       <h1 className="text-2xl font-semibold text-foreground hidden md:block mb-8">
-        プロフィール
+        {t("profile.title")}
       </h1>
 
       <div className="space-y-4">
         <div className="space-y-1.5">
-          <Label className="text-sm text-muted-foreground font-normal">お名前</Label>
+          <Label className="text-sm text-muted-foreground font-normal">{t("profile.name")}</Label>
           <Input
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             className="rounded-md"
-            placeholder="未設定"
+            placeholder={t("profile.notSet")}
             autoComplete="name"
           />
         </div>
         <div className="space-y-1.5">
-          <Label className="text-sm text-muted-foreground font-normal">メールアドレス</Label>
+          <Label className="text-sm text-muted-foreground font-normal">{t("common.email")}</Label>
           <Input
             type="email"
             value={email}
@@ -145,18 +147,18 @@ const ProfilePage = () => {
           disabled={updateDisplayName.isPending}
           className="rounded-md bg-foreground text-background hover:bg-foreground/90 px-6"
         >
-          {updateDisplayName.isPending ? "保存中..." : "変更を保存"}
+          {updateDisplayName.isPending ? t("profile.saving") : t("profile.saveChanges")}
         </Button>
       </div>
 
       <div className="space-y-4 mt-10">
-        <h2 className="text-base font-semibold text-foreground">パスワードの変更</h2>
+        <h2 className="text-base font-semibold text-foreground">{t("profile.changePassword")}</h2>
         <p className="text-xs text-muted-foreground">
-          メール／パスワードで登録したアカウントのみ変更できます。
+          {t("profile.passwordNote")}
         </p>
         <div className="space-y-1.5">
           <Label className="text-sm text-muted-foreground font-normal">
-            現在のパスワード
+            {t("profile.currentPassword")}
           </Label>
           <Input
             type="password"
@@ -168,7 +170,7 @@ const ProfilePage = () => {
         </div>
         <div className="space-y-1.5">
           <Label className="text-sm text-muted-foreground font-normal">
-            新しいパスワード
+            {t("profile.newPassword")}
           </Label>
           <Input
             type="password"
@@ -180,7 +182,7 @@ const ProfilePage = () => {
         </div>
         <div className="space-y-1.5">
           <Label className="text-sm text-muted-foreground font-normal">
-            新しいパスワードを確認
+            {t("profile.confirmPassword")}
           </Label>
           <Input
             type="password"
@@ -196,21 +198,21 @@ const ProfilePage = () => {
           onClick={handleChangePassword}
           className="rounded-md bg-foreground text-background hover:bg-foreground/90 px-6"
         >
-          パスワードを更新
+          {t("profile.updatePassword")}
         </Button>
       </div>
 
       <div className="space-y-3 pt-6 mt-2">
-        <h2 className="text-base font-semibold text-foreground">ユーザー詳細</h2>
+        <h2 className="text-base font-semibold text-foreground">{t("profile.userDetails")}</h2>
         <div className="border border-border rounded-md p-4 space-y-2">
           <p className="text-sm text-muted-foreground">
-            これにより、個人データはすべて完全に削除されます。
+            {t("profile.deleteWarning")}
           </p>
           <Link
             to="/account/delete"
             className="text-sm text-destructive hover:text-destructive/80 transition-colors"
           >
-            アカウントを削除
+            {t("profile.deleteAccount")}
           </Link>
         </div>
       </div>

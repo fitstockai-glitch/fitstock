@@ -4,6 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
+import { DocumentLang } from "./components/seo/DocumentLang";
+import { AppRouteSeoFallback } from "./components/seo/AppRouteSeoFallback";
 import { AuthProvider } from "./contexts/AuthContext";
 
 import Index from "./pages/Index";
@@ -23,6 +25,9 @@ import TagPage from "./pages/TagPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import LegalNotice from "./pages/LegalNotice";
+import PrivacyPolicyEn from "./pages/PrivacyPolicyEn";
+import TermsOfServiceEn from "./pages/TermsOfServiceEn";
+import LegalNoticeEn from "./pages/LegalNoticeEn";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +38,8 @@ const App = () => (
         <Toaster />
         <Sonner />
           <BrowserRouter>
+            <DocumentLang />
+            <AppRouteSeoFallback />
             <ScrollToTop />
             <Routes>
               <Route path="/" element={<Index />} />
@@ -51,6 +58,9 @@ const App = () => (
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/legal-notice" element={<LegalNotice />} />
+              <Route path="/en/privacy-policy" element={<PrivacyPolicyEn />} />
+              <Route path="/en/terms" element={<TermsOfServiceEn />} />
+              <Route path="/en/legal-notice" element={<LegalNoticeEn />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

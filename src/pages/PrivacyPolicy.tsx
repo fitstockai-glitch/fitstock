@@ -27,10 +27,11 @@ const PrivacyPolicy = () => {
               <h2 className="text-2xl font-light text-foreground mb-4">1. 事業者情報</h2>
               <ul className="list-none text-muted-foreground space-y-1">
                 <li>サービス名: FitStock（フィットストック）</li>
-                <li>運営者: [運営者名]</li>
-                <li>所在地: [住所]</li>
-                <li>お問い合わせ窓口: support@fitstock.example.com</li>
-                <li>お問い合わせフォーム: https://fitstock.example.com/contact</li>
+                <li>運営者: 株式会社FLUID</li>
+                <li>代表者: 森田 敏之</li>
+                <li>所在地: 東京都渋谷区本町3-51-17 402</li>
+                <li>公式サイト: https://fitstock.ai/</li>
+                <li>お問い合わせ窓口: info@fitstock.ai</li>
               </ul>
             </section>
 
@@ -274,7 +275,7 @@ const PrivacyPolicy = () => {
                 <li>サブスクリプションの自動キャンセル</li>
               </ul>
 
-              <p className="text-muted-foreground leading-relaxed">請求方法: お問い合わせフォーム（/contact）または privacy@fitstock.example.com までご連絡ください。</p>
+              <p className="text-muted-foreground leading-relaxed">請求方法: info@fitstock.ai までご連絡ください。</p>
             </section>
 
             <section>
@@ -310,7 +311,7 @@ const PrivacyPolicy = () => {
               <p className="text-muted-foreground leading-relaxed mb-4">当サービスでは、米国のサービスプロバイダーを利用しています。これらのプロバイダーは、適切なデータ保護措置（標準契約条項等）を講じています。</p>
 
               <h3 className="text-xl font-light text-foreground mb-2">10.3 データ保護責任者</h3>
-              <p className="text-muted-foreground leading-relaxed">お問い合わせ先: privacy@fitstock.example.com</p>
+              <p className="text-muted-foreground leading-relaxed">お問い合わせ先: info@fitstock.ai</p>
             </section>
 
             <section>
@@ -327,16 +328,13 @@ const PrivacyPolicy = () => {
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">12. お問い合わせ</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">プライバシーポリシーに関するご質問は、以下までお問い合わせください。</p>
-              <div className="text-muted-foreground space-y-1">
-                <p>メール: privacy@fitstock.example.com</p>
-                <p>お問い合わせフォーム: https://fitstock.example.com/contact</p>
-              </div>
+              <p className="text-muted-foreground">メール: info@fitstock.ai</p>
             </section>
 
             <section>
               <h2 className="text-2xl font-light text-foreground mb-4">13. 準拠法・管轄裁判所</h2>
               <p className="text-muted-foreground leading-relaxed">
-                本プライバシーポリシーは、日本法に準拠し、解釈されるものとします。本プライバシーポリシーに関する紛争については、[運営者所在地]を管轄する裁判所を専属的合意管轄裁判所とします。
+                本プライバシーポリシーは、日本法に準拠し、解釈されるものとします。本プライバシーポリシーに関する紛争については、東京都渋谷区本町3-51-17 402を管轄する裁判所を専属的合意管轄裁判所とします。
               </p>
             </section>
 
