@@ -49,7 +49,7 @@ const App = () => (
               <Route path="/photo/:id" element={<PhotoDetail />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/terms" element={<TermsOfService />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/account/delete" element={<DeleteAccount />} />
@@ -58,9 +58,11 @@ const App = () => (
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/legal-notice" element={<LegalNotice />} />
+              <Route path="/legal" element={<LegalNotice />} />
               <Route path="/en/privacy-policy" element={<PrivacyPolicyEn />} />
               <Route path="/en/terms" element={<TermsOfServiceEn />} />
               <Route path="/en/legal-notice" element={<LegalNoticeEn />} />
+              <Route path="/en/legal" element={<LegalNoticeEn />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

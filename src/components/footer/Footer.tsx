@@ -35,7 +35,7 @@ const Footer = () => {
         <div className="md:ml-auto md:mr-16 lg:mr-32">
           <h4 className="text-sm font-semibold text-foreground mb-4">{t("footer.followUs")}</h4>
           <ul className="space-y-2">
-            <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Twitter</a></li>
+            <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">X</a></li>
             <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Instagram</a></li>
             <li><a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Facebook</a></li>
           </ul>
@@ -60,11 +60,11 @@ const Footer = () => {
               >
                 {t("footer.privacy")}
               </Link>
-              <Link to={isEn ? "/en/terms" : "/terms-of-service"} className="hover:text-foreground transition-colors">
+              <Link to={isEn ? "/en/terms" : "/terms"} className="hover:text-foreground transition-colors">
                 {t("footer.terms")}
               </Link>
               <Link
-                to={isEn ? "/en/legal-notice" : "/legal-notice"}
+                to={isEn ? "/en/legal" : "/legal"}
                 className="hover:text-foreground transition-colors"
               >
                 {t("footer.legalNotice")}
