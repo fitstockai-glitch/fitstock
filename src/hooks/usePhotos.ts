@@ -78,12 +78,7 @@ function sortPhotoRows(
   } else if (sort === "popular") {
     out.sort((a, b) => b.download_count - a.download_count || byCreatedDesc(a, b));
   } else {
-    out.sort((a, b) => {
-      const ca = trendMap.get(a.id) ?? 0;
-      const cb = trendMap.get(b.id) ?? 0;
-      if (cb !== ca) return cb - ca;
-      return byCreatedDesc(a, b);
-    });
+    return sortRowsByTrend7d(out, trendMap);
   }
   return out;
 }
@@ -99,6 +94,57 @@ async function fetchTrendMap(): Promise<Map<string, number>> {
     map.set(row.photo_id, Number(row.download_count_7d));
   }
   return map;
+}
+
+/** 直近7日DL数（trendMap）降順、同率は created_at 降順 */
+function sortRowsByTrend7d(rows: Tables<"photos">[], trendMap: Map<string, number>): Tables<"photos">[] {
+  const out = [...rows];
+  const byCreatedDesc = (a: Tables<"photos">, b: Tables<"photos">) =>
+    new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  out.sort((a, b) => {
+    const ca = trendMap.get(a.id) ?? 0;
+    const cb = trendMap.get(b.id) ?? 0;
+    if (cb !== ca) return cb - ca;
+    return byCreatedDesc(a, b);
+  });
+  return out;
+}
+
+/** 参照写真とのタグ一致数（集合の積の要素数） */
+function countTagOverlap(rowTags: unknown, referenceTags: string[]): number {
+  if (referenceTags.length === 0) return 0;
+  const rowSet = new Set(normalizePhotoTags(rowTags));
+  let n = 0;
+  for (const t of new Set(referenceTags)) {
+    if (rowSet.has(t)) n++;
+  }
+  return n;
+}
+
+/**
+ * 関連画像用: タグ一致数 降順 → 同率は直近7日DL数（トレンド）→ 同率は created_at 降順
+ */
+function sortRowsByRelatedPriority(
+  rows: Tables<"photos">[],
+  trendMap: Map<string, number>,
+  referenceTags: string[],
+): Tables<"photos">[] {
+  const out = [...rows];
+  const byCreatedDesc = (a: Tables<"photos">, b: Tables<"photos">) =>
+    new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  const byTrend = (a: Tables<"photos">, b: Tables<"photos">) => {
+    const ca = trendMap.get(a.id) ?? 0;
+    const cb = trendMap.get(b.id) ?? 0;
+    if (cb !== ca) return cb - ca;
+    return byCreatedDesc(a, b);
+  };
+  out.sort((a, b) => {
+    const oa = countTagOverlap(a.tags, referenceTags);
+    const ob = countTagOverlap(b.tags, referenceTags);
+    if (ob !== oa) return ob - oa;
+    return byTrend(a, b);
+  });
+  return out;
 }
 
 export function usePhotos(
@@ -228,27 +274,98 @@ export function usePhoto(id: string | undefined) {
   });
 }
 
-export function useRelatedPhotos(excludeId: string | undefined, limit = 24) {
+const RELATED_MAX = 24;
+const RELATED_BUCKET = 12;
+const RELATED_FETCH_CAP = 500;
+
+export interface RelatedPhotosInput {
+  excludeId: string | undefined;
+  categoryName: string | null | undefined;
+  tags: string[] | undefined;
+  /** 写真メタが揃ってから取得する（未指定は true 相当） */
+  enabled?: boolean;
+}
+
+/**
+ * 関連画像: 同カテゴリ最大12 → タグ重複最大12 → 重複除外で最大24、不足分は新着で補完。
+ * 並び: タグ一致数 多い順 → 同率は直近7日DL数（トレンド）。
+ */
+export function useRelatedPhotos(input: RelatedPhotosInput) {
+  const { excludeId, categoryName, tags, enabled: enabledOverride } = input;
+  const normalizedTags = (tags ?? []).map((t) => t.trim()).filter(Boolean);
+  const catKey = categoryName?.trim() ?? "";
+  const tagsKey = [...normalizedTags].sort().join("\0");
+
   return useQuery({
-    queryKey: ["related-photos", excludeId, limit],
-    enabled: !!excludeId,
+    queryKey: ["related-photos-v3", excludeId, catKey, tagsKey],
+    enabled: (enabledOverride ?? true) && !!excludeId,
     staleTime: 5 * 60 * 1000,
     queryFn: async (): Promise<Photo[]> => {
       if (!excludeId) return [];
 
-      const { data, error } = await supabase
-        .from("photos")
-        .select("*")
-        .eq("is_published", true)
-        .is("deleted_at", null)
-        .neq("id", excludeId)
-        .order("created_at", { ascending: false })
-        .limit(limit);
+      const trendMap = await fetchTrendMap();
 
-      if (error) throw error;
-      if (!data || data.length === 0) return [];
+      const [catRes, tagRes] = await Promise.all([
+        catKey
+          ? supabase
+              .from("photos")
+              .select("*")
+              .eq("is_published", true)
+              .is("deleted_at", null)
+              .neq("id", excludeId)
+              .eq("category_name", catKey)
+              .limit(RELATED_FETCH_CAP)
+          : Promise.resolve({ data: [] as Tables<"photos">[], error: null }),
+        normalizedTags.length > 0
+          ? supabase
+              .from("photos")
+              .select("*")
+              .eq("is_published", true)
+              .is("deleted_at", null)
+              .neq("id", excludeId)
+              .overlaps("tags", normalizedTags)
+              .limit(RELATED_FETCH_CAP)
+          : Promise.resolve({ data: [] as Tables<"photos">[], error: null }),
+      ]);
 
-      return mapPhotos(data);
+      if (catRes.error) throw catRes.error;
+      if (tagRes.error) throw tagRes.error;
+
+      const fromCategory = sortRowsByRelatedPriority(catRes.data ?? [], trendMap, normalizedTags).slice(
+        0,
+        RELATED_BUCKET,
+      );
+      const fromTags = sortRowsByRelatedPriority(tagRes.data ?? [], trendMap, normalizedTags).slice(
+        0,
+        RELATED_BUCKET,
+      );
+
+      const byId = new Map<string, Tables<"photos">>();
+      for (const r of [...fromCategory, ...fromTags]) {
+        byId.set(r.id, r);
+      }
+      let merged = sortRowsByRelatedPriority(Array.from(byId.values()), trendMap, normalizedTags);
+      if (merged.length > RELATED_MAX) {
+        merged = merged.slice(0, RELATED_MAX);
+      }
+
+      if (merged.length < RELATED_MAX) {
+        const need = RELATED_MAX - merged.length;
+        const used = new Set<string>([excludeId, ...merged.map((m) => m.id)]);
+        const { data: newestPool, error: newestError } = await supabase
+          .from("photos")
+          .select("*")
+          .eq("is_published", true)
+          .is("deleted_at", null)
+          .order("created_at", { ascending: false })
+          .limit(need + 100);
+        if (newestError) throw newestError;
+        const filler = (newestPool ?? []).filter((p) => !used.has(p.id)).slice(0, need);
+        merged = [...merged, ...filler];
+      }
+
+      merged = sortRowsByRelatedPriority(merged, trendMap, normalizedTags);
+      return mapPhotos(merged);
     },
   });
 }

@@ -41,7 +41,12 @@ const PhotoDetail = () => {
 
   const baseId = id ? extractBasePhotoId(id) : undefined;
   const { data: photo, isLoading } = usePhoto(baseId);
-  const { data: relatedPhotos = [] } = useRelatedPhotos(baseId, 24);
+  const { data: relatedPhotos = [] } = useRelatedPhotos({
+    excludeId: baseId,
+    categoryName: photo?.category_name,
+    tags: photo?.tags,
+    enabled: !!photo && !!baseId,
+  });
 
   useEffect(() => {
     if (id && baseId && id !== baseId) {
