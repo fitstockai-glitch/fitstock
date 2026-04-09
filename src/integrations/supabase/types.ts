@@ -185,6 +185,7 @@ export type Database = {
       }
       photos: {
         Row: {
+          categories: string[] | null
           category_id: string | null
           category_name: string | null
           created_at: string
@@ -210,6 +211,7 @@ export type Database = {
           width: number | null
         }
         Insert: {
+          categories?: string[] | null
           category_id?: string | null
           category_name?: string | null
           created_at?: string
@@ -235,6 +237,7 @@ export type Database = {
           width?: number | null
         }
         Update: {
+          categories?: string[] | null
           category_id?: string | null
           category_name?: string | null
           created_at?: string

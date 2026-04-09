@@ -53,6 +53,7 @@ function mapPhotos(photos: Tables<"photos">[]): Photo[] {
       description: p.description,
       description_en: p.description_en ?? null,
       category_name: p.category_name,
+      categories: normalizePhotoTags(p.categories),
       width: p.width || 1920,
       height: p.height || 1280,
       download_count: p.download_count,
@@ -168,7 +169,7 @@ export function usePhotos(
           .is("deleted_at", null);
 
         if (categoryName && categoryName !== "all") {
-          query = query.eq("category_name", categoryName);
+          query = query.overlaps("categories", [categoryName]);
         }
 
         if (tagName && tagName !== "all") {
@@ -261,6 +262,7 @@ export function usePhoto(id: string | undefined) {
         description: data.description,
         description_en: data.description_en ?? null,
         category_name: data.category_name,
+        categories: normalizePhotoTags((data as { categories?: unknown }).categories),
         width: data.width || 1920,
         height: data.height || 1280,
         download_count: data.download_count,
@@ -281,6 +283,7 @@ const RELATED_FETCH_CAP = 500;
 export interface RelatedPhotosInput {
   excludeId: string | undefined;
   categoryName: string | null | undefined;
+  categories?: string[];
   tags: string[] | undefined;
   /** 写真メタが揃ってから取得する（未指定は true 相当） */
   enabled?: boolean;
@@ -291,9 +294,13 @@ export interface RelatedPhotosInput {
  * 並び: タグ一致数 多い順 → 同率は直近7日DL数（トレンド）。
  */
 export function useRelatedPhotos(input: RelatedPhotosInput) {
-  const { excludeId, categoryName, tags, enabled: enabledOverride } = input;
+  const { excludeId, categoryName, categories, tags, enabled: enabledOverride } = input;
   const normalizedTags = (tags ?? []).map((t) => t.trim()).filter(Boolean);
-  const catKey = categoryName?.trim() ?? "";
+  // categories 配列があればそれを優先、なければ category_name にフォールバック
+  const catKeys = (categories && categories.length > 0)
+    ? categories
+    : categoryName?.trim() ? [categoryName.trim()] : [];
+  const catKey = catKeys.join("\0");
   const tagsKey = [...normalizedTags].sort().join("\0");
 
   return useQuery({
@@ -306,14 +313,14 @@ export function useRelatedPhotos(input: RelatedPhotosInput) {
       const trendMap = await fetchTrendMap();
 
       const [catRes, tagRes] = await Promise.all([
-        catKey
+        catKeys.length > 0
           ? supabase
               .from("photos")
               .select("*")
               .eq("is_published", true)
               .is("deleted_at", null)
               .neq("id", excludeId)
-              .eq("category_name", catKey)
+              .overlaps("categories", catKeys)
               .limit(RELATED_FETCH_CAP)
           : Promise.resolve({ data: [] as Tables<"photos">[], error: null }),
         normalizedTags.length > 0

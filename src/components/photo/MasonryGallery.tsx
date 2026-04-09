@@ -2,6 +2,19 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Photo } from "@/types/photo";
 import PhotoCard from "./PhotoCard";
 import Masonry from "react-masonry-css";
+import { extractBasePhotoId } from "@/lib/utils";
+
+function dedupePhotosById(photos: Photo[]): Photo[] {
+  const seen = new Set<string>();
+  const out: Photo[] = [];
+  for (const p of photos) {
+    const id = extractBasePhotoId(p.id);
+    if (seen.has(id)) continue;
+    seen.add(id);
+    out.push({ ...p, id });
+  }
+  return out;
+}
 
 interface MasonryGalleryProps {
   photos: Photo[];
@@ -18,40 +31,31 @@ const breakpointColumns = {
 
 const MasonryGallery = ({ photos, infinite = true }: MasonryGalleryProps) => {
   const [displayedPhotos, setDisplayedPhotos] = useState<Photo[]>([]);
-  const batchRef = useRef(0);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const lastLoadTime = useRef(0);
 
-  const generateBatch = useCallback((batchNum: number): Photo[] => {
-    const shuffled = [...photos].sort(() => Math.random() - 0.5);
-    return shuffled.map((p, i) => ({
-      ...p,
-      id: `${p.id}-b${batchNum}-${i}`,
-      imageUrl: `${p.imageUrl}`,
-    }));
-  }, [photos]);
-
   const loadMore = useCallback(() => {
     if (!infinite) return;
-    if (photos.length === 0) return;
+    const pool = dedupePhotosById(photos);
+    if (pool.length === 0) return;
 
     const now = Date.now();
     if (now - lastLoadTime.current < 50) return;
     lastLoadTime.current = now;
 
-    const next1 = batchRef.current + 1;
-    const next2 = next1 + 1;
-    batchRef.current = next2;
+    setDisplayedPhotos((current) => {
+      const seen = new Set(current.map((p) => extractBasePhotoId(p.id)));
+      const remaining = pool.filter((p) => !seen.has(extractBasePhotoId(p.id)));
+      if (remaining.length === 0) return current;
 
-    const batch1 = generateBatch(next1);
-    const batch2 = generateBatch(next2);
-
-    setDisplayedPhotos((current) => [...current, ...batch1, ...batch2]);
-  }, [photos, generateBatch, infinite]);
+      const shuffled = [...remaining].sort(() => Math.random() - 0.5);
+      const chunkSize = Math.min(24, remaining.length);
+      return [...current, ...shuffled.slice(0, chunkSize)];
+    });
+  }, [photos, infinite]);
 
   useEffect(() => {
-    batchRef.current = 0;
-    setDisplayedPhotos([...photos]);
+    setDisplayedPhotos(dedupePhotosById(photos));
   }, [photos]);
 
   // Intersection Observer

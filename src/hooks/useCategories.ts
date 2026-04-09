@@ -34,7 +34,7 @@ export function useCategoriesByPhotoCount(max: number) {
       for (;;) {
         const { data: page, error: photosError } = await supabase
           .from("photos")
-          .select("category_id, category_name")
+          .select("category_id, category_name, categories")
           .eq("is_published", true)
           .is("deleted_at", null)
           .range(from, from + pageSize - 1);
@@ -43,6 +43,22 @@ export function useCategoriesByPhotoCount(max: number) {
         if (!page?.length) break;
 
         for (const row of page) {
+          // categories[] が優先。複数カテゴリをそれぞれカウント
+          const cats: string[] = Array.isArray((row as { categories?: unknown }).categories)
+            ? ((row as { categories: unknown[] }).categories as string[]).filter((c) => typeof c === "string" && c.trim())
+            : [];
+
+          if (cats.length > 0) {
+            for (const name of cats) {
+              const resolvedId = nameToCategoryId.get(name.trim());
+              if (resolvedId) {
+                countByCategoryId.set(resolvedId, (countByCategoryId.get(resolvedId) ?? 0) + 1);
+              }
+            }
+            continue;
+          }
+
+          // 後方互換: category_id / category_name にフォールバック
           const cid = row.category_id;
           if (cid != null) {
             countByCategoryId.set(cid, (countByCategoryId.get(cid) ?? 0) + 1);

@@ -44,6 +44,7 @@ const PhotoDetail = () => {
   const { data: relatedPhotos = [] } = useRelatedPhotos({
     excludeId: baseId,
     categoryName: photo?.category_name,
+    categories: photo?.categories,
     tags: photo?.tags,
     enabled: !!photo && !!baseId,
   });

@@ -5,6 +5,7 @@ export interface Photo {
   description: string | null;
   description_en: string | null;
   category_name: string | null;
+  categories: string[];
   width: number;
   height: number;
   download_count: number;

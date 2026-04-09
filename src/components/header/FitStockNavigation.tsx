@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useMembershipTier } from "@/hooks/useMembership";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { getLegalPathForLanguage } from "@/lib/legalRouteLocale";
 
 interface SearchFormProps {
   searchTerm: string;
@@ -164,6 +165,17 @@ const FitStockNavigation = ({ hideSearch = false }: FitStockNavigationProps) => 
                     key={lang.code}
                     onClick={() => {
                       i18n.changeLanguage(lang.code);
+                      const nextPath = getLegalPathForLanguage(
+                        location.pathname,
+                        lang.code,
+                      );
+                      if (nextPath) {
+                        navigate({
+                          pathname: nextPath,
+                          search: location.search,
+                          hash: location.hash,
+                        });
+                      }
                       setIsLanguageDropdownOpen(false);
                     }}
                     className="w-full px-4 py-2 text-sm text-left hover:bg-secondary transition-colors flex items-center justify-between"
