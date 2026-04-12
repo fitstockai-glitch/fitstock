@@ -11,6 +11,29 @@ export const LOGIN_ERROR_CODE_OAUTH_SIGNUP_REQUIRED = "oauth_signup_required";
 export const LEGACY_LOGIN_ERROR_SESSION_KEY = "fitstock_login_error";
 export const LEGACY_LOGIN_ERROR_CODE_EMAIL = "oauth_email_required";
 
+/** Supabase から返ってきた OAuth エラーメッセージを /login で表示するためのキー */
+export const FITSTOCK_OAUTH_ERROR_MSG_KEY = "fitstock_oauth_error_msg";
+
+/** OAuth エラーメッセージを localStorage に保存（/login で消費してトースト表示） */
+export function saveOauthErrorMessage(msg: string): void {
+  try {
+    localStorage.setItem(FITSTOCK_OAUTH_ERROR_MSG_KEY, msg);
+  } catch {
+    /* ignore */
+  }
+}
+
+/** /login で一度だけ読み取り・削除して返す */
+export function consumeOauthErrorMessage(): string | null {
+  try {
+    const v = localStorage.getItem(FITSTOCK_OAUTH_ERROR_MSG_KEY);
+    if (v) localStorage.removeItem(FITSTOCK_OAUTH_ERROR_MSG_KEY);
+    return v || null;
+  } catch {
+    return null;
+  }
+}
+
 /** OAuth 開始直前に localStorage へ保存する intent キー */
 export const OAUTH_INTENT_KEY = "fitstock_oauth_intent";
 /** ログイン経路 */

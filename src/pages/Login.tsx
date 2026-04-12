@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import {
   LOGIN_URL_ERROR_PARAM,
   OAUTH_FROM_LOGIN,
+  consumeOauthErrorMessage,
   saveOauthIntent,
 } from "@/lib/authLoginError";
 import {
@@ -18,8 +19,8 @@ import {
   getPendingLoginErrorCode,
 } from "@/lib/oauthEmailGate";
 
-/** React 18 Strict Mode で 1 回目の effect がストレージ／URL を消しても、同一ページロード内の再実行でトーストが消えないようにする（ref はリマウントでリセットされるためモジュールで保持） */
-let loginOauthRejectToastHandledThisLoad = false;
+/** Strict Mode の二重 effect でも 1 回だけトーストを出すためモジュールスコープで保持 */
+let loginToastHandledThisLoad = false;
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -30,38 +31,30 @@ const Login = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    console.log("[FitStock auth] Login.tsx effect", {
-      href: window.location.href,
-      "searchParams.get(error)": searchParams.get(LOGIN_URL_ERROR_PARAM),
-      loginOauthRejectToastHandledThisLoad,
-    });
+    if (loginToastHandledThisLoad) return;
 
-    if (loginOauthRejectToastHandledThisLoad) {
-      console.log("[FitStock auth] Login.tsx: skip toast (already handled this page load)");
+    // 1. OAuth 拒否（アカウント未登録）エラー
+    const pendingCode = getPendingLoginErrorCode(searchParams);
+    if (pendingCode) {
+      loginToastHandledThisLoad = true;
+      console.log("[FitStock auth] Login.tsx: oauth reject toast", pendingCode);
+      toast.error(t("login.oauthSignupRequired"));
+      clearPendingLoginErrorStorage();
+      if (searchParams.has(LOGIN_URL_ERROR_PARAM)) {
+        const next = new URLSearchParams(searchParams);
+        next.delete(LOGIN_URL_ERROR_PARAM);
+        setSearchParams(next, { replace: true });
+      }
       return;
     }
 
-    const code = getPendingLoginErrorCode(searchParams);
-    if (!code) {
-      console.log("[FitStock auth] Login.tsx: no code → no toast");
-      return;
+    // 2. OAuth 汎用エラー（Supabase / Google からのエラー）
+    const oauthErrMsg = consumeOauthErrorMessage();
+    if (oauthErrMsg) {
+      loginToastHandledThisLoad = true;
+      console.log("[FitStock auth] Login.tsx: oauth error toast", oauthErrMsg);
+      toast.error(oauthErrMsg);
     }
-
-    loginOauthRejectToastHandledThisLoad = true;
-    console.log("[FitStock auth] Login.tsx: toast.error for code", code);
-    toast.error(t("login.oauthSignupRequired"));
-    clearPendingLoginErrorStorage();
-
-    if (searchParams.has(LOGIN_URL_ERROR_PARAM)) {
-      const next = new URLSearchParams(searchParams);
-      next.delete(LOGIN_URL_ERROR_PARAM);
-      setSearchParams(next, { replace: true });
-      console.log("[FitStock auth] Login.tsx: stripped ?error= from URL (replace)");
-    }
-
-    queueMicrotask(() => {
-      console.log("[FitStock auth] Login.tsx: after toast microtask, href=", window.location.href);
-    });
   }, [searchParams, setSearchParams, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
