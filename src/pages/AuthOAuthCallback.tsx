@@ -24,12 +24,13 @@ const AuthOAuthCallback = () => {
         return;
       }
 
-      const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+      const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
       if (exchangeError) {
         console.error("[FitStock auth] exchangeCodeForSession error:", exchangeError);
         if (!cancelled) window.location.replace("/login");
         return;
       }
+      console.log("[FitStock auth] exchangeCodeForSession success:", data);
 
       if (!cancelled) window.location.replace("/");
     })();
