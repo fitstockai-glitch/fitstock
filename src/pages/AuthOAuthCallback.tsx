@@ -3,39 +3,35 @@ import { supabase } from "@/integrations/supabase/client";
 
 /**
  * Google OAuth の PKCE コールバック専用。
- * exchangeCodeForSession 後にトップページへリダイレクト。
+ * detectSessionInUrl: true により Supabase が自動で code を exchange するので、
+ * SIGNED_IN イベントを待ってトップページへリダイレクト。
  */
 const AuthOAuthCallback = () => {
   useEffect(() => {
-    let cancelled = false;
+    const url = new URL(window.location.href);
+    const err = url.searchParams.get("error");
 
-    (async () => {
-      const url = new URL(window.location.href);
-      const err = url.searchParams.get("error");
-      const code = url.searchParams.get("code");
+    if (err) {
+      window.location.replace("/login");
+      return;
+    }
 
-      if (err) {
-        if (!cancelled) window.location.replace("/login");
-        return;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") {
+        subscription.unsubscribe();
+        window.location.replace("/");
       }
+    });
 
-      if (!code) {
-        if (!cancelled) window.location.replace("/login");
-        return;
-      }
+    const timer = setTimeout(() => {
+      subscription.unsubscribe();
+      window.location.replace("/login");
+    }, 10_000);
 
-      const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-      if (exchangeError) {
-        console.error("[FitStock auth] exchangeCodeForSession error:", exchangeError);
-        if (!cancelled) window.location.replace("/login");
-        return;
-      }
-      console.log("[FitStock auth] exchangeCodeForSession success:", data);
-
-      if (!cancelled) window.location.replace("/");
-    })();
-
-    return () => { cancelled = true; };
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timer);
+    };
   }, []);
 
   return (
