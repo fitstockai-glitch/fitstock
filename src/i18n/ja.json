@@ -38,6 +38,7 @@
     "noAccount": "アカウントをお持ちではありませんか？",
     "register": "登録する",
     "invalidCredentials": "メールアドレスまたはパスワードが正しくありません",
+    "oauthSignupRequired": "アカウントが見つかりません。先にサインアップしてください。",
     "success": "ログインしました"
   },
   "register": {

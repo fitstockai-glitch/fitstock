@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -8,13 +8,61 @@ import Footer from "@/components/footer/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import {
+  LOGIN_URL_ERROR_PARAM,
+  OAUTH_FROM_LOGIN,
+  saveOauthIntent,
+} from "@/lib/authLoginError";
+import {
+  clearPendingLoginErrorStorage,
+  getPendingLoginErrorCode,
+} from "@/lib/oauthEmailGate";
+
+/** React 18 Strict Mode で 1 回目の effect がストレージ／URL を消しても、同一ページロード内の再実行でトーストが消えないようにする（ref はリマウントでリセットされるためモジュールで保持） */
+let loginOauthRejectToastHandledThisLoad = false;
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    console.log("[FitStock auth] Login.tsx effect", {
+      href: window.location.href,
+      "searchParams.get(error)": searchParams.get(LOGIN_URL_ERROR_PARAM),
+      loginOauthRejectToastHandledThisLoad,
+    });
+
+    if (loginOauthRejectToastHandledThisLoad) {
+      console.log("[FitStock auth] Login.tsx: skip toast (already handled this page load)");
+      return;
+    }
+
+    const code = getPendingLoginErrorCode(searchParams);
+    if (!code) {
+      console.log("[FitStock auth] Login.tsx: no code → no toast");
+      return;
+    }
+
+    loginOauthRejectToastHandledThisLoad = true;
+    console.log("[FitStock auth] Login.tsx: toast.error for code", code);
+    toast.error(t("login.oauthSignupRequired"));
+    clearPendingLoginErrorStorage();
+
+    if (searchParams.has(LOGIN_URL_ERROR_PARAM)) {
+      const next = new URLSearchParams(searchParams);
+      next.delete(LOGIN_URL_ERROR_PARAM);
+      setSearchParams(next, { replace: true });
+      console.log("[FitStock auth] Login.tsx: stripped ?error= from URL (replace)");
+    }
+
+    queueMicrotask(() => {
+      console.log("[FitStock auth] Login.tsx: after toast microtask, href=", window.location.href);
+    });
+  }, [searchParams, setSearchParams, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,9 +137,10 @@ const Login = () => {
             variant="outline"
             className="mt-6 w-full h-12 rounded-md text-base gap-3 border-border"
             onClick={async () => {
+              saveOauthIntent(OAUTH_FROM_LOGIN);
               const { error } = await supabase.auth.signInWithOAuth({
                 provider: "google",
-                options: { redirectTo: window.location.origin },
+                options: { redirectTo: `${window.location.origin}/auth/callback` },
               });
               if (error) toast.error(error.message);
             }}

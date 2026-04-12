@@ -38,6 +38,7 @@
     "noAccount": "Don't have an account?",
     "register": "Sign up",
     "invalidCredentials": "Invalid email or password",
+    "oauthSignupRequired": "No account found. Please sign up first.",
     "success": "Logged in"
   },
   "register": {
