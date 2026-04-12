@@ -13,7 +13,5 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABL
     storage: localStorage,
     persistSession: true,
     autoRefreshToken: true,
-    // OAuth は /auth/callback で手動 exchange する（コールバック直後にゲート処理するため）
-    detectSessionInUrl: false,
   },
 });
