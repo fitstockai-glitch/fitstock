@@ -10,10 +10,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { buildThumbnailPublicUrlFlexible } from "@/lib/supabaseStorage";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import {
-  OAUTH_FROM_REGISTER,
-  saveOauthIntent,
-} from "@/lib/authLoginError";
 
 const Register = () => {
   const { t } = useTranslation();
@@ -49,10 +45,9 @@ const Register = () => {
 
   const handleGoogleSignUp = async () => {
     setIsGoogleLoading(true);
-    saveOauthIntent(OAUTH_FROM_REGISTER);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
+      options: { redirectTo: `${window.location.origin}/auth/callback?from=register` },
     });
     if (error) {
       toast.error(error.message);

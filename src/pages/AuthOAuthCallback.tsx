@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { consumeOauthIntent, saveOauthErrorMessage } from "@/lib/authLoginError";
-import { enforceEmailIdentityOrReject } from "@/lib/oauthEmailGate";
 
 /** query params と hash fragment の両方からパラメータを取得する */
 function getOauthParams(href: string): Record<string, string> {
@@ -16,9 +14,14 @@ function getOauthParams(href: string): Record<string, string> {
   return params;
 }
 
+/** created_at が現在時刻から 30 秒以内なら新規ユーザーと判定 */
+function isNewUser(createdAt: string): boolean {
+  return Date.now() - new Date(createdAt).getTime() < 30_000;
+}
+
 /**
- * Google OAuth の PKCE コールバック専用。AuthProvider の外で処理し、
- * メール未登録ユーザーにはログイン UI を見せない。
+ * Google OAuth の PKCE コールバック専用。
+ * from=login かつ新規ユーザーの場合のみサインアウトして /login?error=new_user にリダイレクト。
  */
 const AuthOAuthCallback = () => {
   const [message, setMessage] = useState("ログイン処理中…");
@@ -29,76 +32,41 @@ const AuthOAuthCallback = () => {
     (async () => {
       const params = getOauthParams(window.location.href);
       const err = params["error"] ?? null;
-      const errDesc = params["error_description"] ?? null;
       const code = params["code"] ?? null;
-
-      const oauthIntent = consumeOauthIntent();
-
-      console.log("[FitStock auth] AuthOAuthCallback: mount", {
-        href: window.location.href,
-        hasCode: Boolean(code),
-        hasErr: Boolean(err),
-        oauthIntent,
-      });
-
-      /** エラーメッセージを保存して /login に飛ぶ */
-      function redirectLoginWithError(msg: string): void {
-        saveOauthErrorMessage(msg);
-        console.log("[FitStock auth] AuthOAuthCallback: error → save & redirect /login", { msg });
-        window.location.replace("/login");
-      }
+      const from = params["from"] ?? null;
 
       if (err) {
-        const msg =
-          errDesc
-            ? decodeURIComponent(errDesc.replace(/\+/g, " "))
-            : "Googleログインに失敗しました。もう一度お試しください。";
         if (!cancelled) {
-          setMessage(msg);
-          redirectLoginWithError(msg);
+          setMessage("Googleログインに失敗しました。");
+          window.location.replace("/login?error=google_error");
         }
         return;
       }
 
       if (!code) {
-        console.log("[FitStock auth] AuthOAuthCallback: no code, redirect /login");
         if (!cancelled) window.location.replace("/login");
         return;
       }
 
-      const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-      if (exchangeError) {
-        console.error("[FitStock auth] AuthOAuthCallback: exchangeCodeForSession error", exchangeError);
-        if (!cancelled) {
-          redirectLoginWithError("Googleログインの認証に失敗しました。もう一度お試しください。");
-        }
+      const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+      if (exchangeError || !data.session) {
+        console.error("[FitStock auth] exchangeCodeForSession error:", exchangeError);
+        if (!cancelled) window.location.replace("/login?error=auth_failed");
         return;
       }
 
-      const urlClean = new URL(window.location.href);
-      urlClean.searchParams.delete("code");
-      const qs = urlClean.searchParams.toString();
-      window.history.replaceState({}, document.title, urlClean.pathname + (qs ? `?${qs}` : ""));
+      // from=login かつ新規ユーザー → 既存アカウントのみ許可
+      const user = data.session.user;
+      if (from === "login" && user.created_at && isNewUser(user.created_at)) {
+        await supabase.auth.signOut({ scope: "local" });
+        if (!cancelled) window.location.replace("/login?error=new_user");
+        return;
+      }
 
-      console.log("[FitStock auth] AuthOAuthCallback: exchange OK, calling enforceEmailIdentityOrReject()", {
-        cancelled,
-        oauthIntent,
-      });
-      const allowed = await enforceEmailIdentityOrReject({ oauthIntent });
-      console.log("[FitStock auth] AuthOAuthCallback: enforceEmailIdentityOrReject() returned", {
-        allowed,
-        cancelled,
-      });
-
-      if (!allowed || cancelled) return;
-
-      console.log("[FitStock auth] AuthOAuthCallback: redirecting to /");
-      window.location.replace("/");
+      if (!cancelled) window.location.replace("/");
     })();
 
-    return () => {
-      cancelled = true;
-    };
+    return () => { cancelled = true; };
   }, []);
 
   return (

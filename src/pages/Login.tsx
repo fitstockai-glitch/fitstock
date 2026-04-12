@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,19 +8,12 @@ import Footer from "@/components/footer/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import {
-  LOGIN_URL_ERROR_PARAM,
-  OAUTH_FROM_LOGIN,
-  consumeOauthErrorMessage,
-  saveOauthIntent,
-} from "@/lib/authLoginError";
-import {
-  clearPendingLoginErrorStorage,
-  getPendingLoginErrorCode,
-} from "@/lib/oauthEmailGate";
 
-/** Strict Mode の二重 effect でも 1 回だけトーストを出すためモジュールスコープで保持 */
-let loginToastHandledThisLoad = false;
+const ERROR_MESSAGES: Record<string, string> = {
+  new_user: "login.oauthSignupRequired",
+  auth_failed: "login.authFailed",
+  google_error: "login.googleLoginFailed",
+};
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -29,32 +22,24 @@ const Login = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
+  const toastShownRef = useRef(false);
 
   useEffect(() => {
-    if (loginToastHandledThisLoad) return;
-
-    // 1. OAuth 拒否（アカウント未登録）エラー
-    const pendingCode = getPendingLoginErrorCode(searchParams);
-    if (pendingCode) {
-      loginToastHandledThisLoad = true;
-      console.log("[FitStock auth] Login.tsx: oauth reject toast", pendingCode);
-      toast.error(t("login.oauthSignupRequired"));
-      clearPendingLoginErrorStorage();
-      if (searchParams.has(LOGIN_URL_ERROR_PARAM)) {
-        const next = new URLSearchParams(searchParams);
-        next.delete(LOGIN_URL_ERROR_PARAM);
-        setSearchParams(next, { replace: true });
-      }
+    const error = searchParams.get("error");
+    if (!error) {
+      toastShownRef.current = false;
       return;
     }
+    if (toastShownRef.current) return;
+    toastShownRef.current = true;
 
-    // 2. OAuth 汎用エラー（Supabase / Google からのエラー）
-    const oauthErrMsg = consumeOauthErrorMessage();
-    if (oauthErrMsg) {
-      loginToastHandledThisLoad = true;
-      console.log("[FitStock auth] Login.tsx: oauth error toast", oauthErrMsg);
-      toast.error(oauthErrMsg);
-    }
+    const i18nKey = ERROR_MESSAGES[error];
+    toast.error(i18nKey ? t(i18nKey) : t("login.googleLoginFailed"));
+
+    setSearchParams((prev) => {
+      prev.delete("error");
+      return prev;
+    }, { replace: true });
   }, [searchParams, setSearchParams, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -130,10 +115,9 @@ const Login = () => {
             variant="outline"
             className="mt-6 w-full h-12 rounded-md text-base gap-3 border-border"
             onClick={async () => {
-              saveOauthIntent(OAUTH_FROM_LOGIN);
               const { error } = await supabase.auth.signInWithOAuth({
                 provider: "google",
-                options: { redirectTo: `${window.location.origin}/auth/callback` },
+                options: { redirectTo: `${window.location.origin}/auth/callback?from=login` },
               });
               if (error) toast.error(error.message);
             }}
