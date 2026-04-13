@@ -142,4 +142,3 @@ export function derivePlanStatus(
   if (membershipTier === "plus") return "plus";
   return "free";
 }
-

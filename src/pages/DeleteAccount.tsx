@@ -60,10 +60,7 @@ const DeleteAccount = () => {
     if (!user) return;
     setIsDeleting(true);
     try {
-      const { error: refreshError } = await supabase.auth.refreshSession();
-      if (refreshError) {
-        console.warn("refreshSession before delete-account:", refreshError.message);
-      }
+      await supabase.auth.refreshSession();
 
       const {
         data: { session },
@@ -76,7 +73,6 @@ const DeleteAccount = () => {
         );
       }
 
-      // getAccessToken が null のとき anon キーが Bearer になり verify_jwt で Invalid JWT になるのを防ぐ
       const { error } = await supabase.functions.invoke("delete-account", {
         body: {},
         headers: { Authorization: `Bearer ${accessToken}` },

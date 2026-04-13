@@ -41,7 +41,7 @@ const BillingSection = () => {
                 <TableCell className="pr-0">
                   <button
                     className="inline-flex items-center gap-1.5 text-sm text-destructive hover:underline"
-                    onClick={() => console.log("Download receipt:", item.id)}
+                    onClick={() => {}}
                   >
                     <Download size={14} />
                     {t("billing.download")}
@@ -75,7 +75,7 @@ const BillingSection = () => {
                   <TableCell colSpan={3} className="text-sm pl-0 pt-0">
                     <button
                       className="inline-flex items-center gap-1.5 text-xs text-destructive border border-destructive rounded-md px-3 py-1.5 mt-1 hover:bg-destructive hover:text-destructive-foreground transition-colors"
-                      onClick={() => console.log("Download receipt:", item.id)}
+                      onClick={() => {}}
                     >
                       <Download size={14} />
                       {t("billing.download")}

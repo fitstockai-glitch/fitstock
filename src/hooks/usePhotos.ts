@@ -88,7 +88,6 @@ async function fetchTrendMap(): Promise<Map<string, number>> {
   const map = new Map<string, number>();
   const { data, error } = await supabase.rpc("gallery_photo_download_counts_7d");
   if (error) {
-    console.warn("[usePhotos] gallery_photo_download_counts_7d failed; trending falls back to newest", error);
     return map;
   }
   for (const row of data ?? []) {

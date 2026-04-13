@@ -32,9 +32,8 @@ const billingHistory = [
 ];
 
 const SubscriptionHistorySection = () => {
-  const handleDownloadReceipt = (id: string) => {
-    // Mock download - in real app would generate/download PDF
-    console.log("Downloading receipt for:", id);
+  const handleDownloadReceipt = (_id: string) => {
+    // placeholder
   };
 
   return (

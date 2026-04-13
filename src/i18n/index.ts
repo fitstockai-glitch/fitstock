@@ -68,10 +68,7 @@ i18n.use(initReactI18next).init(
       escapeValue: false,
     },
   },
-  (err) => {
-    if (err) {
-      console.error(err);
-    }
+  () => {
     // init 時に飛ぶ languageChanged を拾わないよう、同期処理の後に登録する
     setTimeout(() => {
       i18n.on("languageChanged", (lng) => {

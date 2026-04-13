@@ -16,10 +16,6 @@ const Category = () => {
   const gallerySort = normalizeGallerySort(searchParams.get("sort"));
   const { data: photos = [], isLoading } = usePhotos(activeCategory, undefined, searchQuery, gallerySort);
 
-  const handleCategoryChange = (_newCategory: string) => {
-    // Navigation is handled by CategoryTabs
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <FitStockHeader />
@@ -31,7 +27,7 @@ const Category = () => {
       ) : (
         <CategoryTabs
           selectedCategory={activeCategory}
-          onCategoryChange={handleCategoryChange}
+          onCategoryChange={() => {}}
         />
       )}
 

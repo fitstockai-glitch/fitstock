@@ -25,12 +25,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signOut = useCallback(async () => {
     try {
-      const { error } = await supabase.auth.signOut({ scope: "local" });
-      if (error) {
-        console.warn("signOut:", error.message);
-      }
-    } catch (e) {
-      console.warn("signOut:", e);
+      await supabase.auth.signOut({ scope: "local" });
+    } catch {
+      /* ignore */
     } finally {
       clearSupabaseAuthStorage();
       setSession(null);
